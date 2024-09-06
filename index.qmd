@@ -1,0 +1,9 @@
+---
+title: "Jason Amey - STA 9750 Fall 2024"
+---
+
+## Hi my name is Jason Amey.
+
+![](./images/ja-head-shot.jpg){style="width:20%;border-radius:50%; border: 1px solid black; box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.5); display: block;"}
+
+**About Me:** I work professionally as a Business Librarian in the [Newman Library](https://library.baruch.cuny.edu/) at [Baruch College](https://www.baruch.cuny.edu/) in New York City, NY.
