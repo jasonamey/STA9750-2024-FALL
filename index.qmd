@@ -10,7 +10,7 @@ title: "Jason Amey - STA 9750 Fall 2024"
 
 ### 5 Top Fives from Jason
 
-Top 5 Subway Stations
+**Top 5 Subway Stations**
 
 1.  Coney Island-Stillwell Av (BK)
 2.  Smith-9th St (BK)
@@ -18,7 +18,7 @@ Top 5 Subway Stations
 4.  Roosevelt Av/74th St (QN)
 5.  81st St - Museum of Natural History (NY)
 
-Top 5 Super Mario Games
+**Top 5 Super Mario Games**
 
 1.  Super Mario World
 2.  Super Mario 3
@@ -26,7 +26,7 @@ Top 5 Super Mario Games
 4.  Super Mario 3D
 5.  Super Mario Odyssey
 
-Top 5 Months in NYC
+**Top 5 Months in NYC**
 
 1.  October
 2.  May
@@ -34,7 +34,7 @@ Top 5 Months in NYC
 4.  April
 5.  December
 
-Top 5 Pizza Toppings
+**Top 5 Pizza Toppings**
 
 1.  Garlic
 2.  Basil
@@ -42,14 +42,10 @@ Top 5 Pizza Toppings
 4.  Extra Garlic
 5.  Extra Onions
 
-Top 5 Prince Songs
+**Top 5 Prince Songs**
 
 1.  U Got the Look
-
 2.  Raspberry Beret
-
 3.  Pop Life
-
 4.  I Wanna Be Your Lover
-
 5.  Mountains
