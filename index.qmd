@@ -10,44 +10,5 @@ title: "Jason Amey - STA 9750 Fall 2024"
 
 Here is my: [Github](https://github.com/jasonamey)
 
-### 5 Top Fives from Jason
-
-**Top 5 Subway Stations**
-
-1.  Coney Island-Stillwell Av (BK)
-2.  Smith-9th St (BK)
-3.  161st Street/Yankee Stadium (BX)
-4.  Roosevelt Av/74th St (QN)
-5.  81st St - Museum of Natural History (NY)
-
-**Top 5 Super Mario Games**
-
-1.  Super Mario World
-2.  Super Mario 3
-3.  Super Mario Galaxy
-4.  Super Mario 3D
-5.  Super Mario Odyssey
-
-**Top 5 Months in NYC**
-
-1.  October
-2.  May
-3.  November
-4.  April
-5.  December
-
-**Top 5 Pizza Toppings**
-
-1.  Garlic
-2.  Basil
-3.  Onions
-4.  Extra Garlic
-5.  Extra Onions
-
-**Top 5 Prince Songs**
-
-1.  U Got the Look
-2.  Raspberry Beret
-3.  Pop Life
-4.  I Wanna Be Your Lover
-5.  Mountains
+### Mini-Projects:
+1.[mp #01](/miniprojects/mini01.html)
