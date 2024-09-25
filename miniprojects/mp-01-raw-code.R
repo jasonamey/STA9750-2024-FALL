@@ -538,7 +538,7 @@ USAGE_AND_FINANCIALS |>
   mutate(fares_VRM = total_fares / total_vrm ) |>
   arrange(desc(fares_VRM)) |>
   select(agency, mode, fares_VRM)
-
+# 
 # agency                                                            mode           fares_VRM
 # <chr>                                                             <chr>              <dbl>
 # 1 Jacksonville Transportation Authority                           Ferry Boat         158.

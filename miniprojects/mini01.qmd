@@ -117,12 +117,13 @@ USAGE <- USAGE |>
 
 | NTD ID | agency      | metro_area          | mode | month      | unlinked_passenger_trips | vehicle_revenue_miles |
 |--------|-------------|---------------------|------|------------|--------------------------|-----------------------|
-| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-01-01 | 135144                   | 746158                |
-| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-02-01 | 127378                   | 656324                |
-| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-03-01 | 136030                   | 726578                |
-| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-04-01 | 142204                   | 736975                |
-| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-05-01 | 144697                   | 746158                |
-| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-06-01 | 131833                   | 696633                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-01-01 | 135,144                   | 746,158                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-02-01 | 127,378                   | 656,324                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-03-01 | 136,030                   | 726,578                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-04-01 | 142,204                   | 736,975                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-05-01 | 144,697                   | 746,158                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-06-01 | 131,833                   | 696,633                |
+
 
 : Data for King County Transit {.striped .hover}
 
@@ -200,11 +201,12 @@ USAGE |>
 ```
 | agency                                                                         | total         |
 |--------------------------------------------------------------------------------|---------------|
-| MTA New York City Transit                                                      | 10832855350   |
-| New Jersey Transit Corporation                                                 | 5645525525    |
-| Los Angeles County Metropolitan Transportation Authority                       | 4354016659    |
-| Washington Metropolitan Area Transit Authority                                 | 2821950701    |
-| Chicago Transit Authority                                                      | 2806202144    |
+| MTA New York City Transit                                                      | 10,832,855,350 |
+| New Jersey Transit Corporation                                                 | 5,645,525,525  |
+| Los Angeles County Metropolitan Transportation Authority                       | 4,354,016,659  |
+| Washington Metropolitan Area Transit Authority                                 | 2,821,950,701  |
+| Chicago Transit Authority                                                      | 2,806,202,144  |
+
 
 : Data for Agency with Largest Vehicle Revenue Miles {.striped .hover}
 
@@ -224,11 +226,12 @@ USAGE |>
 ```
 | mode             | total_vrm      |
 |------------------|----------------|
-| Motor Bus        | 49444494088     |
-| Demand Response  | 17955073508     |
-| Heavy Rail       | 14620362107     |
-| Commuter Rail    |  6970644241     |
-| Vanpool          |  3015783362     |
+| Motor Bus        | 49,444,494,088  |
+| Demand Response  | 17,955,073,508  |
+| Heavy Rail       | 14,620,362,107  |
+| Commuter Rail    | 6,970,644,241   |
+| Vanpool          | 3,015,783,362   |
+
 
 : Data for mode with largest Vehicle Revenue Miles {.striped .hover}
 
@@ -250,8 +253,10 @@ USAGE |>
 ```
 | agency                      | mode       | month      | unlinked_passenger_trips |
 |-----------------------------|------------|------------|--------------------------|
-| MTA New York City Transit    | Heavy Rail | 2004-05-01 | 184334430                |
-: Data for trips takes on NYC Subway in May 2024 {.striped .hover}
+| MTA New York City Transit    | Heavy Rail | 2004-05-01 | 184,334,430              |
+
+: Data for trips taken on NYC Subway in May 2024 {.striped .hover}
+
 
 ### Answer 3: 
 **184,334,430 trips**
@@ -330,19 +335,21 @@ USAGE |>
 ```
 | month_name | total_this_month |
 |------------|------------------|
-| July       | 1715940          |
-| August     | 1507425          |
-| June       | 1424861          |
-| May        | 1224003          |
-| September  | 1128166          |
-| October    | 1061274          |
-| April      | 1032881          |
-| November   | 965257           |
-| March      | 895805           |
-| December   | 877248           |
-| January    | 666924           |
-| February   | 641834           |
+| July       | 1,715,940        |
+| August     | 1,507,425        |
+| June       | 1,424,861        |
+| May        | 1,224,003        |
+| September  | 1,128,166        |
+| October    | 1,061,274        |
+| April      | 1,032,881        |
+| November   | 965,257          |
+| March      | 895,805          |
+| December   | 877,248          |
+| January    | 666,924          |
+| February   | 641,834          |
+
 : Data for yearly ridership of the Pittsburgh Inclined Plane {.striped .hover}
+
 
 ### Conclusion 
 The ridership numbers spiking in the summer, along with stark drop off in ridership from December to January, suggest the incline is largely popular with tourists and no longer used by the hill-weary residents of Mt. Washington.
@@ -367,26 +374,27 @@ USAGE |>
 ```
 | state | total_trips    |
 |-------|----------------|
-| NY    | 85530025008    |
-| CA    | 27099834336    |
-| IL    | 12744773889    |
-| DC    | 9057818580     |
-| PA    | 8776976555     |
-| MA    | 7993427892     |
-| FL    | 5742223542     |
-| TX    | 5466164685     |
-| WA    | 4524992934     |
-| GA    | 3096203662     |
-| OR    | 2555837796     |
-| OH    | 2364107111     |
-| MD    | 2271510025     |
-| CO    | 2144454426     |
-| MN    | 1909216918     |
-| MI    | 1776345495     |
-| NV    | 1395503197     |
-| AZ    | 1384679690     |
-| MO    | 1371031013     |
-| HI    | 1225521578     |
+| NY    | 85,530,025,008 |
+| CA    | 27,099,834,336 |
+| IL    | 12,744,773,889 |
+| DC    | 9,057,818,580  |
+| PA    | 8,776,976,555  |
+| MA    | 7,993,427,892  |
+| FL    | 5,742,223,542  |
+| TX    | 5,466,164,685  |
+| WA    | 4,524,992,934  |
+| GA    | 3,096,203,662  |
+| OR    | 2,555,837,796  |
+| OH    | 2,364,107,111  |
+| MD    | 2,271,510,025  |
+| CO    | 2,144,454,426  |
+| MN    | 1,909,216,918  |
+| MI    | 1,776,345,495  |
+| NV    | 1,395,503,197  |
+| AZ    | 1,384,679,690  |
+| MO    | 1,371,031,013  |
+| HI    | 1,225,521,578  |
+
 : Data for total State Transit Trips {.striped .hover}
 
 
