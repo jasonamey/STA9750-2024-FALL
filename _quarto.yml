@@ -3,15 +3,18 @@ project:
   output-dir: docs
 
 website:
-  title: "STA 9750 2024 Submission for Mini Project 00"
+  title: "STA 9750 Fall 2024 - Jason Amey"
   description:
     Course Projects for STA 9750 at Baruch College - Jason Amey
   site-url: "https://jasonamey.github.io/STA9750-2024-FALL/"
   navbar:
     background: secondary
     search: false
+  
     
 format:
   html:
     theme: cosmo
     toc: false
+    css: styles.css
+  

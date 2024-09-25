@@ -1,0 +1,592 @@
+# Jason Amey Mini Project 01 
+## Fiscal Characteristics of Major US Public Transit Systems
+
+### Data Creation : 
+
+```
+if(!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
+
+if(!require("DT")) install.packages("DT")
+library(DT)
+
+if(!require("stringr")) install.packages("stringr")
+library(stringr)
+
+if(!require("lubridate")) install.packages("lubridate")
+library(lubridate)
+
+FARES <- readxl::read_xlsx("data/mp-01/2022_fare_revenue.xlsx") |>
+  select(-`State/Parent NTD ID`,
+         -`Reporter Type`,
+         -`Reporting Module`,
+         -`TOS`,
+         -`Passenger Paid Fares`,
+         -`Organization Paid Fares`) |>
+  filter(`Expense Type` == "Funds Earned During Period") |>
+  select(-`Expense Type`)
+
+EXPENSES <- readr::read_csv("data/mp-01/2022_expenses.csv") |>
+  select(`NTD ID`,
+         `Agency`,
+         `Total`,
+         `Mode`) |>
+  mutate(`NTD ID` = as.integer(`NTD ID`)) |>
+  rename(Expenses = Total) |>
+  group_by(`NTD ID`, `Mode`) |>
+  summarize(Expenses = sum(Expenses)) |>
+  ungroup()
+
+TRIPS <- readxl::read_xlsx("data/mp-01/2022_ridership.xlsx", sheet="UPT") |>
+  filter(`Mode/Type of Service Status` == "Active") |>
+  select(-`Legacy NTD ID`,
+         -`Reporter Type`,
+         -`Mode/Type of Service Status`,
+         -`UACE CD`,
+         -`TOS`) |>
+  pivot_longer(-c(`NTD ID`:`3 Mode`),
+               names_to="month",
+               values_to="UPT") |>
+  drop_na() |>
+  mutate(month=my(month)) # Parse _m_onth _y_ear date specs
+
+MILES <- readxl::read_xlsx("data/mp-01/2022_ridership.xlsx", sheet="VRM") |>
+  filter(`Mode/Type of Service Status` == "Active") |>
+  select(-`Legacy NTD ID`,
+         -`Reporter Type`,
+         -`Mode/Type of Service Status`,
+         -`UACE CD`,
+         -`TOS`) |>
+  pivot_longer(-c(`NTD ID`:`3 Mode`),
+               names_to="month",
+               values_to="VRM") |>
+  drop_na() |>
+  group_by(`NTD ID`, `Agency`, `UZA Name`,
+           `Mode`, `3 Mode`, month) |>
+  summarize(VRM = sum(VRM)) |>
+  ungroup() |>
+  mutate(month=my(month)) # Parse _m_onth _y_ear date specs
+
+USAGE <- inner_join(TRIPS, MILES) |>
+  mutate(`NTD ID` = as.integer(`NTD ID`))
+
+FINANCIALS <- inner_join(FARES, EXPENSES, join_by(`NTD ID`, `Mode`))
+
+FINANCIALS <- FINANCIALS |>
+  rename(
+         "mode" = "Mode"
+  )
+
+FINANCIALS <- FINANCIALS |>
+  mutate(mode=case_when(
+    mode == "HR" ~ "Heavy Rail",
+    mode == "DR" ~ "Demand Response",
+    mode == "FB" ~ "Ferry Boat",
+    mode == "MB" ~ "Motor Bus",
+    mode == "SR" ~ "Streetcar",
+    mode == "TB" ~ "Trolleybus",
+    mode == "VP" ~ "Vanpool",
+    mode == "CB" ~ "Commuter Bus",
+    mode == "RB" ~ "Bus Rapid Transit",
+    mode == "LR" ~ "Light Rail",
+    mode == "YR" ~ "Hybrid Rail",
+    mode == "MG" ~ "Guided Transit (Monorail)",
+    mode == "CR" ~ "Commuter Rail",
+    mode == "AR" ~ "Alaska Railroad",
+    mode == "TR" ~ "Tramway",
+    mode == "HR" ~ "Heavy Rail",
+    mode == "IP" ~ "Inclined Plane",
+    mode == "PB" ~ "Publico",
+    mode == "CC" ~ "Cable Car",
+    TRUE ~ "Unknown"))
+```
+
+# TASK 1 - Creating Syntactic Names
+Renaming column UZA Name to metro_area:
+```
+USAGE <- USAGE |>
+  rename("metro_area" = "UZA Name",
+         "unlinked_passenge_trips" = "UPT",
+         "vehicle_revenue_miles" = "VRM",
+         "agency" = "Agency",
+         "mode" = "Mode"
+        ) |>
+  select(-"3 Mode")
+```
+### Output: 
+
+| NTD ID | agency      | metro_area          | mode | month      | unlinked_passenger_trips | vehicle_revenue_miles |
+|--------|-------------|---------------------|------|------------|--------------------------|-----------------------|
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-01-01 | 135144                   | 746158                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-02-01 | 127378                   | 656324                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-03-01 | 136030                   | 726578                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-04-01 | 142204                   | 736975                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-05-01 | 144697                   | 746158                |
+| 1      | King County | Seattle--Tacoma, WA | DR   | 2002-06-01 | 131833                   | 696633                |
+
+: Data for King County Transit {.striped .hover}
+
+---
+
+# TASK 2 - Recoding the Mode Column
+Expanding DOT mode codes into their full definitions
+All of the code definitions are found here: 
+[National Transit Database NTD Glossary](https://www.transit.dot.gov/ntd/national-transit-database-ntd-glossary)
+```
+USAGE <- USAGE |>
+  mutate(mode=case_when(
+    mode == "HR" ~ "Heavy Rail",
+    mode == "DR" ~ "Demand Response",
+    mode == "FB" ~ "Ferry Boat",
+    mode == "MB" ~ "Motor Bus",
+    mode == "SR" ~ "Streetcar",
+    mode == "TB" ~ "Trolleybus",
+    mode == "VP" ~ "Vanpool",
+    mode == "CB" ~ "Commuter Bus",
+    mode == "RB" ~ "Bus Rapid Transit",
+    mode == "LR" ~ "Light Rail",
+    mode == "YR" ~ "Hybrid Rail",
+    mode == "MG" ~ "Guided Transit (Monorail)",
+    mode == "CR" ~ "Commuter Rail",
+    mode == "AR" ~ "Alaska Railroad",
+    mode == "TR" ~ "Tramway",
+    mode == "IP" ~ "Inclined Plane",
+    mode == "PB" ~ "Publico",
+    mode == "CC" ~ "Cable Car",
+    TRUE ~ "Unknown"))
+
+sample_n(USAGE, 20) |>
+  select(agency, metro_area, mode)
+```
+| agency                                              | metro_area                        | mode              |
+|-----------------------------------------------------|-----------------------------------|-------------------|
+| Birmingham-Jefferson County Transit Authority       | Birmingham, AL                    | Motor Bus         |
+| Yolo County Transportation District                 | Sacramento, CA                    | Motor Bus         |
+| Michiana Area Council of Governments                | Elkhart, IN--MI                   | Motor Bus         |
+| Lower Rio Grande Valley Development Council         | McAllen, TX                       | Demand Response   |
+| Potomac and Rappahannock Transportation Commission  | Washington--Arlington, DC--VA--MD | Demand Response   |
+| Greater Richmond Transit Company                    | Richmond, VA                      | Vanpool           |
+| Stanislaus Regional Transit Authority               | Modesto, CA                       | Demand Response   |
+| Worcester Regional Transit Authority                | Worcester, MA--CT                 | Demand Response   |
+| Chattanooga Area Regional Transportation Authority  | Chattanooga, TN--GA               | Motor Bus         |
+| Knoxville-Knox County Community Action Committee    | Knoxville, TN                     | Demand Response   |
+| Pinellas Suncoast Transit Authority                 | Tampa--St. Petersburg, FL         | Bus Rapid Transit |
+| Laketran                                            | Cleveland, OH                     | Commuter Bus      |
+| METRO Regional Transit Authority                    | Akron, OH                         | Motor Bus         |
+| Regional Transportation Commission of Washoe County | Reno, NV--CA                      | Demand Response   |
+| Kanawha Valley Regional Transportation Authority    | Charleston, WV                    | Motor Bus         |
+| Maryland Transit Administration                     | Baltimore, MD                     | Light Rail        |
+| Transit Joint Powers Authority for Merced County    | Merced, CA                        | Demand Response   |
+| Broward County Board of County Commissioners        | Miami--Fort Lauderdale, FL        | Motor Bus         |
+| Regional Transportation Program, Inc.               | Portland, ME                      | Demand Response   |
+| Central Midlands Regional Transportation Authority  | Columbia, SC                      | Commuter Bus      |
+
+: Data for Full Definition Transit Modes {.striped .hover}
+
+---
+
+# TASK 3: Answering Instructor Specified Questions with dplyr
+Using functions we have studied in class, including filter, group_by, summarize, arrange, answer the following questions in your analysis:
+
+### Question 1: 
+What transit agency had the most total VRM in this sample?
+
+```
+USAGE |>
+  filter(!is.na(agency)) |>
+  group_by(agency) |>
+  summarize(total = sum(vehicle_revenue_miles)) |>
+  arrange(desc(total))
+```
+| agency                                                                         | total         |
+|--------------------------------------------------------------------------------|---------------|
+| MTA New York City Transit                                                      | 10832855350   |
+| New Jersey Transit Corporation                                                 | 5645525525    |
+| Los Angeles County Metropolitan Transportation Authority                       | 4354016659    |
+| Washington Metropolitan Area Transit Authority                                 | 2821950701    |
+| Chicago Transit Authority                                                      | 2806202144    |
+
+: Data for Agency with Largest Vehicle Revenue Miles {.striped .hover}
+
+### Answer 1: 
+MTA New York City Transit: **10,832,855,350 Vehicle Revenue Miles**
+
+---
+
+### Question 2: 
+What transit mode had the most total VRM in this sample?
+```
+USAGE |>
+  filter(!is.na(mode)) |>
+  group_by(mode) |>
+  summarize(total_vrm = sum(vehicle_revenue_miles, na.rm = TRUE)) |>
+  arrange(desc(total_vrm))
+```
+| mode             | total_vrm      |
+|------------------|----------------|
+| Motor Bus        | 49444494088     |
+| Demand Response  | 17955073508     |
+| Heavy Rail       | 14620362107     |
+| Commuter Rail    |  6970644241     |
+| Vanpool          |  3015783362     |
+
+: Data for mode with largest Vehicle Revenue Miles {.striped .hover}
+
+### Answer 2:  
+Motor Bus: **49,444,494,088 Vehicle Revenue Miles**
+
+---
+
+### Question 3  
+How many trips were taken on the NYC Subway (Heavy Rail) in May 2024?
+```
+USAGE |>
+  filter(
+    month =="2004-05-01" &
+    mode == "Heavy Rail" &
+    agency == "MTA New York City Transit"
+  ) |>
+  select(agency, mode, month, unlinked_passenge_trips)
+```
+| agency                      | mode       | month      | unlinked_passenger_trips |
+|-----------------------------|------------|------------|--------------------------|
+| MTA New York City Transit    | Heavy Rail | 2004-05-01 | 184334430                |
+: Data for trips takes on NYC Subway in May 2024 {.striped .hover}
+
+### Answer 3: 
+**184,334,430 trips**
+
+---
+
+### ~~Question 4~~
+~~What mode of transport had the longest average trip in May 2024?~~
+
+---
+
+### Question 5 
+How much did NYC subway ridership fall between April 2019 and April 2020?
+```
+ subway_ridership <- USAGE |>
+  filter(
+      agency == 'MTA New York City Transit' &
+      mode == "Heavy Rail" &
+      (month == "2019-05-01" | month == "2020-05-01")
+      )
+
+subway_ridership_2019 <- subway_ridership[1,]$unlinked_passenge_trips
+subway_ridership_2020 <- subway_ridership[2,]$unlinked_passenge_trips
+
+subway_ridership_2019 - subway_ridership_2020
+```
+```
+# [1] 210561702
+```
+### Answer 5: 
+184,334,430
+---
+
+### Three more interesting transit facts in this data 
+
+### FACT 1: 
+
+In Pittsburgh, PA there is a unique form of uphill rail transit called the [Duquesne Incline](https://en.m.wikipedia.org/wiki/Duquesne_Incline). Do only tourists ride it? : 
+
+*from Wikipedia:*
+
+>The incline was intended to carry cargo up and down Mt. Washington 
+>in the late 19th century. It later carried passengers, particularly 
+>Mt. Washington residents who were tired of walking up the steep footpaths 
+>to the top of the bluff. Inclines were being built all over Mt. 
+>Washington to serve working-class people who were forced out of the 
+> lowlying riverfront by industrial development
+
+I was interested to see if the ridership numbers suggested any traditional transit usage, or if the incline was now primarily used for “transit tourism”.
+
+```
+month_map <- c(
+  "01" = "January",
+  "02" = "February",
+  "03" = "March",
+  "04" = "April",
+  "05" = "May",
+  "06" = "June",
+  "07" = "July",
+  "08" = "August",
+  "09" = "September",
+  "10" = "October",
+  "11" = "November",
+  "12" = "December"
+)
+
+USAGE |>
+  filter(startsWith(agency, "Pitt")) |>
+  filter(mode == "Inclined Plane") |>
+  mutate(month_split = strsplit(as.character(month), "-")) |>
+  mutate(month_num = sapply(month_split, function(x) x[2])) |>
+  mutate(month_name = month_map[month_num]) |>
+  group_by(month_name) |>
+  summarize(total_this_month = sum(unlinked_passenge_trips)) |>
+  arrange(desc(total_this_month))
+```
+| month_name | total_this_month |
+|------------|------------------|
+| July       | 1715940          |
+| August     | 1507425          |
+| June       | 1424861          |
+| May        | 1224003          |
+| September  | 1128166          |
+| October    | 1061274          |
+| April      | 1032881          |
+| November   | 965257           |
+| March      | 895805           |
+| December   | 877248           |
+| January    | 666924           |
+| February   | 641834           |
+: Data for yearly ridership of the Pittsburgh Inclined Plane {.striped .hover}
+
+### Conclusion 
+The ridership numbers spiking in the summer, along with stark drop off in ridership from December to January, suggest the incline is largely popular with tourists and no longer used by the hill-weary residents of Mt. Washington.
+
+### FACT 2:
+
+As our country remains polarized on so many issues and cultural concern, I was curious if there was an obvious Red vs. Blue divide over transit usage in this country. 
+
+I wanted to see if I could identify any obvious distinctions or division in the use of transit between Red States and Blue States. 
+
+```
+USAGE |>
+  #there is def some code smell here :
+  mutate(state_split = strsplit(metro_area, ", ")) |>
+  mutate(state = sapply(state_split, function(st) st[2])) |>
+  mutate(state_split = strsplit(state, "-")) |>
+  mutate(state = sapply(state_split, function(st) st[1])) |>
+  group_by(state) |>
+  summarize(total_trips = sum(unlinked_passenge_trips)) |>
+  arrange(desc(total_trips)) |>
+  print(n = 20)
+```
+| state | total_trips    |
+|-------|----------------|
+| NY    | 85530025008    |
+| CA    | 27099834336    |
+| IL    | 12744773889    |
+| DC    | 9057818580     |
+| PA    | 8776976555     |
+| MA    | 7993427892     |
+| FL    | 5742223542     |
+| TX    | 5466164685     |
+| WA    | 4524992934     |
+| GA    | 3096203662     |
+| OR    | 2555837796     |
+| OH    | 2364107111     |
+| MD    | 2271510025     |
+| CO    | 2144454426     |
+| MN    | 1909216918     |
+| MI    | 1776345495     |
+| NV    | 1395503197     |
+| AZ    | 1384679690     |
+| MO    | 1371031013     |
+| HI    | 1225521578     |
+: Data for total State Transit Trips {.striped .hover}
+
+
+### Conclusion
+There does in fact look to be a Red vs. Blue divide over transit usage in this country. While this list is indeed dominated by many **Blue States**, I believe the most convincing evidence for this fact are state rankings #7 - #11. 
+
+Both Florida, Texas and Georgia - *all **Red States*** -  are among the largest states by population in the United States. 
+
+1. Florida Population: **22.4 million**
+2. Texas Population: **30.03 million**
+3. Georgia Population: **10.9 million** 
+
+However, Oregon and Washingon are neighbors to those 3 large Red states in this ranking of transit use. 
+
+Yet Oregon and Washington - *both **Blue States*** -  are medium-sized states in terms of population counts. 
+
+1. Washington Population **7.786 million**
+2. Oregon Population    **4.2 million**
+
+That Oregon and Washinton maintain comparable volumes of transit usage, despite significantly lower populations than large **Red States** like Florida, Texas and Georgia, suggest there is a Red v. Blue divide over transit usage in the United States. 
+
+A better exercise would be to measure transit trips / population to see the per capita number for ridership. 
+
+---
+
+# Task 5: Table Summarization
+Create a new table from USAGE that has annual total (sum) UPT and VRM for 2022. This will require use of the group_by, summarize, and filter functions. You will also want to use the year function, to extract a year from the month column.
+
+```
+USAGE_2022_ANNUAL <- USAGE |>
+  mutate(year = year(month)) |>
+  filter(year(month) == 2022) |>
+  group_by(year, metro_area, agency, mode, `NTD ID`) |>
+  summarize(total_upt = sum(unlinked_passenge_trips, na.rm = TRUE),
+            total_vrm = sum(vehicle_revenue_miles, na.rm = TRUE)) |>
+  select(`NTD ID`, agency, metro_area, mode, total_upt, total_vrm, year) |>
+  filter(total_upt > 400000) |>
+  ungroup()
+
+USAGE_AND_FINANCIALS <- left_join(USAGE_2022_ANNUAL,
+                                  FINANCIALS,
+                                  join_by(`NTD ID`, mode)) |>
+  rename(
+    "total_fares" = "Total Fares",
+    "expenses" = "Expenses",
+  ) |>
+  select(-"Agency Name") |>
+  drop_na() |>
+  
+print(USAGE_AND_FINANCIALS, n = 5)
+```
+| NTD ID | agency                                           | metro_area              | mode              | total_upt  | total_vrm  | year | total_fares | expenses   |
+|--------|--------------------------------------------------|-------------------------|-------------------|------------|------------|------|-------------|------------|
+| 50010  | METRO Regional Transit Authority                 | Akron, OH               | Motor Bus          | 3,470,765  | 3,252,489  | 2022 | 2,345,779   | 38,200,740 |
+| 50021  | Portage Area Regional Transportation Authority   | Akron, OH               | Motor Bus          | 591,881    | 672,463    | 2022 | 1,933,660   | 6,197,595  |
+| 20002  | Capital District Transportation Authority        | Albany--Schenectady, NY | Motor Bus          | 12,656,760 | 8,723,783  | 2022 | 7,947,384   | 95,586,715 |
+| 60019  | City of Albuquerque                              | Albuquerque, NM         | Bus Rapid Transit  | 1,829,848  | 792,000    | 2022 | 38,268      | 6,535,431  |
+| 60019  | City of Albuquerque                              | Albuquerque, NM         | Motor Bus          | 4,151,408  | 3,788,377  | 2022 | 738,682     | 40,436,564 |
+: Data for 2022 Usage and Financials {.striped .hover}
+
+---
+
+# Task 6: Farebox Recovery Among Major Systems
+### Question 1 
+Which transit system (agency and mode) had the most UPT in 2022?
+
+```
+USAGE_AND_FINANCIALS |>
+  arrange(desc(total_upt)) |>
+  select(agency, mode, total_upt)
+```
+| agency                                                     | mode        | total_upt    |
+|------------------------------------------------------------|-------------|--------------|
+| MTA New York City Transit                                  | Heavy Rail  | 1,793,073,801 |
+| MTA New York City Transit                                  | Motor Bus   | 458,602,305   |
+| Los Angeles County Metropolitan Transportation Authority   | Motor Bus   | 193,637,448   |
+| Los Angeles County Metropolitan Transportation Authority   | Motor Bus   | 193,637,448   |
+| Chicago Transit Authority                                  | Motor Bus   | 140,013,945   |
+
+### Answer 1: 
+MTA New York City Transit Heavy Rail: **1,793,073,801**
+
+---
+
+### Question 2: 
+Which transit system (agency and mode) had the highest farebox recovery, defined as the highest ratio of Total Fares to Expenses?
+```
+USAGE_AND_FINANCIALS |>
+  mutate(farebox_recovery = total_fares / expenses ) |>
+  arrange(desc(farebox_recovery)) |>
+  select(agency, mode, farebox_recovery) |>
+  print(n = 5)
+```
+| agency                                                | mode           | farebox_recovery |
+|-------------------------------------------------------|----------------|------------------|
+| Port Imperial Ferry Corporation                       | Ferry Boat     | 1.43             |
+| Hyannis Harbor Tours, Inc.                            | Ferry Boat     | 1.41             |
+| Trans-Bridge Lines, Inc.                              | Commuter Bus   | 1.33             |
+| Chattanooga Area Regional Transportation Authority    | Inclined Plane | 1.31             |
+| Regional Transportation Commission of Washoe County   | Vanpool        | 1.24             |
+
+
+### Answer 2: 
+Port Imperial Ferry Corporation, Ferry Boat: **1.43**
+
+---
+
+### Question 3: 
+Which transit system (agency and mode) has the lowest expenses per UPT?
+```
+USAGE_AND_FINANCIALS |>
+  mutate(expenses_UPT = expenses / total_upt ) |>
+  arrange(expenses_UPT) |>
+  select(agency, mode, expenses_UPT)
+```
+| agency                                  | mode        | expenses_UPT |
+|-----------------------------------------|-------------|--------------|
+| North Carolina State University         | Motor Bus   | 1.18         |
+| Anaheim Transportation Network          | Motor Bus   | 1.28         |
+| University of Iowa                      | Motor Bus   | 1.54         |
+| Chatham Area Transit Authority          | Ferry Boat  | 1.60         |
+| Texas State University                  | Motor Bus   | 2.05         |
+
+### Answer 3: 
+North Carolina State University, Motor Bus : **1.18 $/ride**
+
+---
+
+### Question 4: 
+Which transit system (agency and mode) has the highest total fares per UPT?
+```
+USAGE_AND_FINANCIALS |>
+  mutate(fares_UPT = total_fares / total_upt ) |>
+  arrange(desc(fares_UPT)) |>
+  select(agency, mode, fares_UPT)
+```
+
+| agency                                        | mode           | fares_UPT |
+|-----------------------------------------------|----------------|-----------|
+| Hampton Jitney, Inc.                          | Commuter Bus   | 41.3      |
+| Pennsylvania Department of Transportation     | Commuter Rail  | 32.3      |
+| Hyannis Harbor Tours, Inc.                    | Ferry Boat     | 29.6      |
+| Trans-Bridge Lines, Inc.                      | Commuter Bus   | 28.1      |
+| SeaStreak, LLC                                | Ferry Boat     | 22.1      |
+
+### Answer 4: 
+Hampton Jitney: **41.3 $/trip** 
+
+---
+
+### Question 5: 
+Which transit system (agency and mode) has the lowest expenses per VRM?
+
+```
+USAGE_AND_FINANCIALS |>
+  mutate(expenses_VRM = expenses / total_vrm ) |>
+  arrange(expenses_VRM) |>
+  select(agency, mode, expenses_VRM)
+```
+| agency                                                    | mode     | expenses_VRM |
+|-----------------------------------------------------------|----------|--------------|
+| Metropolitan Transportation Commission                    | Vanpool  | 0.445        |
+| San Joaquin Council                                        | Vanpool  | 0.498        |
+| San Diego Association of Governments                       | Vanpool  | 0.540        |
+| Regional Transportation Commission of Washoe County        | Vanpool  | 0.566        |
+| Los Angeles County Metropolitan Transportation Authority   | Vanpool  | 0.581        |
+
+### Answer 5: 
+Metropolitan Transportation Commission : **0.445 $/mile**
+
+---
+
+### Question 6: 
+Which transit system (agency and mode) has the highest total fares per VRM?
+
+```
+USAGE_AND_FINANCIALS |>
+  mutate(fares_VRM = total_fares / total_vrm ) |>
+  arrange(desc(fares_VRM)) |>
+  select(agency, mode, fares_VRM)
+```
+
+| agency                                                       | mode          | fares_VRM |
+|--------------------------------------------------------------|---------------|-----------|
+| Jacksonville Transportation Authority                        | Ferry Boat    | 158.0     |
+| Chattanooga Area Regional Transportation Authority           | Inclined Plane| 149.0     |
+| Hyannis Harbor Tours, Inc.                                   | Ferry Boat    | 138.0     |
+| SeaStreak, LLC                                               | Ferry Boat    | 115.0     |
+| Cape May Lewes Ferry                                         | Ferry Boat    | 93.0      |
+
+### Answer 6: 
+Jacksonville Transportation Authority : **158.0 $/mile**
+
+---
+
+### *Based on all of this, what do you believe to be the most efficient transit system in the country? (Your answer may differ depending on which form of ‘efficiency’ you care most about)*
+
+Transit use is an unmistakable social, ecological and economical good. It enhances opportunity, reduces pollution and generates wealth through efficient land use. 
+
+As such, I believe the transit agency and mode that provides the most trips is the most efficent system:  
+
+# **MTA New York City Transit, Heavy Rail: 	1,793,073,801**
+
