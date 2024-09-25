@@ -444,8 +444,8 @@ sample_n(USAGE, 20) |&gt;
 </table>
 <hr>
 </section>
-<section id="task-3-answering-instructor-specified-questions-with-dplyr" class="level1">
-<h1>TASK 3: Answering Instructor Specified Questions with dplyr</h1>
+<section id="task-3---answering-instructor-specified-questions-with-dplyr" class="level1">
+<h1>TASK 3 - Answering Instructor Specified Questions with dplyr</h1>
 <p>Using functions we have studied in class, including filter, group_by, summarize, arrange, answer the following questions in your analysis:</p>
 <section id="question-1" class="level3">
 <h3 class="anchored" data-anchor-id="question-1">Question 1:</h3>
@@ -608,12 +608,13 @@ subway_ridership_2019 - subway_ridership_2020</code></pre>
 <p>184,334,430</p>
 <hr>
 </section>
-<section id="three-more-interesting-transit-facts-in-this-data" class="level3">
-<h3 class="anchored" data-anchor-id="three-more-interesting-transit-facts-in-this-data">Three more interesting transit facts in this data</h3>
+<section id="three-four-more-interesting-transit-facts-in-this-data" class="level3">
+<h3 class="anchored" data-anchor-id="three-four-more-interesting-transit-facts-in-this-data">Three (four) more interesting transit facts in this data</h3>
 </section>
 <section id="fact-1" class="level3">
-<h3 class="anchored" data-anchor-id="fact-1">FACT 1:</h3>
-<p>In Pittsburgh, PA there is a unique form of uphill rail transit called the <a href="https://en.m.wikipedia.org/wiki/Duquesne_Incline">Duquesne Incline</a>. Do only tourists ride it? :</p>
+<h3 class="anchored" data-anchor-id="fact-1">FACT 1</h3>
+<p><img src="../images/incline.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
+<p>In Pittsburgh, PA there is a unique form of uphill rail transit called the <a href="https://en.m.wikipedia.org/wiki/Duquesne_Incline">Duquesne Incline</a>. It offers arguably the most scenic view of Downtown Pittsburgh and the convergence of the city’s “Three Rivers.” Do tourists largely ride the Duquesne Incline? :</p>
 <p><em>from Wikipedia:</em></p>
 <blockquote class="blockquote">
 <p>The incline was intended to carry cargo up and down Mt. Washington in the late 19th century. It later carried passengers, particularly Mt. Washington residents who were tired of walking up the steep footpaths to the top of the bluff. Inclines were being built all over Mt. Washington to serve working-class people who were forced out of the lowlying riverfront by industrial development</p>
@@ -705,10 +706,11 @@ USAGE |&gt;
 </section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
-<p>The ridership numbers spiking in the summer, along with stark drop off in ridership from December to January, suggest the incline is largely popular with tourists and no longer used by the hill-weary residents of Mt. Washington.</p>
+<p>The ridership numbers spiking in the summer, along with stark drop off in ridership from December to January, suggest the incline is largely popular with tourists and not used as much by the hill-weary residents of Mt. Washington.</p>
 </section>
 <section id="fact-2" class="level3">
-<h3 class="anchored" data-anchor-id="fact-2">FACT 2:</h3>
+<h3 class="anchored" data-anchor-id="fact-2">FACT 2</h3>
+<p><img src="../images/red-state-blue-state.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
 <p>As our country remains polarized on so many issues and cultural concern, I was curious if there was an obvious Red vs.&nbsp;Blue divide over transit usage in this country.</p>
 <p>I wanted to see if I could identify any obvious distinctions or division in the use of transit between Red States and Blue States.</p>
 <pre><code>USAGE |&gt;
@@ -830,6 +832,116 @@ USAGE |&gt;
 </ol>
 <p>That Oregon and Washinton maintain comparable volumes of transit usage, despite significantly lower populations than large <strong>Red States</strong> like Florida, Texas and Georgia, suggest there is a Red v. Blue divide over transit usage in the United States.</p>
 <p>A better exercise would be to measure transit trips / population to see the per capita number for ridership.</p>
+<hr>
+</section>
+<section id="fact-3" class="level3">
+<h3 class="anchored" data-anchor-id="fact-3">FACT 3</h3>
+<p><img src="../images/si_ferry.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
+<p>This is interesting :</p>
+<pre><code>USAGE |&gt;
+  group_by(agency) |&gt;
+  summarize(total_trips = sum(unlinked_passenge_trips),
+            total_miles = sum(vehicle_revenue_miles),
+            num_ppl_mile = total_trips / total_miles
+            ) |&gt;
+  arrange(desc(total_trips)) |&gt;
+  slice(1:50) |&gt;
+  arrange(desc(average_trip)) |&gt;
+  print(n = 50)</code></pre>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 48%">
+<col style="width: 18%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>agency</th>
+<th>total_trips</th>
+<th>total_miles</th>
+<th>num_ppl_mile</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>New York City Department of Transportation</td>
+<td>440,538,576</td>
+<td>4,150,573</td>
+<td>106</td>
+</tr>
+<tr class="even">
+<td>Washington State Ferries</td>
+<td>502,394,973</td>
+<td>20,230,767</td>
+<td>24.8</td>
+</tr>
+<tr class="odd">
+<td>City and County of San Francisco</td>
+<td>4,533,445,698</td>
+<td>583,200,690</td>
+<td>7.77</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="conclusion-2" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-2">Conclusion</h3>
+<p>This looks to be communicating that Ferries are very efficient vehicles for transporting a lot of people over small distances. Every <a href="https://www.nyc.gov/html/dot/html/ferrybus/ferry-facts.shtml#:~:text=John%20J.,16%20knots%2C%20and%209%2C000%20horsepower.">SI Ferry carries around ~4,000 people !</a></p>
+<hr>
+</section>
+<section id="fact-4" class="level3">
+<h3 class="anchored" data-anchor-id="fact-4">FACT 4</h3>
+<p><img src="../images/monorail_man.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"> <img src="../images/monorail_map.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
+<p>This charismatic, tune-carrying charlatan has swindled unknowing cities like Ogdenville, North Haverbrook and Brockway into buying dubious monorail systems for their communities.</p>
+<p>I was interested to see where else this snake-oil salesman - with a voice of gold - has worked his sly sales magic across the United States.</p>
+<pre><code>USAGE |&gt;
+  filter(mode == "Guided Transit (Monorail)") |&gt;
+  group_by(metro_area) |&gt;
+  summarize(count = n())</code></pre>
+<table class="table-striped table-hover caption-top table">
+<caption>Monorails Systems in the United States</caption>
+<thead>
+<tr class="header">
+<th>metro_area</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Detroit, MI</td>
+<td>151</td>
+</tr>
+<tr class="even">
+<td>Jacksonville, FL</td>
+<td>151</td>
+</tr>
+<tr class="odd">
+<td>Las Vegas–Henderson–Paradise, NV</td>
+<td>34</td>
+</tr>
+<tr class="even">
+<td>Miami–Fort Lauderdale, FL</td>
+<td>151</td>
+</tr>
+<tr class="odd">
+<td>Morgantown, WV</td>
+<td>145</td>
+</tr>
+<tr class="even">
+<td>San Francisco–Oakland, CA</td>
+<td>116</td>
+</tr>
+<tr class="odd">
+<td>Seattle–Tacoma, WA</td>
+<td>151</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="conclusion-3" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion-3">Conclusion</h3>
+<p>Detroit, MI, Morgantown, WV and Jacksonville, FL are a few of the US cities where brain-dead slobs work cushy jobs on this extremely unique form of mass transportation.</p>
 <hr>
 </section>
 </section>

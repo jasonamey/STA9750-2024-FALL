@@ -186,7 +186,7 @@ sample_n(USAGE, 20) |>
 
 ---
 
-# TASK 3: Answering Instructor Specified Questions with dplyr
+# TASK 3 - Answering Instructor Specified Questions with dplyr
 Using functions we have studied in class, including filter, group_by, summarize, arrange, answer the following questions in your analysis:
 
 ### Question 1: 
@@ -290,11 +290,13 @@ subway_ridership_2019 - subway_ridership_2020
 184,334,430
 ---
 
-### Three more interesting transit facts in this data 
+### Three (four) more interesting transit facts in this data 
 
-### FACT 1: 
+### FACT 1 
 
-In Pittsburgh, PA there is a unique form of uphill rail transit called the [Duquesne Incline](https://en.m.wikipedia.org/wiki/Duquesne_Incline). Do only tourists ride it? : 
+![](../images/incline.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+In Pittsburgh, PA there is a unique form of uphill rail transit called the [Duquesne Incline](https://en.m.wikipedia.org/wiki/Duquesne_Incline). It offers arguably the most scenic view of Downtown Pittsburgh and the convergence of the city's "Three Rivers." Do tourists largely ride the Duquesne Incline? : 
 
 *from Wikipedia:*
 
@@ -352,9 +354,11 @@ USAGE |>
 
 
 ### Conclusion 
-The ridership numbers spiking in the summer, along with stark drop off in ridership from December to January, suggest the incline is largely popular with tourists and no longer used by the hill-weary residents of Mt. Washington.
+The ridership numbers spiking in the summer, along with stark drop off in ridership from December to January, suggest the incline is largely popular with tourists and not used as much by the hill-weary residents of Mt. Washington.
 
-### FACT 2:
+### FACT 2
+
+![](../images/red-state-blue-state.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 As our country remains polarized on so many issues and cultural concern, I was curious if there was an obvious Red vs. Blue divide over transit usage in this country. 
 
@@ -397,8 +401,8 @@ USAGE |>
 
 : Data for total State Transit Trips {.striped .hover}
 
+### Conclusion 
 
-### Conclusion
 There does in fact look to be a Red vs. Blue divide over transit usage in this country. While this list is indeed dominated by many **Blue States**, I believe the most convincing evidence for this fact are state rankings #7 - #11. 
 
 Both Florida, Texas and Georgia - *all **Red States*** -  are among the largest states by population in the United States. 
@@ -417,6 +421,79 @@ Yet Oregon and Washington - *both **Blue States*** -  are medium-sized states in
 That Oregon and Washinton maintain comparable volumes of transit usage, despite significantly lower populations than large **Red States** like Florida, Texas and Georgia, suggest there is a Red v. Blue divide over transit usage in the United States. 
 
 A better exercise would be to measure transit trips / population to see the per capita number for ridership. 
+
+---
+
+
+### FACT 3 
+
+![](../images/si_ferry.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+
+This is interesting : 
+
+```
+USAGE |>
+  group_by(agency) |>
+  summarize(total_trips = sum(unlinked_passenge_trips),
+            total_miles = sum(vehicle_revenue_miles),
+            num_ppl_mile = total_trips / total_miles
+            ) |>
+  arrange(desc(total_trips)) |>
+  slice(1:50) |>
+  arrange(desc(average_trip)) |>
+  print(n = 50)
+```
+
+
+| agency                                  | total_trips    | total_miles  | num_ppl_mile |
+|-----------------------------------------|----------------|--------------|--------------|
+| New York City Department of Transportation | 440,538,576    | 4,150,573    | 106          |
+| Washington State Ferries                | 502,394,973    | 20,230,767   | 24.8         |
+| City and County of San Francisco        | 4,533,445,698  | 583,200,690  | 7.77         |
+
+
+### Conclusion
+
+
+This looks to be communicating that Ferries are very efficient vehicles for transporting a lot of people over small distances. Every [SI Ferry carries around ~4,000 people ! ](https://www.nyc.gov/html/dot/html/ferrybus/ferry-facts.shtml#:~:text=John%20J.,16%20knots%2C%20and%209%2C000%20horsepower.) 
+
+
+---
+
+### FACT 4 
+
+![](../images/monorail_man.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+![](../images/monorail_map.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+
+This charismatic, tune-carrying charlatan has swindled unknowing cities like Ogdenville, North Haverbrook and Brockway into buying dubious monorail systems for their communities. 
+
+I was interested to see where else this snake-oil salesman - with a voice of gold - has worked his sly sales magic across the United States. 
+
+```
+USAGE |>
+  filter(mode == "Guided Transit (Monorail)") |>
+  group_by(metro_area) |>
+  summarize(count = n())
+```
+
+| metro_area                           | count |
+|--------------------------------------|-------|
+| Detroit, MI                          | 151   |
+| Jacksonville, FL                     | 151   |
+| Las Vegas--Henderson--Paradise, NV    | 34    |
+| Miami--Fort Lauderdale, FL           | 151   |
+| Morgantown, WV                       | 145   |
+| San Francisco--Oakland, CA           | 116   |
+| Seattle--Tacoma, WA                  | 151   |
+
+: Monorails Systems in the United States {.striped .hover}
+
+### Conclusion 
+
+Detroit, MI, Morgantown, WV and Jacksonville, FL are a few of the US cities where brain-dead slobs work cushy jobs on this extremely unique form of mass transportation. 
+
 
 ---
 
