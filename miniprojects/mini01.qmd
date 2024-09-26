@@ -1,11 +1,11 @@
 # Jason Amey Mini Project 01 
 ## Fiscal Characteristics of Major US Public Transit Systems
 
-Public transit in the United States serves a critical role in urban mobility. US transit serves millions of commuters while reducing congestion, pollution, and reliance on personal vehicles. 
+Public transit in the United States serves a critical role in urban mobility.  Serving millions of commuters while reducing congestion, pollution, and reliance on personal vehicles, transit is a critical institution in the success of the United States. 
 
-There exists a wide variation in the fiscal efficiency of these systems. But understanding these financial dimensions is essential for evaluating both the sustainability and performance of transit services.
+However there exists a wide variation in the fiscal efficiency of these systems. Understanding these financial dimensions is essential for evaluating both the sustainability and performance of transit services.
 
-This report explores data from major U.S. public transit systems, with analyis focused on factors such as: fare revenue per mile, vehicle revenue miles (VRM), unlinked passenger trips (UPT), and the ratio of expenses to farebox recovery. 
+This report explores data from major U.S. public transit systems, with analysis focused on factors such as: fare revenue per mile, vehicle revenue miles (VRM), unlinked passenger trips (UPT), and the ratio of expenses to fare-box recovery. 
 
 The data provide insights into: which systems operate most efficiently, which modes of transport generate the most revenue, and how these metrics differ throughout the United States.
 
