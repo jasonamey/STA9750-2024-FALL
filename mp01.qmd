@@ -328,7 +328,7 @@ Covid sucked.
 
 ### FACT 1 
 
-![](../images/incline.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+![](images/incline.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 In Pittsburgh, PA there is a unique form of uphill rail transit called the [Duquesne Incline](https://en.m.wikipedia.org/wiki/Duquesne_Incline). It offers arguably the most scenic view of Downtown Pittsburgh and the convergence of the city's "Three Rivers." Do tourists largely ride the Duquesne Incline? : 
 
@@ -396,7 +396,7 @@ The ridership numbers spiking in the summer, along with stark drop off in riders
 
 ### FACT 2
 
-![](../images/red-state-blue-state.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+![](images/red-state-blue-state.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 As our country remains polarized on so many issues and cultural concern, I was curious if there was an obvious Red vs. Blue divide over transit usage in this country. 
 
@@ -467,7 +467,7 @@ A better exercise would be to measure transit trips / population to see the per 
 
 ### FACT 3 
 
-![](../images/si_ferry.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+![](images/si_ferry.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 
 This is interesting : 
@@ -503,8 +503,8 @@ This looks to be communicating that Ferries are very efficient vehicles for tran
 
 ### FACT 4 
 
-![](../images/monorail_man.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto; margin-bottom: 10px;"}
-![](../images/monorail_map.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+![](images/monorail_man.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto; margin-bottom: 10px;"}
+![](images/monorail_map.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 
 This charismatic, tune-carrying charlatan has swindled unknowing cities like Ogdenville, North Haverbrook and Brockway into buying dubious monorail systems for their communities. 
