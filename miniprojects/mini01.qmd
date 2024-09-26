@@ -3,13 +3,14 @@
 
 Public transit in the United States serves a critical role in urban mobility. US transit serves millions of commuters while reducing congestion, pollution, and reliance on personal vehicles. 
 
-The fiscal efficiency of these systems varies widely. However understanding these financial dimensions is essential for evaluating the sustainability and performance of transit services in a variety of cities and regions.
+There exists a wide variation in the fiscal efficiency of these systems. But understanding these financial dimensions is essential for evaluating both the sustainability and performance of transit services.
 
 This report explores data from major U.S. public transit systems, with analyis focused on factors such as: fare revenue per mile, vehicle revenue miles (VRM), unlinked passenger trips (UPT), and the ratio of expenses to farebox recovery. 
 
-This data provide insights into which systems operate most efficiently, which modes of transport generate the most revenue, and how these metrics differ across various regions in the United States.
+The data provide insights into: which systems operate most efficiently, which modes of transport generate the most revenue, and how these metrics differ throughout the United States.
 
-Using tools from the R programming language, we explore these trends over time and the influence of population density, geography, and mode type on financial outcomes. 
+Using tools from the R programming language, we explore these trends over time along with the influence of population density, geography, and mode-type on a transit system's financial outcomes. 
+
 Through this exploration, we hope to better understand the complex relationship between transit usage, financial sustainability, and regional transit characteristics.
 
 ### Data Creation : 
