@@ -1,6 +1,17 @@
 # Jason Amey Mini Project 01 
 ## Fiscal Characteristics of Major US Public Transit Systems
 
+Public transit in the United States serves a critical role in urban mobility. US transit serves millions of commuters while reducing congestion, pollution, and reliance on personal vehicles. 
+
+The fiscal efficiency of these systems varies widely. However understanding these financial dimensions is essential for evaluating the sustainability and performance of transit services in a variety of cities and regions.
+
+This report explores data from major U.S. public transit systems, with analyis focused on factors such as: fare revenue per mile, vehicle revenue miles (VRM), unlinked passenger trips (UPT), and the ratio of expenses to farebox recovery. 
+
+This data provide insights into which systems operate most efficiently, which modes of transport generate the most revenue, and how these metrics differ across various regions in the United States.
+
+Using tools from the R programming language, we explore these trends over time and the influence of population density, geography, and mode type on financial outcomes. 
+Through this exploration, we hope to better understand the complex relationship between transit usage, financial sustainability, and regional transit characteristics.
+
 ### Data Creation : 
 
 ```
@@ -113,7 +124,7 @@ USAGE <- USAGE |>
         ) |>
   select(-"3 Mode")
 ```
-### Output: 
+### output: 
 
 | NTD ID | agency      | metro_area          | mode | month      | unlinked_passenger_trips | vehicle_revenue_miles |
 |--------|-------------|---------------------|------|------------|--------------------------|-----------------------|
@@ -159,6 +170,9 @@ USAGE <- USAGE |>
 sample_n(USAGE, 20) |>
   select(agency, metro_area, mode)
 ```
+
+### output:
+
 | agency                                              | metro_area                        | mode              |
 |-----------------------------------------------------|-----------------------------------|-------------------|
 | Birmingham-Jefferson County Transit Authority       | Birmingham, AL                    | Motor Bus         |
@@ -189,7 +203,7 @@ sample_n(USAGE, 20) |>
 # TASK 3 - Answering Instructor Specified Questions with dplyr
 Using functions we have studied in class, including filter, group_by, summarize, arrange, answer the following questions in your analysis:
 
-### Question 1: 
+### Question 1 
 What transit agency had the most total VRM in this sample?
 
 ```
@@ -199,6 +213,8 @@ USAGE |>
   summarize(total = sum(vehicle_revenue_miles)) |>
   arrange(desc(total))
 ```
+### output:
+
 | agency                                                                         | total         |
 |--------------------------------------------------------------------------------|---------------|
 | MTA New York City Transit                                                      | 10,832,855,350 |
@@ -210,9 +226,12 @@ USAGE |>
 
 : Data for Agency with Largest Vehicle Revenue Miles {.striped .hover}
 
-### Answer 1: 
+### Answer 1 
 MTA New York City Transit: **10,832,855,350 Vehicle Revenue Miles**
 
+**Note:** 
+
+New York City is the largest city in the United States and the "big city" with the highest percentage of its residents using mass transit. These findings are in line with the signature characteristics of NYC's transportation demographics. 
 ---
 
 ### Question 2: 
@@ -224,6 +243,8 @@ USAGE |>
   summarize(total_vrm = sum(vehicle_revenue_miles, na.rm = TRUE)) |>
   arrange(desc(total_vrm))
 ```
+### output:
+
 | mode             | total_vrm      |
 |------------------|----------------|
 | Motor Bus        | 49,444,494,088  |
@@ -233,10 +254,16 @@ USAGE |>
 | Vanpool          | 3,015,783,362   |
 
 
-: Data for mode with largest Vehicle Revenue Miles {.striped .hover}
+: Data for Mode with Largest Vehicle Revenue Miles {.striped .hover}
 
-### Answer 2:  
+ 
+
+### Answer 2  
 Motor Bus: **49,444,494,088 Vehicle Revenue Miles**
+
+**Note:**
+
+Outside a few major eastern US cities, much of the United States transportation infrastructure is meant to serve motorized vehicles. It is logical then that the motor bus would far outnumber the miles traveled by rail and other forms of transit.
 
 ---
 
@@ -251,15 +278,19 @@ USAGE |>
   ) |>
   select(agency, mode, month, unlinked_passenge_trips)
 ```
+### output:
+
 | agency                      | mode       | month      | unlinked_passenger_trips |
 |-----------------------------|------------|------------|--------------------------|
 | MTA New York City Transit    | Heavy Rail | 2004-05-01 | 184,334,430              |
 
-: Data for trips taken on NYC Subway in May 2024 {.striped .hover}
+: Data for Trips Taken on NYC Subway in May 2024 {.striped .hover}
 
 
-### Answer 3: 
+### Answer 3 
 **184,334,430 trips**
+
+If you divide this figure by 30 (days in a month), and then divide that result by 8,300,000 (population of NYC), the average New Yorker takes .7402 subway rides a day. 
 
 ---
 
@@ -288,6 +319,10 @@ subway_ridership_2019 - subway_ridership_2020
 ```
 ### Answer 5: 
 184,334,430
+
+**Note:**
+
+Covid sucked. 
 ---
 
 ### Three (four) more interesting transit facts in this data 
@@ -335,6 +370,8 @@ USAGE |>
   summarize(total_this_month = sum(unlinked_passenge_trips)) |>
   arrange(desc(total_this_month))
 ```
+### output:
+
 | month_name | total_this_month |
 |------------|------------------|
 | July       | 1,715,940        |
@@ -350,7 +387,7 @@ USAGE |>
 | January    | 666,924          |
 | February   | 641,834          |
 
-: Data for yearly ridership of the Pittsburgh Inclined Plane {.striped .hover}
+: Data for Yearly Ridership of the Pittsburgh Inclined Plane {.striped .hover}
 
 
 ### Conclusion 
@@ -378,6 +415,8 @@ USAGE |>
   arrange(desc(total_trips)) |>
   print(n = 20)
 ```
+### output:
+
 | state | total_trips    |
 |-------|----------------|
 | NY    | 85,530,025,008 |
@@ -401,7 +440,7 @@ USAGE |>
 | MO    | 1,371,031,013  |
 | HI    | 1,225,521,578  |
 
-: Data for total State Transit Trips {.striped .hover}
+: Data for Total State Transit Trips {.striped .hover}
 
 ### Conclusion 
 
@@ -446,7 +485,7 @@ USAGE |>
   arrange(desc(average_trip)) |>
   print(n = 50)
 ```
-
+### output:
 
 | agency                                  | total_trips    | total_miles  | num_ppl_mile |
 |-----------------------------------------|----------------|--------------|--------------|
@@ -465,13 +504,13 @@ This looks to be communicating that Ferries are very efficient vehicles for tran
 
 ### FACT 4 
 
-![](../images/monorail_man.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+![](../images/monorail_man.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto; margin-bottom: 10px;"}
 ![](../images/monorail_map.jpg){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 
 This charismatic, tune-carrying charlatan has swindled unknowing cities like Ogdenville, North Haverbrook and Brockway into buying dubious monorail systems for their communities. 
 
-I was interested to see where else this snake-oil salesman - with a voice of gold - has worked his sly sales magic across the United States. 
+I was interested to see where this snake-oil salesman - with a voice of gold! - has worked his sly sales magic across the United States... 
 
 ```
 USAGE |>
@@ -479,6 +518,8 @@ USAGE |>
   group_by(metro_area) |>
   summarize(count = n())
 ```
+
+### output:
 
 | metro_area                           | count |
 |--------------------------------------|-------|
@@ -494,7 +535,7 @@ USAGE |>
 
 ### Conclusion 
 
-Detroit, MI, Morgantown, WV and Jacksonville, FL are a few of the US cities where brain-dead slobs work cushy jobs on this extremely unique form of mass transportation. 
+Detroit, MI, Morgantown, WV and Jacksonville, FL are a few of the US cities where brain-dead slobs work cushy jobs on this very unique, very rare form of mass transit. 
 
 
 ---
@@ -525,6 +566,8 @@ USAGE_AND_FINANCIALS <- left_join(USAGE_2022_ANNUAL,
   
 print(USAGE_AND_FINANCIALS, n = 5)
 ```
+### output:
+
 | NTD ID | agency                                           | metro_area              | mode              | total_upt  | total_vrm  | year | total_fares | expenses   |
 |--------|--------------------------------------------------|-------------------------|-------------------|------------|------------|------|-------------|------------|
 | 50010  | METRO Regional Transit Authority                 | Akron, OH               | Motor Bus          | 3,470,765  | 3,252,489  | 2022 | 2,345,779   | 38,200,740 |
@@ -545,6 +588,8 @@ USAGE_AND_FINANCIALS |>
   arrange(desc(total_upt)) |>
   select(agency, mode, total_upt)
 ```
+### output:
+
 | agency                                                     | mode        | total_upt    |
 |------------------------------------------------------------|-------------|--------------|
 | MTA New York City Transit                                  | Heavy Rail  | 1,793,073,801 |
@@ -552,10 +597,17 @@ USAGE_AND_FINANCIALS |>
 | Los Angeles County Metropolitan Transportation Authority   | Motor Bus   | 193,637,448   |
 | Los Angeles County Metropolitan Transportation Authority   | Motor Bus   | 193,637,448   |
 | Chicago Transit Authority                                  | Motor Bus   | 140,013,945   |
+: Transit GOATs {.striped .hover}
+
 
 ### Answer 1: 
 MTA New York City Transit Heavy Rail: **1,793,073,801**
 
+**Note:** 
+
+While New York City's inclusion on this list is understandable, along with Chicago: the 3rd largest city in the United States, seen as an historical pre-war, pre-automobile city... the inclusion of Los Angeles County is arguably surprising. 
+
+While LA County is of significant population size, it is considered a "sprawled out" metro area most friendly to the automobile. Despite this reputation, and despite the challenges of offering transit in a region with lower population density, LA county's high transit ridership suggests the existence of an undeniable appetite for quality transit.
 ---
 
 ### Question 2: 
@@ -567,6 +619,8 @@ USAGE_AND_FINANCIALS |>
   select(agency, mode, farebox_recovery) |>
   print(n = 5)
 ```
+### output:
+
 | agency                                                | mode           | farebox_recovery |
 |-------------------------------------------------------|----------------|------------------|
 | Port Imperial Ferry Corporation                       | Ferry Boat     | 1.43             |
@@ -574,10 +628,15 @@ USAGE_AND_FINANCIALS |>
 | Trans-Bridge Lines, Inc.                              | Commuter Bus   | 1.33             |
 | Chattanooga Area Regional Transportation Authority    | Inclined Plane | 1.31             |
 | Regional Transportation Commission of Washoe County   | Vanpool        | 1.24             |
+: Private Ride You're Going to Pay {.striped .hover}
 
 
 ### Answer 2: 
 Port Imperial Ferry Corporation, Ferry Boat: **1.43**
+
+**Note:**
+
+Port Imperial Ferry, Haynnis Harbor Tours and Trans-Bridge Lines are all private companies. As private companies, their fares **must** exceed their expenses as their operations are not supported by any government entity. Furthermore, business owners expect profit on their capital investment and assumption of risk. This is consistent with an observation of fares outpacing revenue.  
 
 ---
 
@@ -589,6 +648,8 @@ USAGE_AND_FINANCIALS |>
   arrange(expenses_UPT) |>
   select(agency, mode, expenses_UPT)
 ```
+### output:
+
 | agency                                  | mode        | expenses_UPT |
 |-----------------------------------------|-------------|--------------|
 | North Carolina State University         | Motor Bus   | 1.18         |
@@ -596,9 +657,15 @@ USAGE_AND_FINANCIALS |>
 | University of Iowa                      | Motor Bus   | 1.54         |
 | Chatham Area Transit Authority          | Ferry Boat  | 1.60         |
 | Texas State University                  | Motor Bus   | 2.05         |
+: Where is the NYU Shuttle? {.striped .hover}
+
 
 ### Answer 3: 
 North Carolina State University, Motor Bus : **1.18 $/ride**
+
+**Note:** 
+
+It's logical that the transit systems with the lowest expense per ride serve universities. College campuses are communities with two factors suited for offering affordable, cost-sensitive transit: a high population density (students are mostly in dorms and shared housing) and a smaller surface for transit coverage (the routes are limited to a college campus, not an entire city).
 
 ---
 
@@ -610,6 +677,7 @@ USAGE_AND_FINANCIALS |>
   arrange(desc(fares_UPT)) |>
   select(agency, mode, fares_UPT)
 ```
+### output:
 
 | agency                                        | mode           | fares_UPT |
 |-----------------------------------------------|----------------|-----------|
@@ -618,13 +686,17 @@ USAGE_AND_FINANCIALS |>
 | Hyannis Harbor Tours, Inc.                    | Ferry Boat     | 29.6      |
 | Trans-Bridge Lines, Inc.                      | Commuter Bus   | 28.1      |
 | SeaStreak, LLC                                | Ferry Boat     | 22.1      |
+: Soak the Rich {.striped .hover}
 
-### Answer 4: 
+### Answer 4 
 Hampton Jitney: **41.3 $/trip** 
 
+**Note:**
+
+The Hampton Jitney is a logical candidate to collect the highest fares for every ride (i.e. its riders pay the most) because it is responsible for transporting some the wealthiest residents of New York City to some of the most desirable vacationing in the United States - the famed beach community "The Hamptons." If you can charge wealthy customers more for a service they can afford, as a business person, why wouldn't you?  What's more, the Hampton Jitney vehicles are outfitted with amenities to comfort the wealthy riders who use the service. Seemingly the higher fares are not only going to transportation expenses, but also on-bus goodies used to appeal to a luxury audience. 
 ---
 
-### Question 5: 
+### Question 5 
 Which transit system (agency and mode) has the lowest expenses per VRM?
 
 ```
@@ -633,6 +705,8 @@ USAGE_AND_FINANCIALS |>
   arrange(expenses_VRM) |>
   select(agency, mode, expenses_VRM)
 ```
+### output:
+
 | agency                                                    | mode     | expenses_VRM |
 |-----------------------------------------------------------|----------|--------------|
 | Metropolitan Transportation Commission                    | Vanpool  | 0.445        |
@@ -640,13 +714,18 @@ USAGE_AND_FINANCIALS |>
 | San Diego Association of Governments                       | Vanpool  | 0.540        |
 | Regional Transportation Commission of Washoe County        | Vanpool  | 0.566        |
 | Los Angeles County Metropolitan Transportation Authority   | Vanpool  | 0.581        |
+: Vanlyfe {.striped .hover}
 
-### Answer 5: 
+### Answer 5 
 Metropolitan Transportation Commission : **0.445 $/mile**
+
+**Note:**
+
+Vanpool's efficiency stems from 1. it being easier to run a smaller van at capacity than a larger bus and 2. it being subsidized by non-road users. The highway trust fund has long been running a deficit as gas tax revenues have not kept up with [the cost of highway construction and maintenance](https://frontiergroup.org/resources/who-pays-roads/). Because vanpool can run its vehicles consistently at full capacity, and can use infrastructure that is not fully supported by road user fees, it suggests an efficient form of transit. 
 
 ---
 
-### Question 6: 
+### Question : 
 Which transit system (agency and mode) has the highest total fares per VRM?
 
 ```
@@ -655,6 +734,7 @@ USAGE_AND_FINANCIALS |>
   arrange(desc(fares_VRM)) |>
   select(agency, mode, fares_VRM)
 ```
+### output:
 
 | agency                                                       | mode          | fares_VRM |
 |--------------------------------------------------------------|---------------|-----------|
@@ -663,17 +743,25 @@ USAGE_AND_FINANCIALS |>
 | Hyannis Harbor Tours, Inc.                                   | Ferry Boat    | 138.0     |
 | SeaStreak, LLC                                               | Ferry Boat    | 115.0     |
 | Cape May Lewes Ferry                                         | Ferry Boat    | 93.0      |
+: Expensive Boats {.striped .hover}
 
-### Answer 6: 
+### Answer 6 
 Jacksonville Transportation Authority : **158.0 $/mile**
+
+**Note:** 
+
+Ferries are often necessary, not because a rider needs to travel long distances, but because a body of water is serving as an insurmountable transportation barrier. 
+
+Ferries are expensive. Here in NYC, ferries operate at [10X the subsidy as a subway ride](https://www.6sqft.com/nyc-ferrys-gets-a-10-37-per-ride-subsidy-despite-fewer-annual-riders-than-the-subway-has-in-a-day/). Presumably the higher fares collected by these transit agencies are needed to cover the ferry boat's higher expenses. With the combination of a larger numerator (the ferry fares) and a smaller denominator (miles traveled) we can understand the results found here. 
 
 ---
 
-### *Based on all of this, what do you believe to be the most efficient transit system in the country? (Your answer may differ depending on which form of ‘efficiency’ you care most about)*
+### Based on all of this, what do you believe to be the most efficient transit system in the country? (Your answer may differ depending on which form of ‘efficiency’ you care most about)
 
 Transit use is an unmistakable social, ecological and economical good. It enhances opportunity, reduces pollution and generates wealth through efficient land use. 
 
-As such, I believe the transit agency and mode that provides the most trips is the most efficent system:  
+As such, I believe the transit agency and mode that provides the most trips is *the most efficient system*:  
 
 # **MTA New York City Transit, Heavy Rail: 	1,793,073,801**
+
 

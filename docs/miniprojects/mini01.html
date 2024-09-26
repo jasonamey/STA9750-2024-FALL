@@ -103,6 +103,11 @@ ul.task-list li input[type="checkbox"] {
 <h1>Jason Amey Mini Project 01</h1>
 <section id="fiscal-characteristics-of-major-us-public-transit-systems" class="level2">
 <h2 class="anchored" data-anchor-id="fiscal-characteristics-of-major-us-public-transit-systems">Fiscal Characteristics of Major US Public Transit Systems</h2>
+<p>Public transit in the United States serves a critical role in urban mobility. US transit serves millions of commuters while reducing congestion, pollution, and reliance on personal vehicles.</p>
+<p>The fiscal efficiency of these systems varies widely. However understanding these financial dimensions is essential for evaluating the sustainability and performance of transit services in a variety of cities and regions.</p>
+<p>This report explores data from major U.S. public transit systems, with analyis focused on factors such as: fare revenue per mile, vehicle revenue miles (VRM), unlinked passenger trips (UPT), and the ratio of expenses to farebox recovery.</p>
+<p>This data provide insights into which systems operate most efficiently, which modes of transport generate the most revenue, and how these metrics differ across various regions in the United States.</p>
+<p>Using tools from the R programming language, we explore these trends over time and the influence of population density, geography, and mode type on financial outcomes. Through this exploration, we hope to better understand the complex relationship between transit usage, financial sustainability, and regional transit characteristics.</p>
 <section id="data-creation" class="level3">
 <h3 class="anchored" data-anchor-id="data-creation">Data Creation :</h3>
 <pre><code>if(!require("tidyverse")) install.packages("tidyverse")
@@ -215,7 +220,7 @@ FINANCIALS &lt;- FINANCIALS |&gt;
         ) |&gt;
   select(-"3 Mode")</code></pre>
 <section id="output" class="level3">
-<h3 class="anchored" data-anchor-id="output">Output:</h3>
+<h3 class="anchored" data-anchor-id="output">output:</h3>
 <table class="table-striped table-hover caption-top table">
 <caption>Data for King County Transit</caption>
 <colgroup>
@@ -325,6 +330,8 @@ FINANCIALS &lt;- FINANCIALS |&gt;
 
 sample_n(USAGE, 20) |&gt;
   select(agency, metro_area, mode)</code></pre>
+<section id="output-1" class="level3">
+<h3 class="anchored" data-anchor-id="output-1">output:</h3>
 <table class="table-striped table-hover caption-top table">
 <caption>Data for Full Definition Transit Modes</caption>
 <colgroup>
@@ -444,17 +451,21 @@ sample_n(USAGE, 20) |&gt;
 </table>
 <hr>
 </section>
+</section>
 <section id="task-3---answering-instructor-specified-questions-with-dplyr" class="level1">
 <h1>TASK 3 - Answering Instructor Specified Questions with dplyr</h1>
 <p>Using functions we have studied in class, including filter, group_by, summarize, arrange, answer the following questions in your analysis:</p>
 <section id="question-1" class="level3">
-<h3 class="anchored" data-anchor-id="question-1">Question 1:</h3>
+<h3 class="anchored" data-anchor-id="question-1">Question 1</h3>
 <p>What transit agency had the most total VRM in this sample?</p>
 <pre><code>USAGE |&gt;
   filter(!is.na(agency)) |&gt;
   group_by(agency) |&gt;
   summarize(total = sum(vehicle_revenue_miles)) |&gt;
   arrange(desc(total))</code></pre>
+</section>
+<section id="output-2" class="level3">
+<h3 class="anchored" data-anchor-id="output-2">output:</h3>
 <table class="table-striped table-hover caption-top table">
 <caption>Data for Agency with Largest Vehicle Revenue Miles</caption>
 <colgroup>
@@ -492,8 +503,10 @@ sample_n(USAGE, 20) |&gt;
 </table>
 </section>
 <section id="answer-1" class="level3">
-<h3 class="anchored" data-anchor-id="answer-1">Answer 1:</h3>
+<h3 class="anchored" data-anchor-id="answer-1">Answer 1</h3>
 <p>MTA New York City Transit: <strong>10,832,855,350 Vehicle Revenue Miles</strong></p>
+<p><strong>Note:</strong></p>
+<p>New York City is the largest city in the United States and the “big city” with the highest percentage of its residents using mass transit. These findings are in line with the signature characteristics of NYC’s transportation demographics.</p>
 <hr>
 </section>
 <section id="question-2" class="level3">
@@ -504,8 +517,11 @@ sample_n(USAGE, 20) |&gt;
   group_by(mode) |&gt;
   summarize(total_vrm = sum(vehicle_revenue_miles, na.rm = TRUE)) |&gt;
   arrange(desc(total_vrm))</code></pre>
+</section>
+<section id="output-3" class="level3">
+<h3 class="anchored" data-anchor-id="output-3">output:</h3>
 <table class="table-striped table-hover caption-top table">
-<caption>Data for mode with largest Vehicle Revenue Miles</caption>
+<caption>Data for Mode with Largest Vehicle Revenue Miles</caption>
 <thead>
 <tr class="header">
 <th>mode</th>
@@ -537,8 +553,10 @@ sample_n(USAGE, 20) |&gt;
 </table>
 </section>
 <section id="answer-2" class="level3">
-<h3 class="anchored" data-anchor-id="answer-2">Answer 2:</h3>
+<h3 class="anchored" data-anchor-id="answer-2">Answer 2</h3>
 <p>Motor Bus: <strong>49,444,494,088 Vehicle Revenue Miles</strong></p>
+<p><strong>Note:</strong></p>
+<p>Outside a few major eastern US cities, much of the United States transportation infrastructure is meant to serve motorized vehicles. It is logical then that the motor bus would far outnumber the miles traveled by rail and other forms of transit.</p>
 <hr>
 </section>
 <section id="question-3" class="level3">
@@ -551,8 +569,11 @@ sample_n(USAGE, 20) |&gt;
     agency == "MTA New York City Transit"
   ) |&gt;
   select(agency, mode, month, unlinked_passenge_trips)</code></pre>
+</section>
+<section id="output-4" class="level3">
+<h3 class="anchored" data-anchor-id="output-4">output:</h3>
 <table class="table-striped table-hover caption-top table">
-<caption>Data for trips taken on NYC Subway in May 2024</caption>
+<caption>Data for Trips Taken on NYC Subway in May 2024</caption>
 <colgroup>
 <col style="width: 36%">
 <col style="width: 15%">
@@ -578,8 +599,9 @@ sample_n(USAGE, 20) |&gt;
 </table>
 </section>
 <section id="answer-3" class="level3">
-<h3 class="anchored" data-anchor-id="answer-3">Answer 3:</h3>
+<h3 class="anchored" data-anchor-id="answer-3">Answer 3</h3>
 <p><strong>184,334,430 trips</strong></p>
+<p>If you divide this figure by 30 (days in a month), and then divide that result by 8,300,000 (population of NYC), the average New Yorker takes .7402 subway rides a day.</p>
 <hr>
 </section>
 <section id="question-4" class="level3">
@@ -606,6 +628,8 @@ subway_ridership_2019 - subway_ridership_2020</code></pre>
 <section id="answer-5" class="level3">
 <h3 class="anchored" data-anchor-id="answer-5">Answer 5:</h3>
 <p>184,334,430</p>
+<p><strong>Note:</strong></p>
+<p>Covid sucked.</p>
 <hr>
 </section>
 <section id="three-four-more-interesting-transit-facts-in-this-data" class="level3">
@@ -644,8 +668,11 @@ USAGE |&gt;
   group_by(month_name) |&gt;
   summarize(total_this_month = sum(unlinked_passenge_trips)) |&gt;
   arrange(desc(total_this_month))</code></pre>
+</section>
+<section id="output-5" class="level3">
+<h3 class="anchored" data-anchor-id="output-5">output:</h3>
 <table class="table-striped table-hover caption-top table">
-<caption>Data for yearly ridership of the Pittsburgh Inclined Plane</caption>
+<caption>Data for Yearly Ridership of the Pittsburgh Inclined Plane</caption>
 <thead>
 <tr class="header">
 <th>month_name</th>
@@ -724,8 +751,11 @@ USAGE |&gt;
   summarize(total_trips = sum(unlinked_passenge_trips)) |&gt;
   arrange(desc(total_trips)) |&gt;
   print(n = 20)</code></pre>
+</section>
+<section id="output-6" class="level3">
+<h3 class="anchored" data-anchor-id="output-6">output:</h3>
 <table class="table-striped table-hover caption-top table">
-<caption>Data for total State Transit Trips</caption>
+<caption>Data for Total State Transit Trips</caption>
 <thead>
 <tr class="header">
 <th>state</th>
@@ -849,6 +879,9 @@ USAGE |&gt;
   slice(1:50) |&gt;
   arrange(desc(average_trip)) |&gt;
   print(n = 50)</code></pre>
+</section>
+<section id="output-7" class="level3">
+<h3 class="anchored" data-anchor-id="output-7">output:</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 48%">
@@ -893,13 +926,16 @@ USAGE |&gt;
 </section>
 <section id="fact-4" class="level3">
 <h3 class="anchored" data-anchor-id="fact-4">FACT 4</h3>
-<p><img src="../images/monorail_man.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"> <img src="../images/monorail_map.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
+<p><img src="../images/monorail_man.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto; margin-bottom: 10px;"> <img src="../images/monorail_map.jpg" class="img-fluid" style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
 <p>This charismatic, tune-carrying charlatan has swindled unknowing cities like Ogdenville, North Haverbrook and Brockway into buying dubious monorail systems for their communities.</p>
-<p>I was interested to see where else this snake-oil salesman - with a voice of gold - has worked his sly sales magic across the United States.</p>
+<p>I was interested to see where this snake-oil salesman - with a voice of gold! - has worked his sly sales magic across the United States…</p>
 <pre><code>USAGE |&gt;
   filter(mode == "Guided Transit (Monorail)") |&gt;
   group_by(metro_area) |&gt;
   summarize(count = n())</code></pre>
+</section>
+<section id="output-8" class="level3">
+<h3 class="anchored" data-anchor-id="output-8">output:</h3>
 <table class="table-striped table-hover caption-top table">
 <caption>Monorails Systems in the United States</caption>
 <thead>
@@ -942,7 +978,7 @@ USAGE |&gt;
 </section>
 <section id="conclusion-3" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion-3">Conclusion</h3>
-<p>Detroit, MI, Morgantown, WV and Jacksonville, FL are a few of the US cities where brain-dead slobs work cushy jobs on this extremely unique form of mass transportation.</p>
+<p>Detroit, MI, Morgantown, WV and Jacksonville, FL are a few of the US cities where brain-dead slobs work cushy jobs on this very unique, very rare form of mass transit.</p>
 <hr>
 </section>
 </section>
@@ -970,6 +1006,8 @@ USAGE_AND_FINANCIALS &lt;- left_join(USAGE_2022_ANNUAL,
   drop_na() |&gt;
   
 print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
+<section id="output-9" class="level3">
+<h3 class="anchored" data-anchor-id="output-9">output:</h3>
 <table class="table-striped table-hover caption-top table">
 <caption>Data for 2022 Usage and Financials</caption>
 <colgroup>
@@ -1056,6 +1094,7 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
 </table>
 <hr>
 </section>
+</section>
 <section id="task-6-farebox-recovery-among-major-systems" class="level1">
 <h1>Task 6: Farebox Recovery Among Major Systems</h1>
 <section id="question-1-1" class="level3">
@@ -1064,7 +1103,11 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
 <pre><code>USAGE_AND_FINANCIALS |&gt;
   arrange(desc(total_upt)) |&gt;
   select(agency, mode, total_upt)</code></pre>
-<table class="caption-top table">
+</section>
+<section id="output-10" class="level3">
+<h3 class="anchored" data-anchor-id="output-10">output:</h3>
+<table class="table-striped table-hover caption-top table">
+<caption>Transit GOATs</caption>
 <colgroup>
 <col style="width: 68%">
 <col style="width: 14%">
@@ -1109,6 +1152,9 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
 <section id="answer-1-1" class="level3">
 <h3 class="anchored" data-anchor-id="answer-1-1">Answer 1:</h3>
 <p>MTA New York City Transit Heavy Rail: <strong>1,793,073,801</strong></p>
+<p><strong>Note:</strong></p>
+<p>While New York City’s inclusion on this list is understandable, along with Chicago: the 3rd largest city in the United States, seen as an historical pre-war, pre-automobile city… the inclusion of Los Angeles County is arguably surprising.</p>
+<p>While LA County is of significant population size, it is considered a “sprawled out” metro area most friendly to the automobile. Despite this reputation, and despite the challenges of offering transit in a region with lower population density, LA county’s high transit ridership suggests the existence of an undeniable appetite for quality transit.</p>
 <hr>
 </section>
 <section id="question-2-1" class="level3">
@@ -1119,7 +1165,11 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
   arrange(desc(farebox_recovery)) |&gt;
   select(agency, mode, farebox_recovery) |&gt;
   print(n = 5)</code></pre>
-<table class="caption-top table">
+</section>
+<section id="output-11" class="level3">
+<h3 class="anchored" data-anchor-id="output-11">output:</h3>
+<table class="table-striped table-hover caption-top table">
+<caption>Private Ride You’re Going to Pay</caption>
 <colgroup>
 <col style="width: 61%">
 <col style="width: 17%">
@@ -1164,6 +1214,8 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
 <section id="answer-2-1" class="level3">
 <h3 class="anchored" data-anchor-id="answer-2-1">Answer 2:</h3>
 <p>Port Imperial Ferry Corporation, Ferry Boat: <strong>1.43</strong></p>
+<p><strong>Note:</strong></p>
+<p>Port Imperial Ferry, Haynnis Harbor Tours and Trans-Bridge Lines are all private companies. As private companies, their fares <strong>must</strong> exceed their expenses as their operations are not supported by any government entity. Furthermore, business owners expect profit on their capital investment and assumption of risk. This is consistent with an observation of fares outpacing revenue.</p>
 <hr>
 </section>
 <section id="question-3-1" class="level3">
@@ -1173,7 +1225,11 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
   mutate(expenses_UPT = expenses / total_upt ) |&gt;
   arrange(expenses_UPT) |&gt;
   select(agency, mode, expenses_UPT)</code></pre>
-<table class="caption-top table">
+</section>
+<section id="output-12" class="level3">
+<h3 class="anchored" data-anchor-id="output-12">output:</h3>
+<table class="table-striped table-hover caption-top table">
+<caption>Where is the NYU Shuttle?</caption>
 <thead>
 <tr class="header">
 <th>agency</th>
@@ -1213,6 +1269,8 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
 <section id="answer-3-1" class="level3">
 <h3 class="anchored" data-anchor-id="answer-3-1">Answer 3:</h3>
 <p>North Carolina State University, Motor Bus : <strong>1.18 $/ride</strong></p>
+<p><strong>Note:</strong></p>
+<p>It’s logical that the transit systems with the lowest expense per ride serve universities. College campuses are communities with two factors suited for offering affordable, cost-sensitive transit: a high population density (students are mostly in dorms and shared housing) and a smaller surface for transit coverage (the routes are limited to a college campus, not an entire city).</p>
 <hr>
 </section>
 <section id="question-4-1" class="level3">
@@ -1222,7 +1280,11 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
   mutate(fares_UPT = total_fares / total_upt ) |&gt;
   arrange(desc(fares_UPT)) |&gt;
   select(agency, mode, fares_UPT)</code></pre>
-<table class="caption-top table">
+</section>
+<section id="output-13" class="level3">
+<h3 class="anchored" data-anchor-id="output-13">output:</h3>
+<table class="table-striped table-hover caption-top table">
+<caption>Soak the Rich</caption>
 <colgroup>
 <col style="width: 63%">
 <col style="width: 21%">
@@ -1265,18 +1327,24 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
 </table>
 </section>
 <section id="answer-4" class="level3">
-<h3 class="anchored" data-anchor-id="answer-4">Answer 4:</h3>
+<h3 class="anchored" data-anchor-id="answer-4">Answer 4</h3>
 <p>Hampton Jitney: <strong>41.3 $/trip</strong></p>
+<p><strong>Note:</strong></p>
+<p>The Hampton Jitney is a logical candidate to collect the highest fares for every ride (i.e.&nbsp;its riders pay the most) because it is responsible for transporting some the wealthiest residents of New York City to some of the most desirable vacationing in the United States - the famed beach community “The Hamptons.” If you can charge wealthy customers more for a service they can afford, as a business person, why wouldn’t you? What’s more, the Hampton Jitney vehicles are outfitted with amenities to comfort the wealthy riders who use the service. Seemingly the higher fares are not only going to transportation expenses, but also on-bus goodies used to appeal to a luxury audience.</p>
 <hr>
 </section>
 <section id="question-5-1" class="level3">
-<h3 class="anchored" data-anchor-id="question-5-1">Question 5:</h3>
+<h3 class="anchored" data-anchor-id="question-5-1">Question 5</h3>
 <p>Which transit system (agency and mode) has the lowest expenses per VRM?</p>
 <pre><code>USAGE_AND_FINANCIALS |&gt;
   mutate(expenses_VRM = expenses / total_vrm ) |&gt;
   arrange(expenses_VRM) |&gt;
   select(agency, mode, expenses_VRM)</code></pre>
-<table class="caption-top table">
+</section>
+<section id="output-14" class="level3">
+<h3 class="anchored" data-anchor-id="output-14">output:</h3>
+<table class="table-striped table-hover caption-top table">
+<caption>Vanlyfe</caption>
 <colgroup>
 <col style="width: 71%">
 <col style="width: 12%">
@@ -1319,18 +1387,24 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
 </table>
 </section>
 <section id="answer-5-1" class="level3">
-<h3 class="anchored" data-anchor-id="answer-5-1">Answer 5:</h3>
+<h3 class="anchored" data-anchor-id="answer-5-1">Answer 5</h3>
 <p>Metropolitan Transportation Commission : <strong>0.445 $/mile</strong></p>
+<p><strong>Note:</strong></p>
+<p>Vanpool’s efficiency stems from 1. it being easier to run a smaller van at capacity than a larger bus and 2. it being subsidized by non-road users. The highway trust fund has long been running a deficit as gas tax revenues have not kept up with <a href="https://frontiergroup.org/resources/who-pays-roads/">the cost of highway construction and maintenance</a>. Because vanpool can run its vehicles consistently at full capacity, and can use infrastructure that is not fully supported by road user fees, it suggests an efficient form of transit.</p>
 <hr>
 </section>
-<section id="question-6" class="level3">
-<h3 class="anchored" data-anchor-id="question-6">Question 6:</h3>
+<section id="question" class="level3">
+<h3 class="anchored" data-anchor-id="question">Question :</h3>
 <p>Which transit system (agency and mode) has the highest total fares per VRM?</p>
 <pre><code>USAGE_AND_FINANCIALS |&gt;
   mutate(fares_VRM = total_fares / total_vrm ) |&gt;
   arrange(desc(fares_VRM)) |&gt;
   select(agency, mode, fares_VRM)</code></pre>
-<table class="caption-top table">
+</section>
+<section id="output-15" class="level3">
+<h3 class="anchored" data-anchor-id="output-15">output:</h3>
+<table class="table-striped table-hover caption-top table">
+<caption>Expensive Boats</caption>
 <colgroup>
 <col style="width: 70%">
 <col style="width: 17%">
@@ -1373,14 +1447,17 @@ print(USAGE_AND_FINANCIALS, n = 5)</code></pre>
 </table>
 </section>
 <section id="answer-6" class="level3">
-<h3 class="anchored" data-anchor-id="answer-6">Answer 6:</h3>
+<h3 class="anchored" data-anchor-id="answer-6">Answer 6</h3>
 <p>Jacksonville Transportation Authority : <strong>158.0 $/mile</strong></p>
+<p><strong>Note:</strong></p>
+<p>Ferries are often necessary, not because a rider needs to travel long distances, but because a body of water is serving as an insurmountable transportation barrier.</p>
+<p>Ferries are expensive. Here in NYC, ferries operate at <a href="https://www.6sqft.com/nyc-ferrys-gets-a-10-37-per-ride-subsidy-despite-fewer-annual-riders-than-the-subway-has-in-a-day/">10X the subsidy as a subway ride</a>. Presumably the higher fares collected by these transit agencies are needed to cover the ferry boat’s higher expenses. With the combination of a larger numerator (the ferry fares) and a smaller denominator (miles traveled) we can understand the results found here.</p>
 <hr>
 </section>
 <section id="based-on-all-of-this-what-do-you-believe-to-be-the-most-efficient-transit-system-in-the-country-your-answer-may-differ-depending-on-which-form-of-efficiency-you-care-most-about" class="level3">
-<h3 class="anchored" data-anchor-id="based-on-all-of-this-what-do-you-believe-to-be-the-most-efficient-transit-system-in-the-country-your-answer-may-differ-depending-on-which-form-of-efficiency-you-care-most-about"><em>Based on all of this, what do you believe to be the most efficient transit system in the country? (Your answer may differ depending on which form of ‘efficiency’ you care most about)</em></h3>
+<h3 class="anchored" data-anchor-id="based-on-all-of-this-what-do-you-believe-to-be-the-most-efficient-transit-system-in-the-country-your-answer-may-differ-depending-on-which-form-of-efficiency-you-care-most-about">Based on all of this, what do you believe to be the most efficient transit system in the country? (Your answer may differ depending on which form of ‘efficiency’ you care most about)</h3>
 <p>Transit use is an unmistakable social, ecological and economical good. It enhances opportunity, reduces pollution and generates wealth through efficient land use.</p>
-<p>As such, I believe the transit agency and mode that provides the most trips is the most efficent system:</p>
+<p>As such, I believe the transit agency and mode that provides the most trips is <em>the most efficient system</em>:</p>
 </section>
 </section>
 <section id="mta-new-york-city-transit-heavy-rail-1793073801" class="level1">
