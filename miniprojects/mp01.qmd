@@ -233,7 +233,7 @@ MTA New York City Transit: **10,832,855,350 Vehicle Revenue Miles**
 New York City is the largest city in the United States and the "big city" with the highest percentage of its residents using mass transit. These findings are in line with the signature characteristics of NYC's transportation demographics. 
 ---
 
-### Question 2: 
+### Question 2 
 What transit mode had the most total VRM in this sample?
 ```
 USAGE |>
@@ -293,7 +293,7 @@ If you divide this figure by 30 (days in a month), and then divide that result b
 
 ---
 
-### ~~Question 4~~
+### ~~Question 4
 ~~What mode of transport had the longest average trip in May 2024?~~
 
 ---
@@ -316,7 +316,7 @@ subway_ridership_2019 - subway_ridership_2020
 ```
 # [1] 210561702
 ```
-### Answer 5: 
+### Answer 5 
 184,334,430
 
 **Note:**
@@ -599,7 +599,7 @@ USAGE_AND_FINANCIALS |>
 : Transit GOATs {.striped .hover}
 
 
-### Answer 1: 
+### Answer 1 
 MTA New York City Transit Heavy Rail: **1,793,073,801**
 
 **Note:** 
@@ -609,7 +609,7 @@ While New York City's inclusion on this list is understandable, along with Chica
 While LA County is of significant population size, it is considered a "sprawled out" metro area most friendly to the automobile. Despite this reputation, and despite the challenges of offering transit in a region with lower population density, LA county's high transit ridership suggests the existence of an undeniable appetite for quality transit.
 ---
 
-### Question 2: 
+### Question 2 
 Which transit system (agency and mode) had the highest farebox recovery, defined as the highest ratio of Total Fares to Expenses?
 ```
 USAGE_AND_FINANCIALS |>
@@ -630,7 +630,7 @@ USAGE_AND_FINANCIALS |>
 : Private Ride You're Going to Pay {.striped .hover}
 
 
-### Answer 2: 
+### Answer 2 
 Port Imperial Ferry Corporation, Ferry Boat: **1.43**
 
 **Note:**
@@ -639,7 +639,7 @@ Port Imperial Ferry, Haynnis Harbor Tours and Trans-Bridge Lines are all private
 
 ---
 
-### Question 3: 
+### Question 3 
 Which transit system (agency and mode) has the lowest expenses per UPT?
 ```
 USAGE_AND_FINANCIALS |>
@@ -659,7 +659,7 @@ USAGE_AND_FINANCIALS |>
 : Where is the NYU Shuttle? {.striped .hover}
 
 
-### Answer 3: 
+### Answer 3 
 North Carolina State University, Motor Bus : **1.18 $/ride**
 
 **Note:** 
@@ -668,7 +668,7 @@ It's logical that the transit systems with the lowest expense per ride serve uni
 
 ---
 
-### Question 4: 
+### Question 4 
 Which transit system (agency and mode) has the highest total fares per UPT?
 ```
 USAGE_AND_FINANCIALS |>
@@ -724,7 +724,7 @@ Vanpool's efficiency stems from 1. it being easier to run a smaller van at capac
 
 ---
 
-### Question : 
+### Question 6 
 Which transit system (agency and mode) has the highest total fares per VRM?
 
 ```
