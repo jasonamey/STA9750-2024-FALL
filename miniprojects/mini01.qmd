@@ -9,7 +9,7 @@ This report explores data from major U.S. public transit systems, with analysis 
 
 The data thus provides insights into important components of tranist analysis including: which systems operate most efficiently, which modes of transport generate the most revenue, and how these metrics differ throughout the United States.
 
-Using tools from the R programming language, we explore these trends over time along with the influence of population density, geography, and mode-type on a transit system's financial outcomes. Through this exploration, we hope to better understand the complex relationship between transit usage, financial sustainability, and regional transit characteristics.
+Using tools from the R programming language, we explore these trends over time along with the influence of population density, geography, and mode-type on a transit system's financial outcomes. Through this exploration, we hope to better understand the complex relationship among transit usage, financial sustainability, and regional transit characteristics.
 
 ### Data Creation : 
 
