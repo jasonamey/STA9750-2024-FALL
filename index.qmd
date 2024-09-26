@@ -11,4 +11,4 @@ title: "Jason Amey - STA 9750 Fall 2024"
 Here is my: [Github](https://github.com/jasonamey)
 
 ### Mini-Projects:
-1.[mp #01](/miniprojects/mini01.html)
+1.[mp #01](/miniprojects/mp01.html)
