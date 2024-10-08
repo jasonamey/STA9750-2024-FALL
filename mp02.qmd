@@ -1,0 +1,34 @@
+library(readr)
+library(stringr)
+library(data.table)
+DATA_FOLDER <- "data/mp02/"
+
+get_imdb_file <- function(fname){
+ 
+    as.data.frame(readr::read_tsv(fname, lazy=FALSE))
+}
+
+
+
+create_file_ext <- function(fname){
+
+  paste0(DATA_FOLDER, fname)
+}
+
+
+NAME_BASICS <- get_imdb_file(create_file_ext("name.basics.tsv"))
+
+head(NAME_BASICS)
+
+NAME_BASICS <- NAME_BASICS |> 
+    filter(str_count(knownForTitles, ",") > 1)
+
+write_tsv(NAME_BASICS, "name_basics_sample.tsv")
+
+
+install.packages("data.table")  # Install if you don't have it already
+library(data.table)
+
+sample_data <- fread("data/mp02/name.basics.tsv", nrows = 100)
+
+print(sample_data)

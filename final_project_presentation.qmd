@@ -1,0 +1,60 @@
+---
+title: "STA 9750 Final Project Presentation"
+author: "Clinta Varghese and Jason Amey"
+format: revealjs
+---
+
+## What makes a neighborhood expensive in NYC? 
+
+
+**Location:** Proximity to Manhattan often increases prices.
+
+**Transportation:** Better access to subways, buses, and major roads raises desirability.
+
+**Amenities:** Access to parks, schools, dining, shopping, and cultural attractions.
+
+**Crime:** Safer neighborhoods tend to be more expensive.
+
+**Status:** Historical prestige, architecture, and celebrity residents can elevate prices
+
+
+## Is there a relationship between streets and home values?
+
+![](images/final-project-presentation/slide-1.jpg)
+
+
+## Project Question: 
+### *Do streets with less traffic and traffic violence increase property values?*
+
+
+## Do streets with less traffic and traffic violence increase property values?{style="display: flex; align-items:center;"}
+
+## There is no singular identification of NYC street transformations
+![](images/final-project-presentation/slide-3.jpg)
+
+## Media Coverage as a signal for “significant traffic calming project”
+![](images/final-project-presentation/slide-4.jpg)
+
+
+## Identifying significant traffic calming projects in local media
+![](images/final-project-presentation/slide-5.jpg)
+
+
+## Parse text from html and rank tokens in search of street names
+![](images/final-project-presentation/slide-6.jpg)
+
+
+## Need to identify block and lot numbers on streets
+![](images/final-project-presentation/slide-7.jpg)
+
+
+## With block and lot numbers we can identify tax assessments
+![](images/final-project-presentation/slide-8.jpg)
+
+
+## Identify comparable, neighboring streets by traffic flows
+![](images/final-project-presentation/slide-9.jpg)
+
+
+## ...attempting to control for these influences: 
+![](images/final-project-presentation/slide-10.jpg)
