@@ -27,8 +27,6 @@ format: revealjs
 ### *Do streets with less traffic and traffic violence increase property values?*
 
 
-## Do streets with less traffic and traffic violence increase property values?{style="display: flex; align-items:center;"}
-
 ## There is no singular identification of NYC street transformations
 ![](images/final-project-presentation/slide-3.jpg)
 
