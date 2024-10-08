@@ -27,6 +27,14 @@ format: revealjs
 ### *Do streets with less traffic and traffic violence increase property values?*
 
 
+## When streets minimize traffic incidents, is there a corresponding increase in property values?
+![](images/final-project-presentation/slide-2.jpg)
+
+
+## Question?
+![](images/final-project-presentation/slide-11.jpg)
+
+
 ## There is no singular identification of NYC street transformations
 ![](images/final-project-presentation/slide-3.jpg)
 
@@ -56,3 +64,14 @@ format: revealjs
 
 ## ...attempting to control for these influences: 
 ![](images/final-project-presentation/slide-10.jpg)
+
+
+## Questions for project 
+1. Can we make geographic connections among our data with code? For instance: can we find traffic calmed corridors, and then identify neighboring properties by block and lot number? Can we isolate street regions bounded by cross streets? 
+
+2. What statistical test should we use to test for significance in tax assessment changes? 
+3. How do we effectively and efficiently work with large files? (The tax assessment files are ~1GB)
+
+4. Is there enough media coverage to identify significant traffic calming projects? 
+
+5. How many traffic calmed corridors should we focus on? 

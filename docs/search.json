@@ -145,5 +145,33 @@
     "title": "STA 9750 Final Project Presentation",
     "section": "Do streets with less traffic and traffic violence increase property values?",
     "text": "Do streets with less traffic and traffic violence increase property values?"
+  },
+  {
+    "objectID": "final_project_presentation.html#when-streets-minimize-traffic-incidents-is-there-a-corresponding-increase-in-property-values",
+    "href": "final_project_presentation.html#when-streets-minimize-traffic-incidents-is-there-a-corresponding-increase-in-property-values",
+    "title": "STA 9750 Final Project Presentation",
+    "section": "When streets minimize traffic incidents, is there a corresponding increase in property values?",
+    "text": "When streets minimize traffic incidents, is there a corresponding increase in property values?"
+  },
+  {
+    "objectID": "final_project_presentation.html#questions-for-project",
+    "href": "final_project_presentation.html#questions-for-project",
+    "title": "STA 9750 Final Project Presentation",
+    "section": "Questions for project",
+    "text": "Questions for project\n\nCan we make geographic connections among our data with code? For instance: can we find traffic calmed corridors, and then identify neighboring properties by block and lot number? Can we isolate street regions bounded by cross streets?\nWhat statistical test should we use to test for significance in tax assessment changes?\nHow do we effectively and efficiently work with large files? (The tax assessment files are ~1GB)\nIs there enough media coverage to identify significant traffic calming projects?\nHow many traffic calmed corridors should we focus on?"
+  },
+  {
+    "objectID": "final_project_presentation.html#that-is",
+    "href": "final_project_presentation.html#that-is",
+    "title": "STA 9750 Final Project Presentation",
+    "section": "That is:",
+    "text": "That is:"
+  },
+  {
+    "objectID": "final_project_presentation.html#question",
+    "href": "final_project_presentation.html#question",
+    "title": "STA 9750 Final Project Presentation",
+    "section": "Question?",
+    "text": "Question?"
   }
 ]
