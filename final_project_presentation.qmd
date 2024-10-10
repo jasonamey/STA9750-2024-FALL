@@ -78,8 +78,6 @@ correctly identifying a collection of properties?
 **City of New York: VZV Street Improvement Projects - SIPs Corridor.** *NYC Open Data.*
 [link](https://data.cityofnewyork.us/Transportation/VZV_Street-Improvement-Projects-SIPs-Corridor/wqhs-q6wd)
 
-**New York City Department of Transportation.** *Vision Zero street improvement projects (SIPs): Corridor-level treatments* NYC Open Data. 
-[link](https://data.cityofnewyork.us/Transportation/VZV_Street-Improvement-Projects-SIPs-Corridor/wqhs-q6wd)
 
 ## Challenges for project 
 1. Can we make geographic connections among our data with code? 
