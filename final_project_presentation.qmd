@@ -66,23 +66,20 @@ correctly identifying a collection of properties?
 
 ## Data sets we will use 
 
-**New York City Department of Finance.** *Property Assessment Roll Archives.* NYC Department of Finance. 
+**Property Assessment Roll Archives.** NYC Department of Finance. [link](https://www.nyc.gov/site/finance/property/property-assessment-roll-archives.page)
 
-**City of New York.** *Automated Traffic Volume Counts.* NYC Open Data. 
-
+**Automated Traffic Volume Counts.** NYC Department of Transportation. [link](https://data.cityofnewyork.us/Transportation/Automated-Traffic-Volume-Counts/7ym2-wayt/about_data)
 
 
 ## Data sets we may use
 
+**New York City Department of City Planning.** *NYC Tax Lot Selector.* [link](https://lotselector.planning.nyc.gov/#16/40.7508/-73.98)
 
-**City of New York.** *VZV Street Improvement Projects - SIPs Corridor.* NYC Open Data. 
+**City of New York: VZV Street Improvement Projects - SIPs Corridor.** *NYC Open Data.*
+[link](https://data.cityofnewyork.us/Transportation/VZV_Street-Improvement-Projects-SIPs-Corridor/wqhs-q6wd)
 
-**Westlaw.** (2024, October 8). Search results for “bike lane" in New York Post articles. Westlaw.
-
-**Westlaw.** (2024, October 8). Search results for “bike lane" in New York Daily News articles. Westlaw.
-
-**New York City Department of City Planning.** *NYC Tax Lot Selector.*
-
+**New York City Department of Transportation.** *Vision Zero street improvement projects (SIPs): Corridor-level treatments* NYC Open Data. 
+[link](https://data.cityofnewyork.us/Transportation/VZV_Street-Improvement-Projects-SIPs-Corridor/wqhs-q6wd)
 
 ## Challenges for project 
 1. Can we make geographic connections among our data with code? 
@@ -93,6 +90,12 @@ correctly identifying a collection of properties?
 4. Is there enough media coverage to identify significant traffic calming projects? 
 
 5. How many traffic calmed corridors should we focus on? 
+
+## Additional Questions 
+
+1. Is there a geographic or NYC borough trend with our conclusions? 
+2. Did Bloomberg's major street transformations of the late 2000s have a bigger influence on real estate values than the more modest transformations of the De Blasio and Adams administrations? 
+3. Is there a difference between residential and commerical property changes?
 
 
 ## Thank You! 

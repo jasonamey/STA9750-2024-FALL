@@ -207,14 +207,14 @@
     "href": "final_project_presentation.html#data-sets-we-will-use",
     "title": "STA 9750 Final Project Presentation",
     "section": "Data sets we will use",
-    "text": "Data sets we will use\nNew York City Department of Finance. Property Assessment Roll Archives. NYC Department of Finance.\nCity of New York. Automated Traffic Volume Counts. NYC Open Data."
+    "text": "Data sets we will use\nProperty Assessment Roll Archives. NYC Department of Finance. link\nAutomated Traffic Volume Counts. NYC Department of Transportation. link"
   },
   {
     "objectID": "final_project_presentation.html#data-sets-we-may-use",
     "href": "final_project_presentation.html#data-sets-we-may-use",
     "title": "STA 9750 Final Project Presentation",
     "section": "Data sets we may use",
-    "text": "Data sets we may use\nCity of New York. VZV Street Improvement Projects - SIPs Corridor. NYC Open Data.\nWestlaw. (2024, October 8). Search results for “bike lane” in New York Post articles. Westlaw.\nWestlaw. (2024, October 8). Search results for “bike lane” in New York Daily News articles. Westlaw.\nNew York City Department of City Planning. NYC Tax Lot Selector."
+    "text": "Data sets we may use\nNew York City Department of City Planning. NYC Tax Lot Selector. link\nCity of New York: VZV Street Improvement Projects - SIPs Corridor. NYC Open Data. link\nNew York City Department of Transportation. Vision Zero street improvement projects (SIPs): Corridor-level treatments NYC Open Data. link"
   },
   {
     "objectID": "final_project_presentation.html#with-block-and-lot-numbers-we-can-identify-tax-assessments-1",
@@ -278,5 +278,12 @@
     "title": "STA 9750 Final Project Presentation",
     "section": "Thank You!",
     "text": "Thank You!\nClinta and Jason :-)"
+  },
+  {
+    "objectID": "final_project_presentation.html#additional-questions",
+    "href": "final_project_presentation.html#additional-questions",
+    "title": "STA 9750 Final Project Presentation",
+    "section": "Additional Questions",
+    "text": "Additional Questions\n\nIs there a geographic or NYC borough trend with our conclusions?\nDid Bloomberg’s major street transformations of the late 2000s have a bigger influence on real estate values than the more modest transformations of the De Blasio and Adams administrations?\nIs there a difference between residential and commerical property changes?"
   }
 ]
