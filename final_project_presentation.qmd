@@ -22,7 +22,7 @@ format: revealjs
 ![](images/final-project-presentation/slide-3.jpg)
 
 ## NYC does identify singular Vision Zero improvemments
-![](images/final-project-presentation/vision-zero.jpg)
+![](images/final-project-presentation/vision-zero-1.jpg)
 
 
 ## Media Coverage as a signal for “significant traffic calming project”
