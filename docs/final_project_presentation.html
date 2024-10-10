@@ -337,34 +337,27 @@ Clinta Varghese and Jason Amey
 </div>
 
 </section>
-<section id="what-makes-a-neighborhood-expensive-in-nyc" class="slide level2">
-<h2>What makes a neighborhood expensive in NYC?</h2>
-<p><strong>Location:</strong> Proximity to Manhattan often increases prices.</p>
-<p><strong>Transportation:</strong> Better access to subways, buses, and major roads raises desirability.</p>
-<p><strong>Amenities:</strong> Access to parks, schools, dining, shopping, and cultural attractions.</p>
-<p><strong>Crime:</strong> Safer neighborhoods tend to be more expensive.</p>
-<p><strong>Status:</strong> Historical prestige, architecture, and celebrity residents can elevate prices</p>
-</section>
 <section id="is-there-a-relationship-between-streets-and-home-values" class="slide level2">
 <h2>Is there a relationship between streets and home values?</h2>
 
 <img data-src="images/final-project-presentation/slide-1.jpg" class="r-stretch"></section>
-<section id="project-question" class="slide level2">
-<h2>Project Question:</h2>
-<h3 id="do-streets-with-less-traffic-and-traffic-violence-increase-property-values"><em>Do streets with less traffic and traffic violence increase property values?</em></h3>
-</section>
 <section id="when-streets-minimize-traffic-incidents-is-there-a-corresponding-increase-in-property-values" class="slide level2">
 <h2>When streets minimize traffic incidents, is there a corresponding increase in property values?</h2>
 
-<img data-src="images/final-project-presentation/slide-2.jpg" class="r-stretch"></section>
-<section id="question" class="slide level2">
-<h2>Question?</h2>
+<img data-src="images/final-project-presentation/slide-2.jpg" class="center-img r-stretch"></section>
+<section id="project-question" class="slide level2">
+<h2>Project Question:</h2>
+<h3 id="do-streets-with-less-traffic-and-traffic-violence-increase-property-values"><em>Do streets with less traffic and traffic violence increase property values?</em></h3>
 
-<img data-src="images/final-project-presentation/slide-11.jpg" class="r-stretch"></section>
+<img data-src="images/final-project-presentation/less-traffic-more-money.jpg" class="r-stretch"></section>
 <section id="there-is-no-singular-identification-of-nyc-street-transformations" class="slide level2">
 <h2>There is no singular identification of NYC street transformations</h2>
 
 <img data-src="images/final-project-presentation/slide-3.jpg" class="r-stretch"></section>
+<section id="nyc-does-identify-singular-vision-zero-improvemments" class="slide level2">
+<h2>NYC does identify singular Vision Zero improvemments</h2>
+
+<img data-src="images/final-project-presentation/vision-zero.jpg" class="r-stretch"></section>
 <section id="media-coverage-as-a-signal-for-significant-traffic-calming-project" class="slide level2">
 <h2>Media Coverage as a signal for “significant traffic calming project”</h2>
 
@@ -373,14 +366,6 @@ Clinta Varghese and Jason Amey
 <h2>Identifying significant traffic calming projects in local media</h2>
 
 <img data-src="images/final-project-presentation/slide-5.jpg" class="r-stretch"></section>
-<section id="parse-text-from-html-and-rank-tokens-in-search-of-street-names" class="slide level2">
-<h2>Parse text from html and rank tokens in search of street names</h2>
-
-<img data-src="images/final-project-presentation/slide-6.jpg" class="r-stretch"></section>
-<section id="need-to-identify-block-and-lot-numbers-on-streets" class="slide level2">
-<h2>Need to identify block and lot numbers on streets</h2>
-
-<img data-src="images/final-project-presentation/slide-7.jpg" class="r-stretch"></section>
 <section id="with-block-and-lot-numbers-we-can-identify-tax-assessments" class="slide level2">
 <h2>With block and lot numbers we can identify tax assessments</h2>
 
@@ -389,19 +374,48 @@ Clinta Varghese and Jason Amey
 <h2>Identify comparable, neighboring streets by traffic flows</h2>
 
 <img data-src="images/final-project-presentation/slide-9.jpg" class="r-stretch"></section>
-<section id="attempting-to-control-for-these-influences" class="slide level2">
-<h2>…attempting to control for these influences:</h2>
+<section id="again-with-block-and-lot-numbers-we-can-identify-tax-assessments" class="slide level2">
+<h2>(again) …with block and lot numbers we can identify tax assessments</h2>
 
-<img data-src="images/final-project-presentation/slide-10.jpg" class="r-stretch"></section>
-<section id="questions-for-project" class="slide level2">
-<h2>Questions for project</h2>
+<img data-src="images/final-project-presentation/slide-8.jpg" class="r-stretch"></section>
+<section id="challenge-geocoding" class="slide level2">
+<h2>Challenge: Geocoding</h2>
+<p><em>Once we’ve identified areas of interest, how do we go from?</em></p>
+<p>street -&gt; latitude and longitude</p>
+<p>latitude and longitude -&gt; block, lot number</p>
+<p>identifying a corridor of a street?</p>
+<p>correctly identifying a collection of properties?</p>
+<p><em>How do we do this in code?</em></p>
+</section>
+<section id="tax-lot-selector" class="slide level2">
+<h2>Tax Lot Selector</h2>
+
+<img data-src="images/final-project-presentation/tax-lot-selector.jpg" class="r-stretch"></section>
+<section id="data-sets-we-will-use" class="slide level2">
+<h2>Data sets we will use</h2>
+<p><strong>New York City Department of Finance.</strong> <em>Property Assessment Roll Archives.</em> NYC Department of Finance.</p>
+<p><strong>City of New York.</strong> <em>Automated Traffic Volume Counts.</em> NYC Open Data.</p>
+</section>
+<section id="data-sets-we-may-use" class="slide level2">
+<h2>Data sets we may use</h2>
+<p><strong>City of New York.</strong> <em>VZV Street Improvement Projects - SIPs Corridor.</em> NYC Open Data.</p>
+<p><strong>Westlaw.</strong> (2024, October 8). Search results for “bike lane” in New York Post articles. Westlaw.</p>
+<p><strong>Westlaw.</strong> (2024, October 8). Search results for “bike lane” in New York Daily News articles. Westlaw.</p>
+<p><strong>New York City Department of City Planning.</strong> <em>NYC Tax Lot Selector.</em></p>
+</section>
+<section id="challenges-for-project" class="slide level2">
+<h2>Challenges for project</h2>
 <ol type="1">
-<li><p>Can we make geographic connections among our data with code? For instance: can we find traffic calmed corridors, and then identify neighboring properties by block and lot number? Can we isolate street regions bounded by cross streets?</p></li>
+<li><p>Can we make geographic connections among our data with code?</p></li>
 <li><p>What statistical test should we use to test for significance in tax assessment changes?</p></li>
 <li><p>How do we effectively and efficiently work with large files? (The tax assessment files are ~1GB)</p></li>
 <li><p>Is there enough media coverage to identify significant traffic calming projects?</p></li>
 <li><p>How many traffic calmed corridors should we focus on?</p></li>
 </ol>
+</section>
+<section id="thank-you" class="slide level2">
+<h2>Thank You!</h2>
+<p>Clinta and Jason :-)</p>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">

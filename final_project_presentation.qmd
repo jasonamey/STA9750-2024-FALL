@@ -4,39 +4,26 @@ author: "Clinta Varghese and Jason Amey"
 format: revealjs
 ---
 
-## What makes a neighborhood expensive in NYC? 
-
-
-**Location:** Proximity to Manhattan often increases prices.
-
-**Transportation:** Better access to subways, buses, and major roads raises desirability.
-
-**Amenities:** Access to parks, schools, dining, shopping, and cultural attractions.
-
-**Crime:** Safer neighborhoods tend to be more expensive.
-
-**Status:** Historical prestige, architecture, and celebrity residents can elevate prices
-
-
 ## Is there a relationship between streets and home values?
 
 ![](images/final-project-presentation/slide-1.jpg)
 
 
+## When streets minimize traffic incidents, is there a corresponding increase in property values?
+![](images/final-project-presentation/slide-2.jpg){.center-img}
+
+
 ## Project Question: 
 ### *Do streets with less traffic and traffic violence increase property values?*
-
-
-## When streets minimize traffic incidents, is there a corresponding increase in property values?
-![](images/final-project-presentation/slide-2.jpg)
-
-
-## Question?
-![](images/final-project-presentation/slide-11.jpg)
+![](images/final-project-presentation/less-traffic-more-money.jpg)
 
 
 ## There is no singular identification of NYC street transformations
 ![](images/final-project-presentation/slide-3.jpg)
+
+## NYC does identify singular Vision Zero improvemments
+![](images/final-project-presentation/vision-zero.jpg)
+
 
 ## Media Coverage as a signal for “significant traffic calming project”
 ![](images/final-project-presentation/slide-4.jpg)
@@ -44,14 +31,6 @@ format: revealjs
 
 ## Identifying significant traffic calming projects in local media
 ![](images/final-project-presentation/slide-5.jpg)
-
-
-## Parse text from html and rank tokens in search of street names
-![](images/final-project-presentation/slide-6.jpg)
-
-
-## Need to identify block and lot numbers on streets
-![](images/final-project-presentation/slide-7.jpg)
 
 
 ## With block and lot numbers we can identify tax assessments
@@ -62,12 +41,51 @@ format: revealjs
 ![](images/final-project-presentation/slide-9.jpg)
 
 
-## ...attempting to control for these influences: 
-![](images/final-project-presentation/slide-10.jpg)
+## (again) ...with block and lot numbers we can identify tax assessments
+![](images/final-project-presentation/slide-8.jpg)
 
 
-## Questions for project 
-1. Can we make geographic connections among our data with code? For instance: can we find traffic calmed corridors, and then identify neighboring properties by block and lot number? Can we isolate street regions bounded by cross streets? 
+## Challenge: Geocoding 
+
+*Once we've identified areas of interest, how do we go from?*
+
+street -> latitude and longitude 
+
+latitude and longitude -> block, lot number
+
+identifying a corridor of a street? 
+
+correctly identifying a collection of properties? 
+
+*How do we do this in code?*
+
+
+## Tax Lot Selector 
+![](images/final-project-presentation/tax-lot-selector.jpg)
+
+
+## Data sets we will use 
+
+**New York City Department of Finance.** *Property Assessment Roll Archives.* NYC Department of Finance. 
+
+**City of New York.** *Automated Traffic Volume Counts.* NYC Open Data. 
+
+
+
+## Data sets we may use
+
+
+**City of New York.** *VZV Street Improvement Projects - SIPs Corridor.* NYC Open Data. 
+
+**Westlaw.** (2024, October 8). Search results for “bike lane" in New York Post articles. Westlaw.
+
+**Westlaw.** (2024, October 8). Search results for “bike lane" in New York Daily News articles. Westlaw.
+
+**New York City Department of City Planning.** *NYC Tax Lot Selector.*
+
+
+## Challenges for project 
+1. Can we make geographic connections among our data with code? 
 
 2. What statistical test should we use to test for significance in tax assessment changes? 
 3. How do we effectively and efficiently work with large files? (The tax assessment files are ~1GB)
@@ -75,3 +93,8 @@ format: revealjs
 4. Is there enough media coverage to identify significant traffic calming projects? 
 
 5. How many traffic calmed corridors should we focus on? 
+
+
+## Thank You! 
+
+Clinta and Jason :-) 

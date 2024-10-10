@@ -2,3 +2,9 @@ code:not(.sourceCode) {
     background-color: #f7f7f7 !important; 
     padding: 20px; !important;
 }
+
+.smaller-txt { 
+  font-size: .8rem;
+}
+
+

@@ -2,3 +2,15 @@ code:not(.sourceCode) {
     background-color: #f7f7f7 !important; 
     padding: 20px; !important;
 }
+
+.smaller-txt { 
+  font-size: .8rem;
+}
+
+
+.center-img {
+  display: block;  /* Ensures that the image is treated as a block-level element */
+  margin-left: auto;  /* Automatically set the left margin */
+  margin-right: auto;  /* Automatically set the right margin */
+  text-align: center;  /* Aligns the content within the block */
+}
