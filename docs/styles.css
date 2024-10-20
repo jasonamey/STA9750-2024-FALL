@@ -3,8 +3,37 @@ code:not(.sourceCode) {
     padding: 20px; !important;
 }
 
-.smaller-txt { 
-  font-size: .8rem;
+a {
+  color: purple;
+  text-decoration: underline dotted;
+  
 }
 
 
+summary {
+    background-color: black;
+    display: inline-block;
+    padding: 1px 6px;
+    color: #edfff3!important;
+    border-radius: 2px;
+    font-size: 10px;
+    font-family: Courier;
+    cursor: pointer;  
+    letter-spacing: 2px;
+    
+}
+
+details[open] summary {
+    color: #0bf456 !important;
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.5);
+    
+}
+
+summary:hover {
+    color: #0bf456 !important; 
+    box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.remove-top-margin {
+  margin-top: 10px;
+}

@@ -1,34 +1,650 @@
-library(readr)
+---
+title: "IMDb and Me"
+subtitle: "A deep dive into movie data with R"
+format:
+  html:
+    favicon: "images/favicon.ico"
+execute:
+  cache: true
+
+
+---
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr) 
+library(tidyr) 
+library(stringr) 
+library(lubridate) 
+library(readr) 
+library(ggplot2)
+library(scales)
+```
+*This project useses the following packagaes*: `dplyr`, `tidyr`, `stringr`, `lubridate`, `readr`, `scales`
+
+*For details on the data used for this project see* [Appendix A](#appendixA).
+
+
+Originating in the proto-Internet era of Usenet groups in the early 1990s, the Internet Movie Database (with its instantly recognizable acronym: IMDb) has long been an indispensable source of pop culture information. Movie buffs, film industry professionals, trivia enthusiasts, and casual web surfers all agree IMDb is the go-to resource for anyone engaged in the history of motion pictures. 
+
+## What's in the box?
+
+### How many green lights have been granted in Hollywood? 
+
+The "M" in the moniker obviously denotes "movie" and there are indeed `131,890` traditional "movies" in IMDb. However, many take a different interpretations as to what is - and what is not - a "movie" and IMDb maintains a separate designation for `tvMovie`. 
+
+The author contends that the films produced by the premium television outlet Home Box Office are significant films all-too-often overlooked by film afficianados and sure enough, HBO films are considered television films by IMDb : 
+
+```
+titleType   primaryTitle            startYear
+tvMovie     And the Band Played On  1993
+
+titleType   primaryTitle            startYear
+tvMovie     Recount                 2008
+  
+titleType   primaryTitle            startYear
+tvMovie     Conspiracy              2001
+```
+
+Not an HBO original, but this `tvMovie` is partially credited for [ending The Cold War](https://en.wikipedia.org/wiki/The_Day_After#Effects_on_policymakers):
+
+```
+titleType   primaryTitle    startYear
+tvMovie     The Day After   1983
+```
+
+The above are all noteworthy (underrated) films more than deserving to be considered and counted alongside IMDb's critera for "movie". If we were to count both `movie` and `tvMovie` we would find `146,915` movie titles in IMDb. 
+
+...Speaking of television, that "M" in IMDb can be something of a misnomer. IMDb collects data on both film and television too.  And within the database, IMDb doesn't just maintain an entry for every television series, but actually has a record for each televison season and a record for every televsion episode. All told there are `29,868` series within IMDb represented by over `3,012,678` individual episdoes.
+
+If television is collected this extensively in the database, what else does IMDb collect? What else is in the database?
+
+![](images/mp-02/1_media_types_counts.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+I'd argue the collection of Video Games will prove increasingly important as this media form grows in cultural influence. I can certainly see a future where Video Games are of equal cultural significance (...if were not at that momemnt already?) as film and TV is today. 
+
+<details>
+<summary> &#62; show the code</summary>
+
+```r
+# How many films are in IMDb? 
+TITLE_BASICS |> 
+  filter(titleType == "movie" | titleType == "tvMovie") |>
+  count()
+
+# What if we include TV Moives?   
+TITLE_BASICS |> 
+  filter(titleType == "movie" | titleType == "tvMovie") |>
+  count()
+
+# What if we searched for a particular HBO Moive?    
+TITLE_BASICS |> 
+  filter(primaryTitle == "And the Band Played On") |> 
+  select(titleType, primaryTitle, startYear)
+
+# How many television series are in IMDb? 
+TITLE_BASICS |> 
+  filter(titleType == "tvSeries") |>
+  count()
+
+# How many individual episodes are collected? 
+TITLE_EPISODES |>
+  nrow()
+
+# What are the different title types in IMDb  
+title_type_counts <- TITLE_BASICS |> 
+  group_by(titleType) |> 
+  summarize(count = n())
+  
+# Let's visualize the breakdown of all the different title types
+ggplot(title_type_counts, aes(x = "", y = count, fill = titleType)) + 
+  geom_bar(stat = "identity", width = 0.7) +
+  labs(title = "IMDb Media Types and Their Counts", x = NULL, y = "Count") +
+  scale_y_continuous(labels = label_number(scale_cut = cut_short_scale())) +
+  scale_fill_brewer(palette = "Paired")
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())  
+```  
+</summary>
+</details>
+
+### 110 years old you reach, look as good you will not
+
+IMBb is a unrivaled resource for assessing film history. And by history, there is actually some capital "H" history in IMDb.  
+
+IMDb counts `4` as the oldest `birthYear` for any individual in its dataset. And not just `4`, there are also `birthYear` values for `46`, `69`, `70`, `163`, `254`. As far as we know, film production is a ~150 year old technology. 
+
+What is going on? 
+
+Who was born in year `4`? Year `46`? Year `69`? 
+
+```r
+             primaryName
+1       Flavius Josephus
+2 Publius Vergilius Maro
+3                   Ovid
+4  Titus Maccius Plautus
+5     Lucio Anneo Seneca
+6            Cassius Dio
+7               Plutarch
+8              Suetonius
+```
+
+Are you entertained? A fascinating qwirk of IMDb database is that it credits classical writers and historians for modern film production, again, proving IMDb is if nothing else an historical resource and begs the important question? 
+
+*Does Zach Snyder share [300](https://en.wikipedia.org/wiki/300_(film)) points with Plutarch?* 
+
+But how about someone we know or can identify? Who is eldest creator still alive in the IMDb database? A seemingly easy way to identify "oldest creator in IMDb" would be to seek out creators with an `NA` for `deathYear`. 
+
+Unfortunately there are quite a few people IMDb considers living in their sunset years. IMDb idetifies 2,514 "supercentarians" - individuals 110 years of age or older - who at one time worked the film industry.
+
+The [Gerontology Research Group](https://www.grg-supercentenarians.org/) rigorously counts "supercentarians" around the world. A supercentarian is an individual equal-to, or older-than, the age of 110. At current count, there are approximately ~310 supercentarians in the world. 
+
+Clearly there is an issue with the IMDb dataset identifying `2,514` supercentarians in the film industry. There obviously are a multitude of deaths unreported in this data. 
+
+But, just because you're old and you possibly "one-time-maybe did something in the film industry", should anyone care? There are millions of people who throughout their lives have no-doubt been involved in at least 1 movie production in their lives. Does "old person who once worked on a forgotten independent movie no-one-saw" really communicate anything to us?  
+
+I posit that anyone who did anything significant in the film industry would have their `deathYear` duly reported. Therefore, let's re-start our search and see if we can arrive at a collection of individuals "significant enough in the film industry" to warrant our interest and attention. 
+
+Let's first try to identify "significant film productions" in our data. 
+
+I'm going to use the measure of: "if this film had a lot of people working on it, it no doubt cost a lot of money and was of notable interest to some studio or production company." So I'm going to count the number of crew on a film and look for a threshold for top produciton. 
+
+Here are the quantiles for the crew counts: 
+
+```
+10%  20%  30%  40%  50%  60%  70%  80%  90% 100% 
+10   14   16   18   19   20   21   22   24   65 
+```
+
+`90%` of all productions have `24+` or more crew numbers working on them. I'm going to identify any person "significant" in the films industry as someone who has worked on `20+` such productions. Sorted on `number_of_big_productions` worked on, sure enough this yields useful information: 
+
+| primaryName        | birthYear | number_of_big_productions | age  | deathYear |
+|--------------------|-----------|---------------------------|------|-----------|
+| Seth MacFarlane     | 1973      | 2505                      | 51   | 0         |
+| Dee Bradley Baker   | 1962      | 2311                      | 62   | 0         |
+| Dan Castellaneta    | 1957      | 2242                      | 67   | 0         |
+| Hank Azaria         | 1964      | 2191                      | 60   | 0         |
+| Harry Shearer       | 1943      | 2162                      | 81   | 0         |
+| Eric Stuart         | 1967      | 2043                      | 57   | 0         |
+
+: Data for Big Productions by Various Individuals, Including Age {.striped .hover}
+
+
+These names are all identifiable as prominent voice actors. So with this collection of notable individuals, let's idenfity the oldest individual in this data set: 
+
+| primaryName  | birthYear | number_of_big_productions | age  | deathYear |
+|--------------|-----------|---------------------------|------|-----------|
+| Mel Brooks   | 1926      | 37                        | 98   | 0         |
+
+: What a find {.striped .hover}
+
+
+
+
+
+<details>
+<summary> &#62; show the code</summary>
+```r
+# Who is the oldest individual in IMDb?
+min(NAME_BASICS$birthYear, na.rm=TRUE)
+
+# A birthyear of '4'! Is this a mistake? 
+sort(unique(NAME_BASICS$birthYear))
+
+# Who are these individuals? 
+NAME_BASICS |> 
+  filter(
+    birthYear == 4 | 
+    birthYear ==  37 |
+    birthYear ==  43 | 
+    birthYear == 46 | 
+    birthYear == 69 | 
+    birthYear == 70 |
+    birthYear == 163 | 
+    birthYear == 254
+    ) |> 
+  select(primaryName)
+  
+# Are there really that many 110 year-olds in this database? 
+NAME_BASICS |>
+  filter(birthYear <= 1914 & is.na(deathYear)) |>
+  nrow()
+
+# Let's count the amont of crew working for a poduction 
+crew_counts_for_title <- TITLE_PRINCIPALS |> 
+  group_by(tconst) |> 
+  summarize(crew_members = n()) 
+
+# Can we identify the threshold for 'big production' by crew count?
+quantile(crew_counts_for_title$crew_members, probs = seq(0.1, 1, by=.1))
+
+# Top 90% of productions have 24 crew members, so let's use that threshold
+big_productions <- crew_counts_for_title |> 
+  filter(crew_members >= 24)
+
+# Using 24 crew members as a citeria for "big production", this
+# identifies all of the individuals who have worked on 20 or more 
+# such productions, creating the criteria we're using for "significant 
+# individuals in film and television"
+name_ids_in_many_big_productions <- big_productions |> 
+  inner_join(TITLE_PRINCIPALS, by="tconst" |>
+  group_by(nconst) |> 
+  summarize(number_of_big_productions = n()) |> 
+  filter(number_of_big_productions > 20) |> 
+  arrange(desc(number_of_big_productions))
+
+# Mathching up these ids with names 
+names_in_many_big_productions <- name_ids_in_many_big_productions |>
+  inner_join(NAME_BASICS, join_by(nconst == nconst)) |>
+  mutate(deathYear = ifelse(is.na(deathYear), 0, deathYear)) |> 
+  mutate(age = ifelse(deathYear == 0, 2024 - birthYear, deathYear - birthYear)) |> 
+  select(primaryName, birthYear, number_of_big_productions, age, deathYear)
+
+# Who is the oldest individual in this data set?
+names_in_many_big_productions |> 
+  filter(deathYear == 0) |>
+  arrange(desc(age)) |>
+  slice(1)
+```
+</summary>
+</details>
+
+### Singular TV Episode rated highly
+
+| series_title  | episode_title | year |
+|---------------|---------------|------|
+| Breaking Bad  | Ozymandias     | 2013 |
+
+: Hank! {.striped .hover}
+
+<details>
+<summary> &#62; show the code</summary>
+
+```r
+top_episodes <- TITLE_RATINGS |>
+  filter(averageRating == 10 & numVotes >= 200000)
+  
+episode_details <- top_episodes |>
+  inner_join(TITLE_BASICS, by = "tconst") |>
+  inner_join(TITLE_EPISODES, by = "tconst")
+  
+
+episode_details |>
+  inner_join(TITLE_BASICS, join_by("parentTconst" == "tconst")) |>
+  select(series_title = primaryTitle.y, episode_title = primaryTitle.x, year = startYear.x)
+```
+</details>
+
+### Star Wars and Mark Hamill 
+
+| primaryName  | primaryTitle                                    | startYear |
+|--------------|-------------------------------------------------|-----------|
+| Mark Hamill  | Star Wars: Episode IV - A New Hope              | 1977      |
+| Mark Hamill  | Star Wars: Episode V - The Empire Strikes Back  | 1980      |
+| Mark Hamill  | Star Wars: Episode VI - Return of the Jedi      | 1983      |
+| Mark Hamill  | Star Wars: Episode VIII - The Last Jedi         | 2017      |
+
+: Data for Mark Hamill's Star Wars Movies {.striped .hover}
+
+
+<details>
+<summary> &#62; show the code</summary>
+
+```r
+mark_hamil_popular_works_IDs <- NAME_BASICS |>
+  filter(primaryName == "Mark Hamill") |>
+  separate_rows(knownForTitles, sep =",")
+  
+mark_hamil_popular_works_IDs |> 
+  inner_join(TITLE_BASICS, by = c("knownForTitles" = "tconst")) |> 
+  select(primaryName, primaryTitle, startYear) |>
+  arrange(startYear)
+```
+</details>
+
+
+<!-- find parent episode -->
+<!-- find all titles a person is involved with -->
+<!-- assess this individual's career -->
+
+<!-- 5 what television show with more than 12 episodes has the highest rating? -->
+
+tv_show_12_episodes <- 
+  TITLE_EPISODES |> 
+  group_by(parentTconst) |>
+  mutate(numberOfEpisodes = n()) |>  
+  arrange(desc(numberOfEpisodes))
+
+
+tv_show_12_episodes_high_rating_ID <- 
+  tv_show_12_episodes |> 
+  inner_join(TITLE_RATINGS, by = "tconst") |> 
+  select(-seasonNumber, -episodeNumber, -tconst) |>
+  group_by(parentTconst) |> 
+  mutate(average_rating_for_series = mean(averageRating), total_votes = sum(numVotes)) |>
+
+quantile(tv_show_12_episodes_high_rating_ID$total_votes, prob = seq(0,1,.05))
+
+ <!--       0%        5%       10%       15%       20%       25%       30%       35%       40%       45%       50%       55%       60%       65%       70%       75%       80%       85%  -->
+ <!--    100.0    1013.0    1912.0    3124.0    4584.0    6503.0    8854.0   12202.0   15319.0   18571.3   23174.0   28807.0   36989.0   46697.0   62328.0   89750.0  126076.0  168015.0  -->
+ <!--      90%       95%      100%  -->
+ <!-- 268723.0  516342.0 4574462.0  -->
+
+tv_show_12_episodes_high_rating_titles <- 
+  tv_show_12_episodes_high_rating_ID |> 
+  filter(total_votes > 268000) |>
+  inner_join(TITLE_BASICS, join_by(parentTconst == tconst)) 
+  
+tv_show_12_episodes_high_rating_titles <- 
+  tv_show_12_episodes_high_rating_ID |> 
+  filter(total_votes > 268000) |>
+  inner_join(TITLE_BASICS, join_by(parentTconst == tconst)) |>
+  group_by(parentTconst, primaryTitle) |>  
+  summarize(average_rating_for_series = first(average_rating_for_series), .groups = 'drop') |>  
+  arrange(desc(average_rating_for_series))  
+
+
+print(tv_show_12_episodes_high_rating_titles, n = 50)
+
+ <!--   parentTconst primaryTitle                      average_rating_for_series -->
+ <!--   <chr>        <chr>                                                 <dbl> -->
+ <!-- 1 tt7366338    Chernobyl                                              9.52 -->
+ <!-- 2 tt2560140    Attack on Titan                                        9.02 -->
+ <!-- 3 tt0903747    Breaking Bad                                           8.96 -->
+ <!-- 4 tt5753856    Dark                                                   8.89 -->
+ <!-- 5 tt4158110    Mr. Robot                                              8.89 -->
+ <!-- 6 tt3322312    Daredevil                                              8.84 -->
+ <!-- 7 tt1839578    Person of Interest                                     8.80 -->
+
+
+<!-- The TV series Happy Days (1974-1984) gives us the common idiom “jump the shark”. The phrase comes from a controversial fifth season episode (aired in 1977) in which a lead character literally jumped over a shark on water skis. Idiomatically, it is used to refer to the moment when a once-great show becomes ridiculous and rapidly looses quality. -->
+
+<!-- Is it true that episodes from later seasons of Happy Days have lower average ratings than the early seasons? -->
+
+
+<!-- make sure TITLE_BASICS and working movie_lens data_set have similar IMDb IDs -->
+
+title_basics_movie_lens_id <- TITLE_BASICS |> 
+    mutate(IMDbId = as.numeric(substring(tconst, 3)))
+    
+    
+<!-- merge the two data sets, make sure to create a year for when the review was posted -->
+
+movie_lens_and_IMDb <- title_basics_movie_lens_id |> 
+    inner_join(movie_lens_filtered_reviews_IMDb, by = "IMDbId") |> 
+    select(-isAdult, -endYear, -runtimeMinutes, -tmdbId, -titleType) |>
+    mutate(yearReview = year(as.POSIXct(timestamp, origin="1970-01-01")))
+
+<!-- now take out all reviews that were  -->
+
+movie_lens_and_IMDb_5_year_reviews <- movie_lens_and_IMDb |>
+    filter(yearReview - startYear >= 5) |>
+    group_by(IMDbId, primaryTitle, startYear) |> 
+    summarize(avg_review = mean(rating)) |> 
+    select(-IMDbId) |>
+    arrange(desc(avg_review))
+    
+
+print(movie_lens_and_IMDb_5_year_reviews, n=50)
+
+min(movie_lens_and_IMDb$yearReview)
+<!-- [1] 1995 -->
+
+
+<!--     IMDbId primaryTitle                                                         startYear avg_review -->
+<!--      <dbl> <chr>                                                                    <dbl>      <dbl> -->
+<!--  1  795176 Planet Earth                                                              2006       4.44 -->
+<!--  2  185906 Band of Brothers                                                          2001       4.43 -->
+<!--  3  111161 The Shawshank Redemption                                                  1994       4.39 -->
+<!--  4 5491994 Planet Earth II                                                           2016       4.33 -->
+<!--  5   68646 The Godfather                                                             1972       4.32 -->
+<!--  6  278784 Northwest Passage                                                         1989       4.30 -->
+<!--  7 3718778 Over the Garden Wall                                                      2014       4.27 -->
+<!--  8   50083 12 Angry Men                                                              1957       4.27 -->
+<!--  9   71562 The Godfather Part II                                                     1974       4.26 -->
+<!-- 10   47478 Seven Samurai                                                             1954       4.25 -->
+<!-- 11  296310 The Blue Planet                                                           2001       4.25 -->
+<!-- 12  114814 The Usual Suspects                                                        1995       4.25 -->
+<!-- 13 2654430 Whiplash                                                                  2013       4.24 -->
+<!-- 14  137523 Fight Club                                                                1999       4.24 -->
+<!-- 15  110912 Pulp Fiction                                                              1994       4.24 -->
+<!-- 16   47396 Rear Window                                                               1954       4.23 -->
+<!-- 17  245429 Spirited Away                                                             2001       4.21 -->
+<!-- 18   73486 One Flew Over the Cuckoo's Nest                                           1975       4.20 -->
+<!-- 19   57012 Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb      1964       4.20 -->
+<!-- 20  816692 Interstellar                                                              2014       4.20 -->
+<!-- 21   43014 Sunset Boulevard                                                          1950       4.20 -->
+<!-- 22   34583 Casablanca                                                                1942       4.19 -->
+<!-- 23   56058 Harakiri                                                                  1962       4.19 -->
+<!-- 24   99685 Goodfellas                                                                1990       4.19 -->
+<!-- 25   53125 North by Northwest                                                        1959       4.19 -->
+<!-- 26  108052 Schindler's List                                                          1993       4.19 -->
+<!-- 27   41959 The Third Man                                                             1949       4.18 -->
+<!-- 28   36775 Double Indemnity                                                          1944       4.18 -->
+<!-- 29 6769208 Blue Planet II                                                            2017       4.18 -->
+<!-- 30   50825 Paths of Glory                                                            1957       4.18 -->
+<!-- 31  405094 The Lives of Others                                                       2006       4.18 -->
+<!-- 32 2582802 Whiplash                                                                  2014       4.18 -->
+<!-- 33  119698 Princess Mononoke                                                         1997       4.18 -->
+<!-- 34   91251 Come and See                                                              1985       4.17 -->
+<!-- 35   55630 Yojimbo                                                                   1961       4.17 -->
+<!-- 36   57565 High and Low                                                              1963       4.16 -->
+<!-- 37 4299972 The Jinx: The Life and Deaths of Robert Durst                             2015       4.16 -->
+<!-- 38 4633694 Spider-Man: Into the Spider-Verse                                         2018       4.16 -->
+<!-- 39  317248 City of God                                                               2002       4.16 -->
+<!-- 40   96283 My Neighbor Totoro                                                        1988       4.16 -->
+<!-- 41   42192 All About Eve                                                             1950       4.16 -->
+<!-- 42 5311514 Your Name.                                                                2016       4.16 -->
+<!-- 43 1375666 Inception                                                                 2010       4.16 -->
+<!-- 44   71315 Chinatown                                                                 1974       4.15 -->
+<!-- 45   22100 M                                                                         1931       4.15 -->
+<!-- 46   38355 The Big Sleep                                                             1946       4.15 -->
+<!-- 47  110413 Léon: The Professional                                                    1994       4.15 -->
+<!-- 48  468569 The Dark Knight                                                           2008       4.15 -->
+<!-- 49  102926 The Silence of the Lambs                                                  1991       4.15 -->
+<!-- 50   38787 Notorious                                                                 1946       4.15 -->
+
+movie_lens_and_IMDb_year_review <- movie_lens_and_IMDb |>
+    group_by(IMDbId, primaryTitle, startYear) |> 
+    summarize(avg_review = mean(rating)) |> 
+    arrange(desc(avg_review))
+
+print(movie_lens_and_IMDb_year_review, n = 50)
+
+ <!--    IMDbId primaryTitle                                                         startYear avg_review -->
+ <!--     <dbl> <chr>                                                                    <dbl>      <dbl> -->
+ <!-- 1 5491994 Planet Earth II                                                           2016       4.45 -->
+ <!-- 2  795176 Planet Earth                                                              2006       4.44 -->
+ <!-- 3  185906 Band of Brothers                                                          2001       4.43 -->
+ <!-- 4  111161 The Shawshank Redemption                                                  1994       4.40 -->
+ <!-- 5   68646 The Godfather                                                             1972       4.32 -->
+ <!-- 6 6751668 Parasite                                                                  2019       4.31 -->
+ <!-- 7 6769208 Blue Planet II                                                            2017       4.30 -->
+ <!-- 8  278784 Northwest Passage                                                         1989       4.30 -->
+    
+
+polarizing_films <- movie_lens_and_IMDb |>
+  group_by(IMDbId, primaryTitle, startYear, genres) |> 
+  summarise(mean_rating = mean(rating), 
+            sd_rating = sd(rating),
+            num_ratings = n()) |>
+  arrange(desc(sd_rating)) |> 
+  select(-IMDbId) 
+
+polarizing_films
+  
+polarizing_films <- movie_lens_and_IMDb |>
+  group_by(movieId, primaryTitle, startYear, genres) |> 
+  summarise(mean_rating = mean(rating), 
+               iqr_rating = IQR(rating),
+            num_ratings = n()) |>
+  arrange(desc(iqr_rating)) 
+
+      
+
+polarizing_films <- movie_lens_and_IMDb |>
+  group_by(movieId, primaryTitle, startYear, genres) |> 
+  summarise(mean_rating = mean(rating), 
+               var_rating = var(rating),
+            num_ratings = n()) |>
+  arrange(desc(var_rating)) 
+  
+<!-- KAGGLE -->
+
+
+movie_lens_and_IMDb_and_kaggle <- movie_lens_and_IMDb |>
+  inner_join(KAGGLE_DATA, join_by(tconst == IMDb_id)) 
+
+movie_lens_and_IMDb_and_kaggle
+
+get_dollar_adjusted_value <- function(budget, year){
+  return (budget * cpi_named_vector[as.character(2024)]/cpi_named_vector[as.character(year)]) 
+}
+
+votes_budget <- movie_lens_and_IMDb_and_kaggle |> 
+    group_by(IMDbId, primaryTitle, budget, startYear, revenue) |> 
+    summarize(num_votes = n()) |>
+    mutate(adjusted_budget = get_dollar_adjusted_value(budget, startYear), 
+          adjusted_profit = get_dollar_adjusted_value(revenue, startYear) - get_dollar_adjusted_value(budget, startYear)
+    ) 
+
+model_profit <- lm(votes_budget$num_votes ~  votes_budget$adjusted_profit)
+
+reg_line <- function(x_val, model){
+  return(coef(model)[1] + coef(model)[2] * x_val)
+}
+
+votes_budget_profit <- votes_budget |> 
+  mutate(popularity_over_profit = num_votes - reg_line(adjusted_profit, model_profit)) |>
+  arrange(desc(popularity_over_profit))
+
+<!-- why not working? -->
+    
+ggplot(data = votes_budget_profit, aes(x = adjusted_profit, y = num_votes )) +
+  geom_point(alpha = 0.1) + 
+  geom_smooth(method="lm", se=FALSE)
+ 
+model_budget <- lm(votes_budget$num_votes ~  votes_budget$adjusted_budget)
+ 
+
+votes_budget_budget <- votes_budget |> 
+    mutate(popularity_over_budget = num_votes - reg_line(adjusted_budget, model_profit)) |>
+  arrange(desc(popularity_over_budget))
+
+print(votes_budget_budget, n =100)
+
+<!-- expensive films -->
+votes_budget |> 
+  arrange(desc(adjusted_budget)) |> 
+  print(n = 100)
+
+top_500_polarizing_films <- head(polarizing_films, 500)
+
+top_500_polarizing_films_w_budget <- top_500_polarizing_films |> inner_join(KAGGLE_DATA, join_by(IMDbId == IMDb_id)) 
+
+
+
+top_500_polarizing_films_w_budget
+
+
+## Appendix A {#appendixA}
+
+### How Data Was Loaded
+
+In this section, I describe how the data was loaded into the project.
+
+```r
+library(dplyr)
+library(tidyr)
 library(stringr)
-library(data.table)
+library(lubridate)
+library(readr)
+
 DATA_FOLDER <- "data/mp02/"
 
-get_imdb_file <- function(fname){
- 
-    as.data.frame(readr::read_tsv(fname, lazy=FALSE))
-}
-
-
+get_IMDb_file <- function(fname){
+     as.data.frame(readr::read_csv(fname, lazy=FALSE))
+ }
 
 create_file_ext <- function(fname){
-
-  paste0(DATA_FOLDER, fname)
+   paste0(DATA_FOLDER, fname)
 }
 
+# IMDb DATA
 
-NAME_BASICS <- get_imdb_file(create_file_ext("name.basics.tsv"))
+NAME_BASICS <- get_IMDb_file(create_file_ext("NAME_BASICS.csv"))
+TITLE_RATINGS <- get_IMDb_file(create_file_ext("TITLE_RATINGS.csv"))
+TITLE_BASICS <- get_IMDb_file(create_file_ext("TITLE_BASICS.csv"))
+TITLE_CREW <- get_IMDb_file(create_file_ext("TITLE_CREW.csv"))
+TITLE_EPISODES <- get_IMDb_file(create_file_ext("TITLE_EPISODES.csv"))
+TITLE_PRINCIPALS <- get_IMDb_file(create_file_ext("TITLE_PRINCIPALS.csv"))
 
-head(NAME_BASICS)
+NAME_BASICS <- NAME_BASICS |>
+    mutate(birthYear = as.numeric(birthYear),
+           deathYear = as.numeric(deathYear))
 
-NAME_BASICS <- NAME_BASICS |> 
-    filter(str_count(knownForTitles, ",") > 1)
+TITLE_RATINGS <- TITLE_RATINGS |>
+     mutate(averageRating = as.numeric(averageRating),
+            numVotes = as.numeric(numVotes))
 
-write_tsv(NAME_BASICS, "name_basics_sample.tsv")
+TITLE_BASICS <- TITLE_BASICS |>
+    mutate(isAdult = as.logical(isAdult),
+           runtimeMinutes = ifelse(grepl("[^0-9]", runtimeMinutes), NA, as.numeric(runtimeMinutes)))
+
+# MOVIE LENS
+
+MOVIE_LENS_RATINGS <- read.csv("data/mp02/ml-32m/ratings.csv")
+
+MOVIE_LENS_LINKS <- read.csv("data/mp02/ml-32m/links.csv")
+
+movie_lens_ratings_merged <- MOVIE_LENS_RATINGS |>
+   group_by(movieId) |>
+   summarize(count_reviews = n())
+
+# KAGGLE
+
+KAGGLE_DATA <- read.csv("data/mp02/KAGGLE_DATA.csv") |>
+   mutate(budget = ifelse(is.na(budget), 0, parse_number(budget)))
+
+# CPI
+
+HISTORICAL_CPI <- read.csv("data/mp02/HISTORICAL_CPI.csv") |>
+   mutate(year = substring(DATE,1,4))
+
+cpi_named_vector <- setNames(HISTORICAL_CPI$CPIAUCNS, HISTORICAL_CPI$year)
+```
 
 
-install.packages("data.table")  # Install if you don't have it already
-library(data.table)
+head(names_in_many_big_productions)
+<!-- quantile(movies_with_ratings_merged$count_reviews, probs=seq(0,1, by = 0.025)) -->
+<!-- 95% of reviews have 1000 reviews or less... -->
 
-sample_data <- fread("data/mp02/name.basics.tsv", nrows = 100)
+<!-- max(movies_with_ratings_merged$movieId) -->
+<!-- 292757 -->
 
-print(sample_data)
+<!-- MOVIE LENS -->
+
+movies_meeting_review_threshold <- movies_lens_ratings_merged |>
+  filter(count_reviews >= 1000) |>
+  pull(movieId)
+  
+filtered_reviews <- MOVIE_LENS_RATINGS |>
+  filter(movieId %in% movies_meeting_review_threshold)
+
+movie_lens__IMDb <- filtered_reviews |>
+  inner_join(MOVIE_LENS_LINKS, by = "movieId")
+  
+
+<details>
+<summary> &#62; show the code</summary>
+
+```{r}
+hello <- "hello"
+
+```
+</details>
+<!-- number of movies -->
+
+When we say "movie" we often think of "what is opening this Friday" and with it: "what film will win the weekend box office?" 
+
+If we look at the Kaggle Movie Dataset, we see  
+
+quantile(KAGGLE_DATA$revenue, probs = seq(0,1,.05), na.rm=TRUE)
