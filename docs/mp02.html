@@ -287,8 +287,8 @@ tvMovie     The Day After   1983</code></pre>
 </colgroup>
 <thead>
 <tr class="header">
-<th>primaryName</th>
-<th>birthYear</th>
+<th>Name</th>
+<th>Birth Year</th>
 <th>number_of_big_productions</th>
 <th>age</th>
 <th>deathYear</th>
@@ -470,10 +470,9 @@ tvMovie     The Day After   1983</code></pre>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(<span class="st">"parentTconst"</span> <span class="sc">==</span> <span class="st">"tconst"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">series_title =</span> primaryTitle.y, <span class="at">episode_title =</span> primaryTitle.x, <span class="at">year =</span> startYear.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<!-- question 4 what is mark hamil most known for -->
 </section>
-<section id="star-wars-and-mark-hamil" class="level3">
-<h3 class="anchored" data-anchor-id="star-wars-and-mark-hamil">Star Wars and Mark Hamil</h3>
+<section id="star-wars-and-mark-hamill" class="level3">
+<h3 class="anchored" data-anchor-id="star-wars-and-mark-hamill">Star Wars and Mark Hamill</h3>
 <table class="table-striped table-hover caption-top table">
 <caption>Data for Mark Hamill’s Star Wars Movies</caption>
 <colgroup>
@@ -524,24 +523,254 @@ tvMovie     The Day After   1983</code></pre>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, primaryTitle, startYear) <span class="sc">|&gt;</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(startYear)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<p>mark_hamil_popular_works_IDs &lt;- NAME_BASICS |&gt; filter(primaryName == “Mark Hamill”) |&gt; separate_rows(knownForTitles, sep =“,”)</p>
 <!-- find parent episode -->
 <!-- find all titles a person is involved with -->
 <!-- assess this individual's career -->
 <!-- 5 what television show with more than 12 episodes has the highest rating? -->
-<p>tv_show_12_episodes &lt;- TITLE_EPISODES |&gt; group_by(parentTconst) |&gt; mutate(numberOfEpisodes = n()) |&gt;<br>
-arrange(desc(numberOfEpisodes))</p>
-<p>tv_show_12_episodes_high_rating_ID &lt;- tv_show_12_episodes |&gt; inner_join(TITLE_RATINGS, by = “tconst”) |&gt; select(-seasonNumber, -episodeNumber, -tconst) |&gt; group_by(parentTconst) |&gt; mutate(average_rating_for_series = mean(averageRating), total_votes = sum(numVotes)) |&gt;</p>
-<p>quantile(tv_show_12_episodes_high_rating_ID$total_votes, prob = seq(0,1,.05))</p>
-<p><!--       0%        5%       10%       15%       20%       25%       30%       35%       40%       45%       50%       55%       60%       65%       70%       75%       80%       85%  --> <!--    100.0    1013.0    1912.0    3124.0    4584.0    6503.0    8854.0   12202.0   15319.0   18571.3   23174.0   28807.0   36989.0   46697.0   62328.0   89750.0  126076.0  168015.0  --> <!--      90%       95%      100%  --> <!-- 268723.0  516342.0 4574462.0  --></p>
-<p>tv_show_12_episodes_high_rating_titles &lt;- tv_show_12_episodes_high_rating_ID |&gt; filter(total_votes &gt; 268000) |&gt; inner_join(TITLE_BASICS, join_by(parentTconst == tconst))</p>
-<p>tv_show_12_episodes_high_rating_titles &lt;- tv_show_12_episodes_high_rating_ID |&gt; filter(total_votes &gt; 268000) |&gt; inner_join(TITLE_BASICS, join_by(parentTconst == tconst)) |&gt; group_by(parentTconst, primaryTitle) |&gt;<br>
-summarize(average_rating_for_series = first(average_rating_for_series), .groups = ‘drop’) |&gt;<br>
-arrange(desc(average_rating_for_series))</p>
-<p>print(tv_show_12_episodes_high_rating_titles, n = 50)</p>
-<p><!--   parentTconst primaryTitle                      average_rating_for_series --> <!--   <chr>        <chr>                                                 <dbl> --> <!-- 1 tt7366338    Chernobyl                                              9.52 --> <!-- 2 tt2560140    Attack on Titan                                        9.02 --> <!-- 3 tt0903747    Breaking Bad                                           8.96 --> <!-- 4 tt5753856    Dark                                                   8.89 --> <!-- 5 tt4158110    Mr. Robot                                              8.89 --> <!-- 6 tt3322312    Daredevil                                              8.84 --> <!-- 7 tt1839578    Person of Interest                                     8.80 --></p>
+</section>
+<section id="what-television-show-with-at-least-12-episodes-has-the-highest-average-rating" class="level3">
+<h3 class="anchored" data-anchor-id="what-television-show-with-at-least-12-episodes-has-the-highest-average-rating">What Television Show with at least 12 episodes has the highest average rating?</h3>
+<p>This is really unsatisfactory:</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Data for TV Series and Their Average Ratings</caption>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 50%">
+<col style="width: 32%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>parentTconst</th>
+<th>primaryTitle</th>
+<th>average_rating_for_series</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>tt0409579</td>
+<td>Made</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>tt11289784</td>
+<td>Unus Annus</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>tt11363282</td>
+<td>The Real Housewives of Salt Lake City</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>tt21278628</td>
+<td>Cowboys of Thunder</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>tt0060008</td>
+<td>The Milton Berle Show</td>
+<td>9.9</td>
+</tr>
+<tr class="even">
+<td>tt0168358</td>
+<td>Parkinson</td>
+<td>9.9</td>
+</tr>
+<tr class="odd">
+<td>tt0372654</td>
+<td>De película</td>
+<td>9.9</td>
+</tr>
+<tr class="even">
+<td>tt0491739</td>
+<td>In the Nick of Time</td>
+<td>9.9</td>
+</tr>
+<tr class="odd">
+<td>tt14117438</td>
+<td>Tough Love with Hilary Farr</td>
+<td>9.9</td>
+</tr>
+<tr class="even">
+<td>tt31806594</td>
+<td>War of Faith</td>
+<td>9.9</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s investigate the quantiles for number of votes:</p>
+<p><img src="images/mp-02/2_quantile_breakdown_of_num_of_votes.jpeg" class="img-fluid" style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
+<p>Discounting the disotrting effect of few people voting on a television program, we’ll settle on the the top 10% most popular shows, Admittedly this may miss out on underrecognized, cult programs.</p>
+<table class="table-striped table-hover caption-top table">
+<caption>I had never heard of Attack on Titan. The Internet loves Anime.</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 40%">
+<col style="width: 39%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>parentTconst</th>
+<th>primaryTitle</th>
+<th>average_rating_for_series</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>tt2560140</td>
+<td>Attack on Titan</td>
+<td>9.02</td>
+</tr>
+<tr class="even">
+<td>tt0903747</td>
+<td>Breaking Bad</td>
+<td>8.96</td>
+</tr>
+<tr class="odd">
+<td>tt5753856</td>
+<td>Dark</td>
+<td>8.89</td>
+</tr>
+<tr class="even">
+<td>tt4158110</td>
+<td>Mr.&nbsp;Robot</td>
+<td>8.89</td>
+</tr>
+<tr class="odd">
+<td>tt3322312</td>
+<td>Daredevil</td>
+<td>8.84</td>
+</tr>
+<tr class="even">
+<td>tt1839578</td>
+<td>Person of Interest</td>
+<td>8.80</td>
+</tr>
+<tr class="odd">
+<td>tt3032476</td>
+<td>Better Call Saul</td>
+<td>8.80</td>
+</tr>
+<tr class="even">
+<td>tt7660850</td>
+<td>Succession</td>
+<td>8.75</td>
+</tr>
+<tr class="odd">
+<td>tt0944947</td>
+<td>Game of Thrones</td>
+<td>8.75</td>
+</tr>
+<tr class="even">
+<td>tt3581920</td>
+<td>The Last of Us</td>
+<td>8.73</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>
+&gt; show the code
+</summary>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group television shows by their parents</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes <span class="ot">&lt;-</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  TITLE_EPISODES <span class="sc">|&gt;</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">numberOfEpisodes =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span>  </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(numberOfEpisodes <span class="sc">&gt;</span> <span class="dv">12</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(numberOfEpisodes))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify the popular series by averaging the ratings of all episodes</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_ID <span class="ot">&lt;-</span> </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes <span class="sc">|&gt;</span> </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_RATINGS, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>seasonNumber, <span class="sc">-</span>episodeNumber, <span class="sc">-</span>tconst) <span class="sc">|&gt;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst) <span class="sc">|&gt;</span> </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">average_rating_for_series =</span> <span class="fu">mean</span>(averageRating), <span class="at">total_votes =</span> <span class="fu">sum</span>(numVotes))</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Join our working list with the master Title list to identify the series</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) </span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Investigate the name of the most popular shows</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles <span class="ot">&lt;-</span> </span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst, primaryTitle) <span class="sc">|&gt;</span>  </span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_rating_for_series =</span> <span class="fu">first</span>(average_rating_for_series), <span class="at">.groups =</span> <span class="st">'drop'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(average_rating_for_series))  </span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># This yielded unsatisfactory, unidentifiable series, let's try to limit by quantile</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(tv_show_12_episodes_high_rating_ID<span class="sc">$</span>total_votes, <span class="at">prob =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,.<span class="dv">1</span>))</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph used to visualize the quantiles</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(quantile_data, <span class="fu">aes</span>(<span class="at">x =</span> quantile, <span class="at">y =</span> votes, <span class="at">fill =</span> quantile)) <span class="sc">+</span> </span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set3"</span>) <span class="sc">+</span>  </span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Quantile Breakdown of Number of Votes"</span>, </span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Percentage of Shows Receiving Votes"</span>, </span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Votes"</span>) <span class="sc">+</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">scale_cut =</span> <span class="fu">cut_short_scale</span>())) <span class="sc">+</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,  <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))  </span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Investegating the top 10% of shows </span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles <span class="ot">&lt;-</span> </span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(total_votes <span class="sc">&gt;</span> <span class="dv">327732</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst, primaryTitle) <span class="sc">|&gt;</span>  </span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_rating_for_series =</span> <span class="fu">first</span>(average_rating_for_series), <span class="at">.groups =</span> <span class="st">'drop'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(average_rating_for_series)) <span class="sc">|&gt;</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> average_rating_for_series, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <!-- The TV series Happy Days (1974-1984) gives us the common idiom “jump the shark”. The phrase comes from a controversial fifth season episode (aired in 1977) in which a lead character literally jumped over a shark on water skis. Idiomatically, it is used to refer to the moment when a once-great show becomes ridiculous and rapidly looses quality. -->
-<!-- Is it true that episodes from later seasons of Happy Days have lower average ratings than the early seasons? -->
+</section>
+<section id="jump-the-shark-with-happy-days" class="level3">
+<h3 class="anchored" data-anchor-id="jump-the-shark-with-happy-days">Jump the Shark with Happy Days</h3>
+<p>Wikipedia suggests the famous “jumping the shark” episode from Happy Days happened episode <code>3</code> season <code>5</code>.</p>
+<p>After we identify all the episdoes of Happy Days in our IMDb data we create two sets of data filtered around the pivot point of season <code>5</code> episode <code>3</code> : <strong>before shark</strong> and <strong>after shark</strong>.</p>
+<p>Performing calculations on these two sets we see:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">mean</span>(happy_days_episodes_ratings_before_shark<span class="sc">$</span>averageRating)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">7.484404</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">mean</span>(happy_days_episodes_after_shark<span class="sc">$</span>averageRating)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">6.878571</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+Happy Days did, in fact, jump it’s own proverbial shark.
+<details>
+<summary>
+&gt; show the code
+</summary>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying the IMDb ID for television series "Happy Days"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="sc">|&gt;</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"tvSeries"</span> <span class="sc">&amp;</span> primaryTitle <span class="sc">==</span> <span class="st">"Happy Days"</span>) </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Singling out all "Happy Days" epsidoes in our titles dataset </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>happy_days_episodes <span class="ot">&lt;-</span> TITLE_EPISODES <span class="sc">|&gt;</span> </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(parentTconst <span class="sc">==</span> <span class="st">"tt0070992"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Joining our "Happy Days" episodes with their ratings</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>happy_days_episodes_ratings <span class="ot">&lt;-</span> happy_days_episodes <span class="sc">|&gt;</span> </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_RATINGS, <span class="at">by =</span> <span class="st">"tconst"</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtering on all episodes before the infamous "shark jump" episode of </span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Episode 3, Season 5</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>happy_days_episodes_ratings_before_shark <span class="ot">&lt;-</span> happy_days_episodes_ratings <span class="sc">|&gt;</span> </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>((seasonNumber <span class="sc">&lt;</span> <span class="dv">5</span>) <span class="sc">|</span> (seasonNumber <span class="sc">==</span> <span class="dv">5</span> <span class="sc">&amp;</span> episodeNumber <span class="sc">&lt;</span> <span class="dv">3</span>)) </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># With our "before shark" episodes, using a filter join to create a data set</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co"># for "after shark" </span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>happy_days_episodes_after_shark <span class="ot">&lt;-</span> happy_days_episodes_ratings <span class="sc">|&gt;</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(happy_days_episodes_ratings_before_shark, <span class="at">by =</span> <span class="st">"tconst"</span>) </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="co"># With "before shark" and "after shark" data sets, we can perform our calculations</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(happy_days_episodes_ratings_before_shark<span class="sc">$</span>averageRating)</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(happy_days_episodes_after_shark<span class="sc">$</span>averageRating)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<!-- Season 5, episode 3 -->
+<p>head(TITLE_EPISODES) <!-- Is it true that episodes from later seasons of Happy Days have lower average ratings than the early seasons? --></p>
 <!-- make sure TITLE_BASICS and working movie_lens data_set have similar IMDb IDs -->
 <p>title_basics_movie_lens_id &lt;- TITLE_BASICS |&gt; mutate(IMDbId = as.numeric(substring(tconst, 3)))</p>
 <!-- merge the two data sets, make sure to create a year for when the review was posted -->
@@ -627,71 +856,71 @@ arrange(desc(average_rating_for_series))</p>
 <p>top_500_polarizing_films &lt;- head(polarizing_films, 500)</p>
 <p>top_500_polarizing_films_w_budget &lt;- top_500_polarizing_films |&gt; inner_join(KAGGLE_DATA, join_by(IMDbId == IMDb_id))</p>
 <p>top_500_polarizing_films_w_budget</p>
-</section>
+</details></details></section>
 </section>
 <section id="appendixA" class="level2">
 <h2 class="anchored" data-anchor-id="appendixA">Appendix A</h2>
 <section id="how-data-was-loaded" class="level3">
 <h3 class="anchored" data-anchor-id="how-data-was-loaded">How Data Was Loaded</h3>
 <p>In this section, I describe how the data was loaded into the project.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>DATA_FOLDER <span class="ot">&lt;-</span> <span class="st">"data/mp02/"</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>get_IMDb_file <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>     <span class="fu">as.data.frame</span>(readr<span class="sc">::</span><span class="fu">read_csv</span>(fname, <span class="at">lazy=</span><span class="cn">FALSE</span>))</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a> }</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>create_file_ext <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>   <span class="fu">paste0</span>(DATA_FOLDER, fname)</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># IMDb DATA</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"NAME_BASICS.csv"</span>))</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_RATINGS.csv"</span>))</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_BASICS.csv"</span>))</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>TITLE_CREW <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_CREW.csv"</span>))</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>TITLE_EPISODES <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_EPISODES.csv"</span>))</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_PRINCIPALS.csv"</span>))</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">birthYear =</span> <span class="fu">as.numeric</span>(birthYear),</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">deathYear =</span> <span class="fu">as.numeric</span>(deathYear))</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>     <span class="fu">mutate</span>(<span class="at">averageRating =</span> <span class="fu">as.numeric</span>(averageRating),</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">numVotes =</span> <span class="fu">as.numeric</span>(numVotes))</span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">isAdult =</span> <span class="fu">as.logical</span>(isAdult),</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>           <span class="at">runtimeMinutes =</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"[^0-9]"</span>, runtimeMinutes), <span class="cn">NA</span>, <span class="fu">as.numeric</span>(runtimeMinutes)))</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co"># MOVIE LENS</span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>MOVIE_LENS_RATINGS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/ratings.csv"</span>)</span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>MOVIE_LENS_LINKS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/links.csv"</span>)</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>movie_lens_ratings_merged <span class="ot">&lt;-</span> MOVIE_LENS_RATINGS <span class="sc">|&gt;</span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(movieId) <span class="sc">|&gt;</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>   <span class="fu">summarize</span>(<span class="at">count_reviews =</span> <span class="fu">n</span>())</span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="co"># KAGGLE</span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>KAGGLE_DATA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/KAGGLE_DATA.csv"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">budget =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(budget), <span class="dv">0</span>, <span class="fu">parse_number</span>(budget)))</span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="co"># CPI</span></span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>HISTORICAL_CPI <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/HISTORICAL_CPI.csv"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">substring</span>(DATE,<span class="dv">1</span>,<span class="dv">4</span>))</span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>cpi_named_vector <span class="ot">&lt;-</span> <span class="fu">setNames</span>(HISTORICAL_CPI<span class="sc">$</span>CPIAUCNS, HISTORICAL_CPI<span class="sc">$</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>DATA_FOLDER <span class="ot">&lt;-</span> <span class="st">"data/mp02/"</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>get_IMDb_file <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>     <span class="fu">as.data.frame</span>(readr<span class="sc">::</span><span class="fu">read_csv</span>(fname, <span class="at">lazy=</span><span class="cn">FALSE</span>))</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a> }</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>create_file_ext <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>   <span class="fu">paste0</span>(DATA_FOLDER, fname)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"># IMDb DATA</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"NAME_BASICS.csv"</span>))</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_RATINGS.csv"</span>))</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_BASICS.csv"</span>))</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>TITLE_CREW <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_CREW.csv"</span>))</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>TITLE_EPISODES <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_EPISODES.csv"</span>))</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_PRINCIPALS.csv"</span>))</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">birthYear =</span> <span class="fu">as.numeric</span>(birthYear),</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">deathYear =</span> <span class="fu">as.numeric</span>(deathYear))</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>     <span class="fu">mutate</span>(<span class="at">averageRating =</span> <span class="fu">as.numeric</span>(averageRating),</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">numVotes =</span> <span class="fu">as.numeric</span>(numVotes))</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">isAdult =</span> <span class="fu">as.logical</span>(isAdult),</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>           <span class="at">runtimeMinutes =</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"[^0-9]"</span>, runtimeMinutes), <span class="cn">NA</span>, <span class="fu">as.numeric</span>(runtimeMinutes)))</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="co"># MOVIE LENS</span></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>MOVIE_LENS_RATINGS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/ratings.csv"</span>)</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>MOVIE_LENS_LINKS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/links.csv"</span>)</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>movie_lens_ratings_merged <span class="ot">&lt;-</span> MOVIE_LENS_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(movieId) <span class="sc">|&gt;</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>   <span class="fu">summarize</span>(<span class="at">count_reviews =</span> <span class="fu">n</span>())</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a><span class="co"># KAGGLE</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>KAGGLE_DATA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/KAGGLE_DATA.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">budget =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(budget), <span class="dv">0</span>, <span class="fu">parse_number</span>(budget)))</span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a><span class="co"># CPI</span></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>HISTORICAL_CPI <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/HISTORICAL_CPI.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">substring</span>(DATE,<span class="dv">1</span>,<span class="dv">4</span>))</span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>cpi_named_vector <span class="ot">&lt;-</span> <span class="fu">setNames</span>(HISTORICAL_CPI<span class="sc">$</span>CPIAUCNS, HISTORICAL_CPI<span class="sc">$</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>head(names_in_many_big_productions) <!-- quantile(movies_with_ratings_merged$count_reviews, probs=seq(0,1, by = 0.025)) --> <!-- 95% of reviews have 1000 reviews or less... --></p>
 <!-- max(movies_with_ratings_merged$movieId) -->
 <!-- 292757 -->
@@ -704,7 +933,7 @@ arrange(desc(average_rating_for_series))</p>
 &gt; show the code
 </summary>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hello <span class="ot">&lt;-</span> <span class="st">"hello"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>hello <span class="ot">&lt;-</span> <span class="st">"hello"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </details>
 <!-- number of movies -->

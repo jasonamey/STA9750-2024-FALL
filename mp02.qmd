@@ -156,7 +156,7 @@ Here are the quantiles for the crew counts:
 
 `90%` of all productions have `24+` or more crew numbers working on them. I'm going to identify any person "significant" in the films industry as someone who has worked on `20+` such productions. Sorted on `number_of_big_productions` worked on, sure enough this yields useful information: 
 
-| primaryName        | birthYear | number_of_big_productions | age  | deathYear |
+| Name        | Birth Year | number_of_big_productions | age  | deathYear |
 |--------------------|-----------|---------------------------|------|-----------|
 | Seth MacFarlane     | 1973      | 2505                      | 51   | 0         |
 | Dee Bradley Baker   | 1962      | 2311                      | 62   | 0         |
@@ -307,56 +307,163 @@ mark_hamil_popular_works_IDs |>
 
 <!-- 5 what television show with more than 12 episodes has the highest rating? -->
 
+### What Television Show with at least 12 episodes has the highest average rating? 
+
+This is really unsatisfactory: 
+
+| parentTconst | primaryTitle                             | average_rating_for_series |
+|--------------|------------------------------------------|---------------------------|
+| tt0409579    | Made                                     | 10                        |
+| tt11289784   | Unus Annus                               | 10                        |
+| tt11363282   | The Real Housewives of Salt Lake City    | 10                        |
+| tt21278628   | Cowboys of Thunder                       | 10                        |
+| tt0060008    | The Milton Berle Show                    | 9.9                       |
+| tt0168358    | Parkinson                                | 9.9                       |
+| tt0372654    | De película                              | 9.9                       |
+| tt0491739    | In the Nick of Time                      | 9.9                       |
+| tt14117438   | Tough Love with Hilary Farr              | 9.9                       |
+| tt31806594   | War of Faith                             | 9.9                       |
+
+: Data for TV Series and Their Average Ratings {.striped .hover}
+
+Let's investigate the quantiles for number of votes: 
+
+![](images/mp-02/2_quantile_breakdown_of_num_of_votes.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+
+
+Discounting the disotrting effect of few people voting on a television program, we'll settle on the the top 10% most popular shows,  Admittedly this may miss out on underrecognized, cult programs.
+
+| parentTconst | primaryTitle               | average_rating_for_series |
+|--------------|----------------------------|---------------------------|
+| tt2560140    | Attack on Titan             | 9.02                      |
+| tt0903747    | Breaking Bad                | 8.96                      |
+| tt5753856    | Dark                        | 8.89                      |
+| tt4158110    | Mr. Robot                   | 8.89                      |
+| tt3322312    | Daredevil                   | 8.84                      |
+| tt1839578    | Person of Interest          | 8.80                      |
+| tt3032476    | Better Call Saul            | 8.80                      |
+| tt7660850    | Succession                  | 8.75                      |
+| tt0944947    | Game of Thrones             | 8.75                      |
+| tt3581920    | The Last of Us              | 8.73                      |
+  
+: I had never heard of Attack on Titan. The Internet loves Anime. {.striped .hover}
+
+<details>
+<summary> &#62; show the code</summary>
+```r
+
+# Group television shows by their parents
 tv_show_12_episodes <- 
   TITLE_EPISODES |> 
   group_by(parentTconst) |>
   mutate(numberOfEpisodes = n()) |>  
+  filter(numberOfEpisodes > 12) |>
   arrange(desc(numberOfEpisodes))
 
-
+# Identify the popular series by averaging the ratings of all episodes
 tv_show_12_episodes_high_rating_ID <- 
   tv_show_12_episodes |> 
   inner_join(TITLE_RATINGS, by = "tconst") |> 
   select(-seasonNumber, -episodeNumber, -tconst) |>
   group_by(parentTconst) |> 
-  mutate(average_rating_for_series = mean(averageRating), total_votes = sum(numVotes)) |>
+  mutate(average_rating_for_series = mean(averageRating), total_votes = sum(numVotes))
 
-quantile(tv_show_12_episodes_high_rating_ID$total_votes, prob = seq(0,1,.05))
-
- <!--       0%        5%       10%       15%       20%       25%       30%       35%       40%       45%       50%       55%       60%       65%       70%       75%       80%       85%  -->
- <!--    100.0    1013.0    1912.0    3124.0    4584.0    6503.0    8854.0   12202.0   15319.0   18571.3   23174.0   28807.0   36989.0   46697.0   62328.0   89750.0  126076.0  168015.0  -->
- <!--      90%       95%      100%  -->
- <!-- 268723.0  516342.0 4574462.0  -->
-
-tv_show_12_episodes_high_rating_titles <- 
-  tv_show_12_episodes_high_rating_ID |> 
-  filter(total_votes > 268000) |>
+# Join our working list with the master Title list to identify the series
+tv_show_12_episodes_high_rating_ID |> 
   inner_join(TITLE_BASICS, join_by(parentTconst == tconst)) 
   
+# Investigate the name of the most popular shows
 tv_show_12_episodes_high_rating_titles <- 
   tv_show_12_episodes_high_rating_ID |> 
-  filter(total_votes > 268000) |>
   inner_join(TITLE_BASICS, join_by(parentTconst == tconst)) |>
   group_by(parentTconst, primaryTitle) |>  
-  summarize(average_rating_for_series = first(average_rating_for_series), .groups = 'drop') |>  
+  summarize(average_rating_for_series = first(average_rating_for_series), .groups = 'drop') |>
   arrange(desc(average_rating_for_series))  
+tv_show_12_episodes_high_rating_titles
 
+# This yielded unsatisfactory, unidentifiable series, let's try to limit by quantile
+quantile(tv_show_12_episodes_high_rating_ID$total_votes, prob = seq(0,1,.1))
 
-print(tv_show_12_episodes_high_rating_titles, n = 50)
+# Graph used to visualize the quantiles
+ggplot(quantile_data, aes(x = quantile, y = votes, fill = quantile)) + 
+  geom_col() + 
+  scale_fill_brewer(palette = "Set3") +  
+  labs(title = "Quantile Breakdown of Number of Votes", 
+       x = "Percentage of Shows Receiving Votes", 
+       y = "Number of Votes") +
+   scale_y_continuous(labels = label_number(scale_cut = cut_short_scale())) +
+  theme_minimal() +
+  theme(legend.position = "none",  plot.title = element_text(hjust = 0.5))  
 
- <!--   parentTconst primaryTitle                      average_rating_for_series -->
- <!--   <chr>        <chr>                                                 <dbl> -->
- <!-- 1 tt7366338    Chernobyl                                              9.52 -->
- <!-- 2 tt2560140    Attack on Titan                                        9.02 -->
- <!-- 3 tt0903747    Breaking Bad                                           8.96 -->
- <!-- 4 tt5753856    Dark                                                   8.89 -->
- <!-- 5 tt4158110    Mr. Robot                                              8.89 -->
- <!-- 6 tt3322312    Daredevil                                              8.84 -->
- <!-- 7 tt1839578    Person of Interest                                     8.80 -->
+# Investegating the top 10% of shows 
+tv_show_12_episodes_high_rating_titles <- 
+  tv_show_12_episodes_high_rating_ID |> 
+  inner_join(TITLE_BASICS, join_by(parentTconst == tconst)) |>
+  filter(total_votes > 327732) |>
+  group_by(parentTconst, primaryTitle) |>  
+  summarize(average_rating_for_series = first(average_rating_for_series), .groups = 'drop') |>
+  arrange(desc(average_rating_for_series)) |>
+  slice_max(order_by = average_rating_for_series, n = 10)
+
+```
+</details>
 
 
 <!-- The TV series Happy Days (1974-1984) gives us the common idiom “jump the shark”. The phrase comes from a controversial fifth season episode (aired in 1977) in which a lead character literally jumped over a shark on water skis. Idiomatically, it is used to refer to the moment when a once-great show becomes ridiculous and rapidly looses quality. -->
 
+### Jump the Shark with Happy Days 
+
+Wikipedia suggests the famous "jumping the shark" episode from Happy Days happened episode `3` season `5`.
+
+After we identify all the episdoes of Happy Days in our IMDb data we create two sets of data filtered around the pivot point of season `5` episode `3` : **before shark** and **after shark**.
+
+Performing calculations on these two sets we see: 
+```r
+> mean(happy_days_episodes_ratings_before_shark$averageRating)
+[1] 7.484404
+
+> mean(happy_days_episodes_after_shark$averageRating)
+[1] 6.878571
+```
+Happy Days did, in fact, jump it's own proverbial shark.
+<details>
+<summary> &#62; show the code</summary>
+
+```r
+# Identifying the IMDb ID for television series "Happy Days"
+TITLE_BASICS |> 
+  filter(titleType == "tvSeries" & primaryTitle == "Happy Days") 
+
+# Singling out all "Happy Days" epsidoes in our titles dataset 
+happy_days_episodes <- TITLE_EPISODES |> 
+  filter(parentTconst == "tt0070992")
+
+# Joining our "Happy Days" episodes with their ratings
+happy_days_episodes_ratings <- happy_days_episodes |> 
+  inner_join(TITLE_RATINGS, by = "tconst")
+
+# Filtering on all episodes before the infamous "shark jump" episode of 
+# Episode 3, Season 5
+happy_days_episodes_ratings_before_shark <- happy_days_episodes_ratings |> 
+  filter((seasonNumber < 5) | (seasonNumber == 5 & episodeNumber < 3)) 
+
+# With our "before shark" episodes, using a filter join to create a data set
+# for "after shark" 
+happy_days_episodes_after_shark <- happy_days_episodes_ratings |>
+  anti_join(happy_days_episodes_ratings_before_shark, by = "tconst") 
+
+# With "before shark" and "after shark" data sets, we can perform our calculations
+mean(happy_days_episodes_ratings_before_shark$averageRating)
+mean(happy_days_episodes_after_shark$averageRating)
+```
+<details>
+
+<!-- Season 5, episode 3 -->
+
+
+
+head(TITLE_EPISODES)
 <!-- Is it true that episodes from later seasons of Happy Days have lower average ratings than the early seasons? -->
 
 
