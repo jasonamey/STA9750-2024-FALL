@@ -547,7 +547,15 @@ mean(happy_days_episodes_after_shark$averageRating)
 
 ## Beyond the Spotlight
 
-In an attempt to single out noteworthy films, I created a statistical
+We're going to use ratings in IMDb to create a measure to document the significant, successful films. IMDb ratings are crowdsources from its users.  Films with more votes are going to have more stable rating and there is a left skew to the distribution of films and the number of individuals who have rated the film: 
+```
+     0%     10%     20%     30%     40%     50%     60%     70%     80%     90% 
+    100     120     148     187     246     332     473     738    1332    3355
+```
+
+I'm going to filter out the top `~20%` of rated films. 
+
+In an attempt to single out noteworthy remaining films, I created a statistical
 quantification of a movie's positioning by evaluating both its IMDb
 rating and the number of IMDb users who voted on the film. This approach
 aims to capture both the **quality** (via the rating) and the
@@ -565,42 +573,41 @@ $$
 \text{Total Score} = 2 \cdot \Phi(\text{rating score}) + \Phi(\text{votes score})
 $$
 
-**Here are the results**:
+**Here are the results for the top films**:
 
-| primaryTitle                                      | startYear | total_score |
-|---------------------------------------|----------------|----------------|
-| The Shawshank Redemption                          | 1994      | 2.933360    |
-| The Godfather                                     | 1972      | 2.921708    |
-| 12 Angry Men                                      | 1957      | 2.893442    |
-| The Godfather Part II                             | 1974      | 2.893442    |
-| Schindler's List                                  | 1993      | 2.893442    |
-| The Lord of the Rings: The Return of the King     | 2003      | 2.893442    |
-| The Dark Knight                                   | 2008      | 2.893442    |
-| Pulp Fiction                                      | 1994      | 2.876549    |
-| The Lord of the Rings: The Fellowship of the Ring | 2001      | 2.876549    |
-| Kaiva                                             | 2023      | 2.860668    |
-| The Good, the Bad and the Ugly                    | 1966      | 2.857634    |
-| Forrest Gump                                      | 1994      | 2.857634    |
-| Fight Club                                        | 1999      | 2.857634    |
-| The Lord of the Rings: The Two Towers             | 2002      | 2.857634    |
-| Inception                                         | 2010      | 2.857634    |
-| 12th Fail                                         | 2023      | 2.857463    |
-| One Flew Over the Cuckoo's Nest                   | 1975      | 2.836569    |
-| Star Wars: Episode V - The Empire Strikes Back    | 1980      | 2.836569    |
-| Goodfellas                                        | 1990      | 2.836569    |
-| The Matrix                                        | 1999      | 2.836569    |
-| Interstellar                                      | 2014      | 2.836569    |
-| Jai Bhim                                          | 2021      | 2.836569    |
-| Soorarai Pottru                                   | 2020      | 2.836289    |
-| It's a Wonderful Life                             | 1946      | 2.813236    |
-| Seven Samurai                                     | 1954      | 2.813236    |
-| Star Wars: Episode IV - A New Hope                | 1977      | 2.813236    |
-| The Silence of the Lambs                          | 1991      | 2.813236    |
-| Terminator 2: Judgment Day                        | 1991      | 2.813236    |
-| Se7en                                             | 1995      | 2.813236    |
-| Life Is Beautiful                                 | 1997      | 2.813236    |
+| Primary Title                                      | Start Year | Film Score |
+|---------------------------------------------------|------------|------------|
+| The Shawshank Redemption                          | 1994       | 99.97593   |
+| The Godfather                                     | 1972       | 99.97335   |
+| The Godfather Part II                             | 1974       | 99.96597   |
+| Schindler's List                                  | 1993       | 99.96597   |
+| The Lord of the Rings: The Return of the King     | 2003       | 99.96597   |
+| The Dark Knight                                   | 2008       | 99.96597   |
+| 12 Angry Men                                      | 1957       | 99.96597   |
+| Pulp Fiction                                      | 1994       | 99.96070   |
+| The Lord of the Rings: The Fellowship of the Ring | 2001       | 99.96070   |
+| Forrest Gump                                      | 1994       | 99.95391   |
 
-: Top 30 Movies by Total Score {.striped .hover}
+: Table: Top 10 Movies by Film Score {.striped .hover}
+
+**Here are the results for the bottom films**:
+
+
+| Primary Title                                     | Start Year | Film Score |
+|---------------------------------------------------|------------|------------|
+| Track of the Moon Beast                           | 1976       | 6.580106   |
+| Boggy Creek II: And the Legend Continues          | 1983       | 6.577407   |
+| Anne B. Real                                      | 2003       | 6.576749   |
+| Kayhan                                            | 2018       | 6.576689   |
+| Orgy of the Dead                                  | 1965       | 6.576307   |
+| Amazing China                                     | 2018       | 6.575677   |
+| Darling Nikki                                     | 2019       | 6.573956   |
+| Alien Warfare                                     | 2019       | 6.572054   |
+| Anus Magillicutty                                 | 2003       | 6.569317   |
+| Hole in One                                       | 2009       | 6.564986   |
+
+: Table: Movies with Low Film Scores {.striped .hover}
+
 
 Movie Box Office is reported in several popular widely available outlets
 and box office data is the type of low-stakes metric
@@ -615,9 +622,9 @@ as useless unless the numbers are controlled in constant dollars. To correct for
 
 $\text{Box Office Adjusted in 2024 Dollars} = \text{Box Office} \times \frac{\text{Consumer Price Index 2024}}{\text{Consumer Price Index Historical Year}}$
 
-It's always fascinating to view films ranked by adjust box office figures : 
+It's always interesting to view films ranked by adjust box office figures : 
 
-| primaryTitle                                      | startYear | adjusted_box_office      |
+| Primary Title                                    | Start Year| Adjusted Box Office      |
 |--------------------------------------------------|-----------|--------------------------|
 | Gone with the Wind                               | 1939      | $8,815,801,640           |
 | Alice in Wonderland                              | 1951      | $6,945,453,701           |
@@ -629,58 +636,30 @@ It's always fascinating to view films ranked by adjust box office figures :
 | Cinderella                                       | 1950      | $3,459,407,380           |
 | The Exorcist                                     | 1973      | $3,194,983,975           |
 | The Sound of Music                               | 1965      | $2,829,274,085           |
-| Jaws                                             | 1975      | $2,786,136,175           |
-| Star Wars: Episode VII - The Force Awakens       | 2015      | $2,729,380,487           |
-| E.T. the Extra-Terrestrial                       | 1982      | $2,593,467,518           |
-| One Hundred and One Dalmatians                   | 1961      | $2,234,263,969           |
-| Star Wars: Episode V - The Empire Strikes Back   | 1980      | $2,134,340,781           |
-| The Avengers                                     | 2012      | $2,067,621,785           |
-| Jurassic World                                   | 2015      | $1,997,364,285           |
-| Jurassic Park                                    | 1993      | $1,990,003,378           |
-| Furious 7                                        | 2015      | $1,987,757,786           |
-| The Jungle Book                                  | 1967      | $1,929,655,601           |
 
-: Table: Top 20 Movies by Adjusted Box Office in 2024 Dollars {.striped .hover}
+
+: Table: Top 10 Movies by Adjusted Box Office in 2024 Dollars {.striped .hover}
 
 
 
 Here now is our data with our box office figures. This table suggests Film Score identifies financially successful films: 
 
 
-| primaryTitle                                      | startYear | Film Score | adjusted_box_office   |
-|--------------------------------------------------|-----------|-------------|-----------------------|
-| The Shawshank Redemption                          | 1994      | 2.933360    | $59,787,899           |
-| The Godfather                                     | 1972      | 2.921708    | $1,838,993,851        |
-| 12 Angry Men                                      | 1957      | 2.893442    | $11,174,529           |
-| The Godfather Part II                             | 1974      | 2.893442    | $314,657,090          |
-| Schindler's List                                  | 1993      | 2.893442    | $695,053,325          |
-| The Lord of the Rings: The Return of the King     | 2003      | 2.893442    | $1,899,198,581        |
-| The Dark Knight                                   | 2008      | 2.893442    | $1,467,798,473        |
-| Pulp Fiction                                      | 1994      | 2.876549    | $451,294,576          |
-| The Lord of the Rings: The Fellowship of the Ring | 2001      | 2.876549    | $1,534,807,634        |
-| The Good, the Bad and the Ugly                    | 1966      | 2.857634    | $58,191,887           |
-| Forrest Gump                                      | 1994      | 2.857634    | $1,430,163,380        |
-| Fight Club                                        | 1999      | 2.857634    | $189,318,393          |
-| The Lord of the Rings: The Two Towers             | 2002      | 2.857634    | $1,613,115,647        |
-| Inception                                         | 2010      | 2.857634    | $1,175,005,139        |
-| One Flew Over the Cuckoo's Nest                   | 1975      | 2.836569    | $645,137,771          |
-| Star Wars: Episode V - The Empire Strikes Back    | 1980      | 2.836569    | $2,134,340,781        |
-| Goodfellas                                        | 1990      | 2.836569    | $113,384,145          |
-| The Matrix                                        | 1999      | 2.836569    | $870,095,196          |
-| Interstellar                                      | 2014      | 2.836569    | $890,142,146          |
-| It's a Wonderful Life                             | 1946      | 2.813236    | $163,429,219          |
-| Seven Samurai                                     | 1954      | 2.813236    | $3,116,743            |
-| Star Wars: Episode IV - A New Hope                | 1977      | 2.813236    | $4,087,964,566        |
-| The Silence of the Lambs                          | 1991      | 2.813236    | $624,952,108          |
-| Terminator 2: Judgment Day                        | 1991      | 2.813236    | $1,191,506,984        |
-| Se7en                                             | 1995      | 2.813236    | $671,646,983          |
-| Life Is Beautiful                                 | 1997      | 2.813236    | $444,694,279          |
-| The Green Mile                                    | 1999      | 2.813236    | $534,239,064          |
-| Saving Private Ryan                               | 1998      | 2.813236    | $919,603,513          |
-| Spirited Away                                     | 2001      | 2.813236    | $484,246,562          |
-| City of God                                       | 2002      | 2.813236    | $53,362,184           |
+| Primary Title                                      | Start Year | Film Score | Adjusted Box Office   |
+|---------------------------------------------------|------------|------------|-----------------------|
+| The Shawshank Redemption                          | 1994       | 99.97593   | $59,787,899           |
+| The Godfather                                     | 1972       | 99.97335   | $1,838,993,851        |
+| The Godfather Part II                             | 1974       | 99.96597   | $314,657,090          |
+| Schindler's List                                  | 1993       | 99.96597   | $695,053,325          |
+| The Lord of the Rings: The Return of the King     | 2003       | 99.96597   | $1,899,198,581        |
+| The Dark Knight                                   | 2008       | 99.96597   | $1,467,798,473        |
+| 12 Angry Men                                      | 1957       | 99.96597   | $11,174,529           |
+| Pulp Fiction                                      | 1994       | 99.96070   | $451,294,576          |
+| The Lord of the Rings: The Fellowship of the Ring | 2001       | 99.96070   | $1,534,807,634        |
+| Forrest Gump                                      | 1994       | 99.95391   | $1,430,163,380        |
 
-: Table: Top 30 Movies by Total Score and Adjusted Box Office {.striped .hover}
+: Table: Top 10 Movies by Film Score and Adjusted Box Office {.striped .hover}
+
 
 While The Shawshank Redemption looks like a 
 "failure" here, it famously more than made up for its lackluster Box Office returns in [DVD sales, cable television licensing and streaming agreements](https://www.slashfilm.com/1670564/the-shawshank-redemption-box-office-flop-30-years-ago/):
@@ -694,56 +673,70 @@ Does `Film Score` work in reverse? Does it correctly identify "bad" movies?
 
 Filtering for films that are in the top `80%` of movies voted on, and sorting on `film_score` yields some truly terrible films:
 
-| primaryTitle                                      | startYear | Film Score | adjusted_box_office   |
-|--------------------------------------------------|-----------|------------|-----------------------|
-| BloodRayne                                       | 2005      | 0.834253   | $3,890,259            |
-| Police Academy: Mission to Moscow                | 1994      | 0.838061   | $266,325              |
-| House of the Dead                                | 2003      | 0.839262   | $23,454,940           |
-| Dungeons & Dragons                               | 2000      | 0.845246   | $27,745,180           |
-| Spice World                                      | 1997      | 0.856592   | $193,851,000          |
-| The Fog                                          | 2005      | 0.867154   | $74,721,060           |
-| Prom Night                                       | 2008      | 0.869310   | $21,619,340           |
-| Left Behind                                      | 2014      | 0.872549   | $25,951,830           |
-| Dumb and Dumberer: When Harry Met Lloyd          | 2003      | 0.877658   | $66,652,550           |
+| Primary Title                                      | Start Year | Film Score | Adjusted Box Office |
+|---------------------------------------------------|------------|------------|---------------------|
+| The Starfighters                                  | 1964       | 6.541835   | $0                  |
+| Final Justice                                     | 1984       | 6.547430   | $0                  |
+| Time Chasers                                      | 1994       | 6.552881   | $0                  |
+| Mega Shark vs. Mecha Shark                        | 2014       | 6.553869   | $0                  |
+| Orgy of the Dead                                  | 1965       | 6.576307   | $0                  |
+| Boggy Creek II: And the Legend Continues          | 1983       | 6.577407   | $0                  |
+| Track of the Moon Beast                           | 1976       | 6.580106   | $0                  |
+| Levottomat 3 - kun mikään ei riitä                | 2004       | 6.581920   | $0                  |
+| The Blade Master                                  | 1983       | 6.583010   | $0                  |
+| Girl in Gold Boots                                | 1968       | 6.585128   | $0                  |
 
-: Table: Movies with Low Total Scores and Their Adjusted Box Office {.striped .hover}
+: Table: Movies with Moderate Film Scores and Adjusted Box Office {.striped .hover}
 
 How about examining a prominent director? Is there any direcor more prominent than Steven Spielberg? 
 Querying for `film_score`, we find Steven Spielberg's films score : 
 
-`[1] 94.67846`
+```r
+[1] 88.5889
+```
 
-Even including *Indiana Jones and the Kingdom of the Crystal Skull (2008)*, *The BFG (2016)*, and *Always (1989)* Steven Spielberg films collectively average in the top `95%` of all films. `film_score` correctly identifies the most prominent talent in the industry.
+Even including *Indiana Jones and the Kingdom of the Crystal Skull (2008)*, *The BFG (2016)*, and *Always (1989)* Steven Spielberg films collectively average in the top `89%` of all films. `film_score` correctly identifies the most prominent talent in the industry.
 
 How does another director compare to Steven Spielberg? 
 
-Performing an analysis on famous low-budget king Ed Wood finds his films score:  
+Direcor Uwe Boll is famous for being a critically reviled filmmaker.  He's actually known as ["The Worst Director in the World"](https://www.vice.com/en/article/the-worst-director-in-the-world/). 
 
-`[1] 87.15062`
+Does `film_score` correctly identify Uwe Boll's filmography as not-Spielbergian?  
 
-This number is in line with someone who has lesser-quality films than Spielberg, but have become beloved cult-favorites. 
+It certainly does. Here is the collective `film_score` rating of all Uwe Boll films: 
 
-To identify a `film_score` cut-off, I exported the data into a spread sheet for ease of viewing. I filtered for larger box office films so I could identify the films and used the cut-off of `$50,000,000`. I scrolled through the films assessing the quality of the neighboring films until I started to identify a good number of forgettable films. I waited until I reached the point of "I really don't see many good films below this number" and I identified the classic horror film *The Hills Have Eyes (1977)* as a fitting cut-off point. 
+```r
+[1] 14.53452
+```
 
-I'm going to settle on `78.99` as the `film_score` threshold dividing "good movie" from "bad movie":
+To identify a `film_score` cut-off, I exported the data into a spread sheet for ease of viewing. I scrolled through the films assessing the quality of the neighboring films until I started to identify a good number of forgettable films. I used the entirely scientific process of scanning this list until I reached the point of "I really don't see many good films below this number." I found a fitting threshold with *Indiana Jones and the Kingdom of the Crystal Skull (2008)*. 
 
-![](images/mp-02/hills_have_eyes.jpg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+I'm going to settle on `77.46` as the `film_score` threshold dividing "good movie" from "bad movie":
+
+![](images/mp-02/crystal-skull.jpg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 
 <details>
 <summary>\> show the code</summary>
 
 ``` r
-
 # Finding the standard deviations and mean for ratings and votes
-SD_RATING <- sd(TITLE_RATINGS$averageRating)
-MEAN_RATING <- mean(TITLE_RATINGS$averageRating)
-SD_VOTES <- sd(TITLE_RATINGS$numVotes)
-MEAN_VOTES <-mean(TITLE_RATINGS$numVotes)
+
+quantile(TITLE_RATINGS$numVotes, probs=seq(0,1,0.05))
+
+filtered_title_ratings <- TITLE_RATINGS |> 
+  filter(numVotes > 3335)
+
+nrow(count)
+
+SD_RATING <- sd(filtered_title_ratings$averageRating)
+MEAN_RATING <- mean(filtered_title_ratings$averageRating)
+SD_VOTES <- sd(filtered_title_ratings$numVotes)
+MEAN_VOTES <-mean(filtered_title_ratings$numVotes)
 
 # Calculating the cumulative probabilities for ratings and votes 
 # and created total_score metric
-films_scores <- TITLE_RATINGS |> 
+films_scores <- filtered_title_ratings |> 
   inner_join(TITLE_BASICS, by = "tconst") |> 
   filter(titleType == "movie") |>
   mutate(
@@ -762,7 +755,12 @@ films_scores <- films_scores |>
   mutate(film_score = pnorm((total_score - MEAN_SCORE) / SD_SCORE) * 100) |> 
   arrange(desc(film_score)) 
 
-# Consumer Price Index Calcutations
+# Checking if film_score identifies bad films
+tail(films_scores, 20) |>
+  select(primaryTitle)
+
+
+# CONSUMER PRICE INDEX CALCULATIONS
 
 # Reading the historical CPI figure for each year
 HISTORICAL_CPI <- read.csv("data/mp02/HISTORICAL_CPI.csv") |>
@@ -774,15 +772,23 @@ cpi_named_vector <- setNames(HISTORICAL_CPI$CPIAUCNS, HISTORICAL_CPI$year)
 # Function for calculating a dollar figure by 2024 dollars
 get_dollar_adjusted_value <- function(budget, year){
   return (budget * cpi_named_vector[as.character(2024)]/cpi_named_vector[as.character(year)]) 
+  
 # Add adjusted_box_office figure now with CPI calculation
 films_scores_box_office <- films_scores |>
-  inner_join(KAGGLE_DATA, join_by("tconst" == "imdb_id")) |> 
+  inner_join(KAGGLE_DATA, join_by(tconst == imdb_id)) |> 
   mutate(adjusted_box_office = get_dollar_adjusted_value(revenue, startYear))
 
 # Surveying how good Film Score is at documenting box office successes
 films_scores_box_office |> 
-  select(primaryTitle, startYear, total_score, adjusted_box_office ) |>
-  arrange(total_score)
+  select(primaryTitle, startYear, film_score, adjusted_box_office ) |>
+  arrange(desc(film_score)) |> 
+  slice(1:10)
+
+# Surveying how good Film Score is at documenting box office failures
+count <- films_scores_box_office |> 
+  filter(adjusted_box_office == 0)
+
+nrow(count)
 
 # Identifying bad films
 films_scores_box_office |> 
@@ -806,167 +812,92 @@ films_scores_box_office |>
   summarize(average_film_score = mean(film_score, na.rm = TRUE)) |>
   pull(average_film_score)
 
-}
 
-# Finding Ed Wood
-ew_id <- NAME_BASICS |> 
-  filter(primaryName == "Ed Wood") |> 
+<!-- [1] 88.5889 -->
+
+# Finding Uwe Boll
+ub_id <- NAME_BASICS |> 
+  filter(primaryName == "Uwe Boll") |> 
   pull(nconst)
 
-# Identifying all Ed Wood films
-ew_films <- TITLE_PRINCIPALS |> 
-  filter(nconst == mb_id[1] & category == "director") |>
+# Identifying all Uwe Boll films
+ub_films <- TITLE_PRINCIPALS |> 
+  filter(nconst == ub_id[1] & category == "director") |>
   pull(tconst)
 
-# Calculating the average score for all Ed Wood films
+# Calculating the average score for all Uwe Boll films
 films_scores_box_office |>
-  filter(tconst %in% ew_films) |>
+  filter(tconst %in% ub_films) |>
   summarize(average_film_score = mean(film_score, na.rm = TRUE)) |>
   pull(average_film_score)
 
 # Data Frame exported for analysis 
-df_csv <- films_scores_box_office |> 
-  filter(adjusted_box_office > 50000000) |>
+df_csv <- films_scores_box_office |>
   select(primaryTitle, startYear, film_score, adjusted_box_office)
-  
+
 # Export a .csv for viewing
 write.csv(df_csv, "films_scores_box_office.csv", row.names = FALSE)
-
 
 ```
 
 </details>
 
-
-<!--     IMDbId primaryTitle                                                         startYear avg_review -->
-
-<!--      <dbl> <chr>                                                                    <dbl>      <dbl> -->
-
-<!--  1  795176 Planet Earth                                                              2006       4.44 -->
-
-<!--  2  185906 Band of Brothers                                                          2001       4.43 -->
-
-<!--  3  111161 The Shawshank Redemption                                                  1994       4.39 -->
-
-<!--  4 5491994 Planet Earth II                                                           2016       4.33 -->
-
-<!--  5   68646 The Godfather                                                             1972       4.32 -->
-
-<!--  6  278784 Northwest Passage                                                         1989       4.30 -->
-
-<!--  7 3718778 Over the Garden Wall                                                      2014       4.27 -->
-
-<!--  8   50083 12 Angry Men                                                              1957       4.27 -->
-
-<!--  9   71562 The Godfather Part II                                                     1974       4.26 -->
-
-<!-- 10   47478 Seven Samurai                                                             1954       4.25 -->
-
-<!-- 11  296310 The Blue Planet                                                           2001       4.25 -->
-
-<!-- 12  114814 The Usual Suspects                                                        1995       4.25 -->
-
-<!-- 13 2654430 Whiplash                                                                  2013       4.24 -->
-
-<!-- 14  137523 Fight Club                                                                1999       4.24 -->
-
-<!-- 15  110912 Pulp Fiction                                                              1994       4.24 -->
-
-<!-- 16   47396 Rear Window                                                               1954       4.23 -->
-
-<!-- 17  245429 Spirited Away                                                             2001       4.21 -->
-
-<!-- 18   73486 One Flew Over the Cuckoo's Nest                                           1975       4.20 -->
-
-<!-- 19   57012 Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb      1964       4.20 -->
-
-<!-- 20  816692 Interstellar                                                              2014       4.20 -->
-
-<!-- 21   43014 Sunset Boulevard                                                          1950       4.20 -->
-
-<!-- 22   34583 Casablanca                                                                1942       4.19 -->
-
-<!-- 23   56058 Harakiri                                                                  1962       4.19 -->
-
-<!-- 24   99685 Goodfellas                                                                1990       4.19 -->
-
-<!-- 25   53125 North by Northwest                                                        1959       4.19 -->
-
-<!-- 26  108052 Schindler's List                                                          1993       4.19 -->
-
-<!-- 27   41959 The Third Man                                                             1949       4.18 -->
-
-<!-- 28   36775 Double Indemnity                                                          1944       4.18 -->
-
-<!-- 29 6769208 Blue Planet II                                                            2017       4.18 -->
-
-<!-- 30   50825 Paths of Glory                                                            1957       4.18 -->
-
-<!-- 31  405094 The Lives of Others                                                       2006       4.18 -->
-
-<!-- 32 2582802 Whiplash                                                                  2014       4.18 -->
-
-<!-- 33  119698 Princess Mononoke                                                         1997       4.18 -->
-
-<!-- 34   91251 Come and See                                                              1985       4.17 -->
-
-<!-- 35   55630 Yojimbo                                                                   1961       4.17 -->
-
-<!-- 36   57565 High and Low                                                              1963       4.16 -->
-
-<!-- 37 4299972 The Jinx: The Life and Deaths of Robert Durst                             2015       4.16 -->
-
-<!-- 38 4633694 Spider-Man: Into the Spider-Verse                                         2018       4.16 -->
-
-<!-- 39  317248 City of God                                                               2002       4.16 -->
-
-<!-- 40   96283 My Neighbor Totoro                                                        1988       4.16 -->
-
-<!-- 41   42192 All About Eve                                                             1950       4.16 -->
-
-<!-- 42 5311514 Your Name.                                                                2016       4.16 -->
-
-<!-- 43 1375666 Inception                                                                 2010       4.16 -->
-
-<!-- 44   71315 Chinatown                                                                 1974       4.15 -->
-
-<!-- 45   22100 M                                                                         1931       4.15 -->
-
-<!-- 46   38355 The Big Sleep                                                             1946       4.15 -->
-
-<!-- 47  110413 Léon: The Professional                                                    1994       4.15 -->
-
-<!-- 48  468569 The Dark Knight                                                           2008       4.15 -->
-
-<!-- 49  102926 The Silence of the Lambs                                                  1991       4.15 -->
-
-<!-- 50   38787 Notorious                                                                 1946       4.15 -->
-
-movie_lens_and_IMDb_year_review \<- movie_lens_and_IMDb \|\>
-group_by(IMDbId, primaryTitle, startYear) \|\> summarize(avg_review =
-mean(rating)) \|\> arrange(desc(avg_review))
-
-print(movie_lens_and_IMDb_year_review, n = 50)
-
-<!--    IMDbId primaryTitle                                                         startYear avg_review -->
-
-<!--     <dbl> <chr>                                                                    <dbl>      <dbl> -->
-
-<!-- 1 5491994 Planet Earth II                                                           2016       4.45 -->
-
-<!-- 2  795176 Planet Earth                                                              2006       4.44 -->
-
-<!-- 3  185906 Band of Brothers                                                          2001       4.43 -->
-
-<!-- 4  111161 The Shawshank Redemption                                                  1994       4.40 -->
-
-<!-- 5   68646 The Godfather                                                             1972       4.32 -->
-
-<!-- 6 6751668 Parasite                                                                  2019       4.31 -->
-
-<!-- 7 6769208 Blue Planet II                                                            2017       4.30 -->
-
-<!-- 8  278784 Northwest Passage                                                         1989       4.30 -->
+## Best in Decade
+
+<details> 
+<summary>\> show the code</summary>
+
+slim_title <- TITLE_BASICS |> 
+  filter(startYear > 1940 & titleType == "movie") |> 
+  select(tconst, primaryTitle, startYear, genres, titleType) |> 
+  separate_rows(genres, sep = ",") |> 
+    filter(!(genres %in% c("Music","Musical", "Reality-TV", "News","\\N", "Talk-Show", "Film-Noir","Game-Show",  "History","Biography", "Crime", "Sport"))) |>
+  mutate(startYear = as.numeric(startYear), 
+         decade = floor(startYear / 10) * 10,
+         decade = factor(decade, levels = sort(unique(floor(as.numeric(startYear) / 10) * 10))))
+
+
+nrow(slim_title)
+
+genre_count_by_decade <- slim_title |>
+  group_by(decade, genres) |>
+  summarize(genre_count = n(), .groups = 'drop')
+
+ggplot(genre_count_by_decade, aes(x = decade, y = genre_count, fill = genres)) +
+  geom_bar(stat = "identity", position = "fill", color = "black") +
+  scale_y_continuous(labels = scales::percent) +  # Makes the y-axis percentages
+  labs(y = "Percentage", x = "Decade", fill = "Genres", title = "Genre Popularity by Decade") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5),           
+        plot.subtitle = element_text(hjust = 0.5))
+  
+slim_title_no_comedy_no_drama <- TITLE_BASICS |> 
+  filter(startYear > 1940 & titleType == "movie") |> 
+  select(tconst, primaryTitle, startYear, genres, titleType) |> 
+  separate_rows(genres, sep = ",") |> 
+    filter(!(genres %in% c("Music","Musical","Comedy", "Drama", "Reality-TV", "News","\\N", "Talk-Show", "Film-Noir","Game-Show",  "History","Biography", "Crime", "Sport"))) |>
+  mutate(startYear = as.numeric(startYear), 
+         decade = floor(startYear / 10) * 10,
+         decade = factor(decade, levels = sort(unique(floor(as.numeric(startYear) / 10) * 10))))
+
+
+nrow(slim_title_no_comedy_no_drama)
+
+
+
+genre_count_by_decade_no_comedy <- slim_title_no_comedy_no_drama |>
+  group_by(decade, genres) |>
+  summarize(genre_count = n(), .groups = 'drop')
+
+ggplot(genre_count_by_decade_no_comedy, aes(x = decade, y = genre_count, fill = genres)) +
+  geom_bar(stat = "identity", position = "fill", color = "black") +
+  scale_y_continuous(labels = scales::percent) +  # Makes the y-axis percentages
+  labs(y = "Percentage", x = "Decade", fill = "Genres", title = "Genre Popularity by Decade", subtitle = "No Comedy or Drama") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5),           
+        plot.subtitle = element_text(hjust = 0.5))
+ 
+</details>
 
 polarizing_films \<- movie_lens_and_IMDb \|\> group_by(IMDbId,
 primaryTitle, startYear, genres) \|\> summarise(mean_rating =
@@ -1236,3 +1167,10 @@ startYear) \|\> summarize(avg_review = mean(rating)) \|\>
 arrange(desc(avg_review))
 
 print(movie_lens_and_IMDb_5_year_reviews, n=50)
+
+movie_lens_and_IMDb_year_review \<- movie_lens_and_IMDb \|\>
+group_by(IMDbId, primaryTitle, startYear) \|\> summarize(avg_review =
+mean(rating)) \|\> arrange(desc(avg_review))
+
+print(movie_lens_and_IMDb_year_review, n = 50)
+
