@@ -1731,14 +1731,31 @@ tvMovie     The Day After   1983</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Cast Lukas Haas as the villain.</p>
+<p><img src="images/mp-02/witness.jpg" class="img-fluid" style="display: block; margin:auto; width:65%"></p>
 <details>
-<p>romance_thrillers &lt;- TITLE_BASICS |&gt; filter(titleType == “movie”) |&gt;<br>
-filter(grepl(“Romance”, genres) &amp; grepl(“Thriller”, genres)) |&gt; inner_join(films_scores, by = “tconst”) |&gt; filter(film_score &gt; 77.46) |&gt; select(primaryTitle.x, startYear.x, film_score) |&gt; arrange(desc(film_score))</p>
-<p>head(romance_thrillers, 19)</p>
-nrow(romance_thrillers) glimpse(romance_thrillers) glimpse(films_scores)
 <summary>
 &gt; show me the code
 </summary>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Searching for all Romance Thrillers</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>romance_thrillers <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"movie"</span>) <span class="sc">|&gt;</span>  </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">"Romance"</span>, genres) <span class="sc">&amp;</span> <span class="fu">grepl</span>(<span class="st">"Thriller"</span>, genres)) <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(films_scores, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(film_score <span class="sc">&gt;</span> <span class="fl">77.46</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle.x, startYear.x, film_score) <span class="sc">|&gt;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(film_score))</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># This yields 19 films, lets investigate them</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(romance_thrillers, <span class="dv">19</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Has Witness been remade? </span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>witness_films <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span> </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"movie"</span> <span class="sc">&amp;</span> primaryTitle <span class="sc">==</span> <span class="st">"Witness"</span> ) </span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co"># There is another Witness in the dataset, but it's an unrelated film from India</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(witness_films) </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <!-- ##  -->
 <!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(IMDbId, -->
@@ -1798,64 +1815,64 @@ nrow(romance_thrillers) glimpse(romance_thrillers) glimpse(films_scores)
 <section id="how-data-was-loaded" class="level3">
 <h3 class="anchored" data-anchor-id="how-data-was-loaded">How Data Was Loaded</h3>
 <p>In this section, I describe how the data was loaded into the project.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;!--</span> <span class="fu">library</span>(dplyr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(tidyr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(stringr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(lubridate) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(readr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> DATA_FOLDER <span class="ot">&lt;-</span> <span class="st">"data/mp02/"</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> get_IMDb_file <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){ <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>      <span class="fu">as.data.frame</span>(readr<span class="sc">::</span><span class="fu">read_csv</span>(fname, <span class="at">lazy=</span><span class="cn">FALSE</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>  } <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> create_file_ext <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){ <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">paste0</span>(DATA_FOLDER, fname) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> } <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># IMDb DATA --&gt;</span></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> NAME_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"NAME_BASICS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_RATINGS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_RATINGS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_BASICS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_CREW <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_CREW.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_EPISODES <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_EPISODES.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_PRINCIPALS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>     <span class="fu">mutate</span>(<span class="at">birthYear =</span> <span class="fu">as.numeric</span>(birthYear), <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>            <span class="at">deathYear =</span> <span class="fu">as.numeric</span>(deathYear)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_RATINGS <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>      <span class="fu">mutate</span>(<span class="at">averageRating =</span> <span class="fu">as.numeric</span>(averageRating), <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>             <span class="at">numVotes =</span> <span class="fu">as.numeric</span>(numVotes)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_BASICS <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>     <span class="fu">mutate</span>(<span class="at">isAdult =</span> <span class="fu">as.logical</span>(isAdult), <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>            <span class="at">runtimeMinutes =</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"[^0-9]"</span>, runtimeMinutes), <span class="cn">NA</span>, <span class="fu">as.numeric</span>(runtimeMinutes))) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># MOVIE LENS --&gt;</span></span>
-<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> MOVIE_LENS_RATINGS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/ratings.csv"</span>) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> MOVIE_LENS_LINKS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/links.csv"</span>) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> movie_lens_ratings_merged <span class="ot">&lt;-</span> MOVIE_LENS_RATINGS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">group_by</span>(movieId) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">summarize</span>(<span class="at">count_reviews =</span> <span class="fu">n</span>()) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># KAGGLE --&gt;</span></span>
-<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> KAGGLE_DATA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/KAGGLE_DATA.csv"</span>) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">mutate</span>(<span class="at">budget =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(budget), <span class="dv">0</span>, <span class="fu">parse_number</span>(budget))) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># CPI --&gt;</span></span>
-<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> HISTORICAL_CPI <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/HISTORICAL_CPI.csv"</span>) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">substring</span>(DATE,<span class="dv">1</span>,<span class="dv">4</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> cpi_named_vector <span class="ot">&lt;-</span> <span class="fu">setNames</span>(HISTORICAL_CPI<span class="sc">$</span>CPIAUCNS, HISTORICAL_CPI<span class="sc">$</span>year) <span class="sc">-</span><span class="ot">-&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;!--</span> <span class="fu">library</span>(dplyr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(tidyr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(stringr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(lubridate) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(readr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> DATA_FOLDER <span class="ot">&lt;-</span> <span class="st">"data/mp02/"</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> get_IMDb_file <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){ <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>      <span class="fu">as.data.frame</span>(readr<span class="sc">::</span><span class="fu">read_csv</span>(fname, <span class="at">lazy=</span><span class="cn">FALSE</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>  } <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> create_file_ext <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){ <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">paste0</span>(DATA_FOLDER, fname) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> } <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># IMDb DATA --&gt;</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> NAME_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"NAME_BASICS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_RATINGS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_RATINGS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_BASICS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_CREW <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_CREW.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_EPISODES <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_EPISODES.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_PRINCIPALS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>     <span class="fu">mutate</span>(<span class="at">birthYear =</span> <span class="fu">as.numeric</span>(birthYear), <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>            <span class="at">deathYear =</span> <span class="fu">as.numeric</span>(deathYear)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_RATINGS <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>      <span class="fu">mutate</span>(<span class="at">averageRating =</span> <span class="fu">as.numeric</span>(averageRating), <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>             <span class="at">numVotes =</span> <span class="fu">as.numeric</span>(numVotes)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_BASICS <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>     <span class="fu">mutate</span>(<span class="at">isAdult =</span> <span class="fu">as.logical</span>(isAdult), <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>            <span class="at">runtimeMinutes =</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"[^0-9]"</span>, runtimeMinutes), <span class="cn">NA</span>, <span class="fu">as.numeric</span>(runtimeMinutes))) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># MOVIE LENS --&gt;</span></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> MOVIE_LENS_RATINGS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/ratings.csv"</span>) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> MOVIE_LENS_LINKS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/links.csv"</span>) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> movie_lens_ratings_merged <span class="ot">&lt;-</span> MOVIE_LENS_RATINGS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">group_by</span>(movieId) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">summarize</span>(<span class="at">count_reviews =</span> <span class="fu">n</span>()) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># KAGGLE --&gt;</span></span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> KAGGLE_DATA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/KAGGLE_DATA.csv"</span>) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">mutate</span>(<span class="at">budget =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(budget), <span class="dv">0</span>, <span class="fu">parse_number</span>(budget))) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># CPI --&gt;</span></span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> HISTORICAL_CPI <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/HISTORICAL_CPI.csv"</span>) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">substring</span>(DATE,<span class="dv">1</span>,<span class="dv">4</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> cpi_named_vector <span class="ot">&lt;-</span> <span class="fu">setNames</span>(HISTORICAL_CPI<span class="sc">$</span>CPIAUCNS, HISTORICAL_CPI<span class="sc">$</span>year) <span class="sc">-</span><span class="ot">-&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>head(names_in_many_big_productions) <!-- quantile(movies_with_ratings_merged$count_reviews, probs=seq(0,1, by = 0.025)) --> <!-- 95% of reviews have 1000 reviews or less... --></p>
 <!-- max(movies_with_ratings_merged$movieId) -->
 <!-- 292757 -->
@@ -1871,7 +1888,7 @@ nrow(romance_thrillers) glimpse(romance_thrillers) glimpse(films_scores)
 &gt; show the code
 </summary>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>hello <span class="ot">&lt;-</span> <span class="st">"hello"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>hello <span class="ot">&lt;-</span> <span class="st">"hello"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </details>
 <!-- <!-- number of movies -->
@@ -1912,53 +1929,27 @@ nrow(romance_thrillers) glimpse(romance_thrillers) glimpse(films_scores)
 <!-- This analysis is not possible with just IMDb data. For this analysis I -->
 <!-- will need to bring in the data from review site [Movie -->
 <!-- Lens](https://grouplens.org/datasets/movielens/). -->
-<!-- Movie Lens offers a record for every review from each contributors - all -->
-<!-- with a time-stamp for when the review was submitted. Movie Lens first -->
-<!-- review was issued in `1995`. Thus, we can only properly evaluate films -->
-<!-- from `2000 - 2019` (5 years after `1995` and 5 years prior to `2024`) -->
-<!-- <!-- make sure TITLE_BASICS and working movie_lens data_set have similar IMDb IDs -->
-<p>–&gt;</p>
-<!-- title_basics_imdb_id \<- TITLE_BASICS \|\> mutate(IMDbId = -->
-<!-- as.integer(substring(tconst, 3)), startYear = as.numeric(startYear)) -->
-<!-- \|\> filter(startYear \>= 1995 & startYear \<= 2019) \|\> -->
-<!-- select(-runtimeMinutes, -isAdult, -titleType, -originalTitle, -endYear) -->
-<!-- movie_lens_merge_imdb \<- title_basics_imdb_id \|\> -->
-<!-- inner_join(MOVIE_LENS_RATINGS, by = c("IMDbId" = "movieId")) \|\> -->
-<!-- mutate(yearReview = year(as.POSIXct(timestamp, origin="1970-01-01"))) -->
-<!-- <!-- table(movie_lens_merge_imdb)   -->
-<p>–&gt;</p>
-<!-- <!-- 2010  2011  2012  2013  2014  2015  2016  2017  2018  2019  2020  2021  2022  2023  -->
-<p>–&gt;</p>
-<!-- <!--     3     1     4    70  4084 36518 40654 52189 42300 42578 51607 39313 32852 26869  -->
-<p>–&gt;</p>
-<!-- five_year_reviews_after \<- movie_lens_merge_imdb \|\> -->
-<!-- filter((yearReview - startYear) \>= 5) \|\> group_by(tconst) \|\> -->
-<!-- summarize(after_5_year_score = mean(rating)) -->
-<!-- head(five_year_reviews_after) -->
-<!-- five_year_reviews_before \<- movie_lens_imdb_filtered \|\> -->
-<!-- filter(yearReview - startYear \< 5) \|\> group_by(tconst) \|\> -->
-<!-- summarize(before_5_year_score = mean(rating)) -->
-<!-- head(movie_lens_imdb_filtered, 100) -->
-<!-- movie_lens\_\_IMDb \<- filtered_reviews \|\> -->
-<!-- inner_join(MOVIE_LENS_LINKS, by = "movieId") -->
-<!-- head(title_basics_movie_lens_id)\ -->
-<!-- <!-- merge the two data sets, make sure to create a year for when the review was posted -->
-<p>–&gt;</p>
-<!-- movie_lens_and_IMDb \<- title_basics_movie_lens_id \|\> -->
-<!-- inner_join(movie_lens_filtered_reviews_IMDb, by = "IMDbId") \|\> -->
-<!-- select(-isAdult, -endYear, -runtimeMinutes, -tmdbId, -titleType) \|\> -->
-<!-- mutate(yearReview = year(as.POSIXct(timestamp, origin="1970-01-01"))) -->
-<!-- <!-- now take out all reviews that were  -->
-<p>–&gt;</p>
-<!-- movie_lens_and_IMDb_5_year_reviews \<- movie_lens_and_IMDb \|\> -->
-<!-- filter(yearReview - startYear \>= 5) \|\> group_by(IMDbId, primaryTitle, -->
-<!-- startYear) \|\> summarize(avg_review = mean(rating)) \|\> -->
-<!-- arrange(desc(avg_review)) -->
-<!-- print(movie_lens_and_IMDb_5_year_reviews, n=50) -->
-<!-- movie_lens_and_IMDb_year_review \<- movie_lens_and_IMDb \|\> -->
-<!-- group_by(IMDbId, primaryTitle, startYear) \|\> summarize(avg_review = -->
-<!-- mean(rating)) \|\> arrange(desc(avg_review)) -->
-<!-- print(movie_lens_and_IMDb_year_review, n = 50) -->
+<p>Movie Lens offers a record for every review from each contributors - all with a time-stamp for when the review was submitted. Movie Lens first review was issued in <code>1995</code>. Thus, we can only properly evaluate films from <code>2000 - 2019</code> (5 years after <code>1995</code> and 5 years prior to <code>2024</code>) <!-- make sure TITLE_BASICS and working movie_lens data_set have similar IMDb IDs --></p>
+<p>title_basics_imdb_id &lt;- TITLE_BASICS |&gt; mutate(IMDbId = as.integer(substring(tconst, 3)), startYear = as.numeric(startYear)) |&gt; filter(startYear &gt;= 1995 &amp; startYear &lt;= 2019) |&gt; select(-runtimeMinutes, -isAdult, -titleType, -originalTitle, -endYear)</p>
+<p>movie_lens_merge_imdb &lt;- title_basics_imdb_id |&gt; inner_join(MOVIE_LENS_RATINGS, by = c(“IMDbId” = “movieId”)) |&gt; mutate(yearReview = year(as.POSIXct(timestamp, origin=“1970-01-01”)))</p>
+<p>five_year_reviews_after &lt;- movie_lens_merge_imdb |&gt; filter((yearReview - startYear) &gt;= 5) |&gt; group_by(tconst) |&gt; summarize(after_5_year_score = mean(rating))</p>
+<p>head(five_year_reviews_after)</p>
+<p>five_year_reviews_before &lt;- movie_lens_imdb_filtered |&gt; filter(yearReview - startYear &lt; 5) |&gt; group_by(tconst) |&gt; summarize(before_5_year_score = mean(rating))</p>
+<p>head(movie_lens_imdb_filtered, 100)</p>
+<p>movie_lens__IMDb &lt;- filtered_reviews |&gt; inner_join(MOVIE_LENS_LINKS, by = “movieId”)</p>
+<p>head(title_basics_movie_lens_id)<br>
+<!-- merge the two data sets, make sure to create a year for when the review was posted
+
+movie_lens_and_IMDb \<- title_basics_movie_lens_id \|\>
+inner_join(movie_lens_filtered_reviews_IMDb, by = "IMDbId") \|\>
+select(-isAdult, -endYear, -runtimeMinutes, -tmdbId, -titleType) \|\>
+mutate(yearReview = year(as.POSIXct(timestamp, origin="1970-01-01")))
+
+<!-- now take out all reviews that were  --></p>
+<p>movie_lens_and_IMDb_5_year_reviews &lt;- movie_lens_and_IMDb |&gt; filter(yearReview - startYear &gt;= 5) |&gt; group_by(IMDbId, primaryTitle, startYear) |&gt; summarize(avg_review = mean(rating)) |&gt; arrange(desc(avg_review))</p>
+<p>print(movie_lens_and_IMDb_5_year_reviews, n=50)</p>
+<p>movie_lens_and_IMDb_year_review &lt;- movie_lens_and_IMDb |&gt; group_by(IMDbId, primaryTitle, startYear) |&gt; summarize(avg_review = mean(rating)) |&gt; arrange(desc(avg_review))</p>
+<p>print(movie_lens_and_IMDb_year_review, n = 50)</p>
 
 
 </section>

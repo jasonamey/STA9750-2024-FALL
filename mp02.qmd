@@ -1090,8 +1090,17 @@ Witness jumps out at me here :
 
 : Table: Films by Year and Film Score {.striped .hover}
 
+Cast Lukas Haas as the villain. 
+
+![](images/mp-02/witness.jpg){style="display: block; margin:auto; width:65%"}
+
 <details>
 
+
+<summary>\> show me the code</summary>
+
+```r
+# Searching for all Romance Thrillers
 romance_thrillers <- TITLE_BASICS |>
   filter(titleType == "movie") |>  
   filter(grepl("Romance", genres) & grepl("Thriller", genres)) |>
@@ -1099,13 +1108,19 @@ romance_thrillers <- TITLE_BASICS |>
   filter(film_score > 77.46) |>
   select(primaryTitle.x, startYear.x, film_score) |>
   arrange(desc(film_score))
-
+  
+# This yields 19 films, lets investigate them
 head(romance_thrillers, 19)
 
-nrow(romance_thrillers)
-glimpse(romance_thrillers)
-glimpse(films_scores)
-<summary>\> show me the code</summary>
+# Has Witness been remade? 
+witness_films <- TITLE_BASICS |> 
+  filter(titleType == "movie" & primaryTitle == "Witness" ) 
+  
+# There is another Witness in the dataset, but it's an unrelated film from India
+head(witness_films) 
+
+
+```
 </details>
 
 
