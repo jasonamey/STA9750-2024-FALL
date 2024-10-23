@@ -236,7 +236,7 @@ tvMovie     The Day After   1983</code></pre>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>title_type_counts <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span> </span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(titleType) <span class="sc">|&gt;</span> </span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">count =</span> <span class="fu">n</span>())</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's visualize the breakdown of all the different title types</span></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(title_type_counts, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> count, <span class="at">fill =</span> titleType)) <span class="sc">+</span> </span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
@@ -414,7 +414,7 @@ tvMovie     The Day After   1983</code></pre>
 <span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co"># such productions, creating the criteria we're using for "significant </span></span>
 <span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="co"># individuals in film and television"</span></span>
 <span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>name_ids_in_many_big_productions <span class="ot">&lt;-</span> big_productions <span class="sc">|&gt;</span> </span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_PRINCIPALS, <span class="at">by=</span><span class="st">"tconst"</span> <span class="sc">|&gt;</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_PRINCIPALS, <span class="at">by=</span><span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst) <span class="sc">|&gt;</span> </span>
 <span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">number_of_big_productions =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
 <span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(number_of_big_productions <span class="sc">&gt;</span> <span class="dv">20</span>) <span class="sc">|&gt;</span> </span>
@@ -425,7 +425,7 @@ tvMovie     The Day After   1983</code></pre>
 <span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(NAME_BASICS, <span class="fu">join_by</span>(nconst <span class="sc">==</span> nconst)) <span class="sc">|&gt;</span></span>
 <span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">deathYear =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(deathYear), <span class="dv">0</span>, deathYear)) <span class="sc">|&gt;</span> </span>
 <span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">ifelse</span>(deathYear <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">2024</span> <span class="sc">-</span> birthYear, deathYear <span class="sc">-</span> birthYear)) <span class="sc">|&gt;</span> </span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, birthYear, number_of_big_productions, age, deathYear)</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, birthYear, number_of_big_productions, age, deathYear, nconst)</span>
 <span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Who is the oldest individual in this data set?</span></span>
 <span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>names_in_many_big_productions <span class="sc">|&gt;</span> </span>
@@ -460,15 +460,14 @@ tvMovie     The Day After   1983</code></pre>
 </summary>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>top_episodes <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(averageRating <span class="sc">==</span> <span class="dv">10</span> <span class="sc">&amp;</span> numVotes <span class="sc">&gt;=</span> <span class="dv">200000</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>episode_details <span class="ot">&lt;-</span> top_episodes <span class="sc">|&gt;</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_EPISODES, <span class="at">by =</span> <span class="st">"tconst"</span>)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>episode_details <span class="sc">|&gt;</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(<span class="st">"parentTconst"</span> <span class="sc">==</span> <span class="st">"tconst"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">series_title =</span> primaryTitle.y, <span class="at">episode_title =</span> primaryTitle.x, <span class="at">year =</span> startYear.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>episode_details <span class="sc">|&gt;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(<span class="st">"parentTconst"</span> <span class="sc">==</span> <span class="st">"tconst"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">series_title =</span> primaryTitle.y, <span class="at">episode_title =</span> primaryTitle.x, <span class="at">year =</span> startYear.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </section>
 <section id="star-wars-and-mark-hamill" class="level3">
@@ -914,7 +913,7 @@ tvMovie     The Day After   1983</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Movie Box Office is reported in several popular widely available outlets and box office data is the type of low-stakes metric that Internet-curated resources like Kaggle are uniquely suited for providing. To check the box office returns of the Total Score calculation, the <a href="https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset">Kaggle Movies Dataset</a> was used for box office under the variable <code>revenue</code>.</p>
+<p>Movie Box Office is reported in several popular, widely available media outlets and box office data is the type of low-stakes, hobby-friendly metrics that Internet-curated resources like <a href="https://www.kaggle.com/">Kaggle</a> are uniquely suited for. To check the box office returns of the Total Score calculation, the <a href="https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset">Kaggle Movies Dataset</a> was used for box office under the variable <code>revenue</code>.</p>
 <p>However, films can span several decades and box office figures are not as useless unless the numbers are controlled in constant dollars. To correct for this the following variable was added to our data:</p>
 <p><span class="math inline">\(\text{Box Office Adjusted in 2024 Dollars} = \text{Box Office} \times \frac{\text{Consumer Price Index 2024}}{\text{Consumer Price Index Historical Year}}\)</span></p>
 <p>It’s always interesting to view films ranked by adjust box office figures :</p>
@@ -1165,274 +1164,801 @@ tvMovie     The Day After   1983</code></pre>
 <summary>
 &gt; show the code
 </summary>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding the standard deviations and mean for ratings and votes</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(TITLE_RATINGS<span class="sc">$</span>numVotes, <span class="at">probs=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.05</span>))</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Surveying the distriubtion of films by number of votes</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(TITLE_RATINGS<span class="sc">$</span>numVotes, <span class="at">probs=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.05</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtering those films accordingly </span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>filtered_title_ratings <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span> </span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(numVotes <span class="sc">&gt;</span> <span class="dv">3335</span>)</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(count)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>SD_RATING <span class="ot">&lt;-</span> <span class="fu">sd</span>(filtered_title_ratings<span class="sc">$</span>averageRating)</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>MEAN_RATING <span class="ot">&lt;-</span> <span class="fu">mean</span>(filtered_title_ratings<span class="sc">$</span>averageRating)</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>SD_VOTES <span class="ot">&lt;-</span> <span class="fu">sd</span>(filtered_title_ratings<span class="sc">$</span>numVotes)</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>MEAN_VOTES <span class="ot">&lt;-</span><span class="fu">mean</span>(filtered_title_ratings<span class="sc">$</span>numVotes)</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating the cumulative probabilities for ratings and votes </span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># and created total_score metric</span></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>films_scores <span class="ot">&lt;-</span> filtered_title_ratings <span class="sc">|&gt;</span> </span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"movie"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">rating_score =</span> <span class="fu">pnorm</span>((averageRating <span class="sc">-</span> MEAN_RATING) <span class="sc">/</span> SD_RATING),</span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">votes_score =</span> <span class="fu">pnorm</span>((numVotes <span class="sc">-</span> MEAN_VOTES) <span class="sc">/</span> SD_VOTES)</span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_score =</span> <span class="dv">2</span> <span class="sc">*</span> rating_score <span class="sc">+</span> votes_score) <span class="sc">|&gt;</span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_score)) </span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-calculating the standard deviations for total_score</span></span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>SD_SCORE <span class="ot">&lt;-</span> <span class="fu">sd</span>(films_with_scores<span class="sc">$</span>total_score)</span>
-<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>MEAN_SCORE <span class="ot">&lt;-</span> <span class="fu">mean</span>(films_with_scores<span class="sc">$</span>total_score)</span>
-<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting total_score to film_score via cumulative probabilities</span></span>
-<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>films_scores <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span> </span>
-<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">film_score =</span> <span class="fu">pnorm</span>((total_score <span class="sc">-</span> MEAN_SCORE) <span class="sc">/</span> SD_SCORE) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(film_score)) </span>
-<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking if film_score identifies bad films</span></span>
-<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(films_scores, <span class="dv">20</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle)</span>
-<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a><span class="co"># CONSUMER PRICE INDEX CALCULATIONS</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding the standard deviations and mean for ratings and votes</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>SD_RATING <span class="ot">&lt;-</span> <span class="fu">sd</span>(filtered_title_ratings<span class="sc">$</span>averageRating)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>MEAN_RATING <span class="ot">&lt;-</span> <span class="fu">mean</span>(filtered_title_ratings<span class="sc">$</span>averageRating)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>SD_VOTES <span class="ot">&lt;-</span> <span class="fu">sd</span>(filtered_title_ratings<span class="sc">$</span>numVotes)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>MEAN_VOTES <span class="ot">&lt;-</span><span class="fu">mean</span>(filtered_title_ratings<span class="sc">$</span>numVotes)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating the cumulative probabilities for ratings and votes </span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># and created total_score metric</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>films_scores <span class="ot">&lt;-</span> filtered_title_ratings <span class="sc">|&gt;</span> </span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(titleType <span class="sc">==</span> <span class="st">"movie"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">rating_score =</span> <span class="fu">pnorm</span>((averageRating <span class="sc">-</span> MEAN_RATING) <span class="sc">/</span> SD_RATING),</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">votes_score =</span> <span class="fu">pnorm</span>((numVotes <span class="sc">-</span> MEAN_VOTES) <span class="sc">/</span> SD_VOTES)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_score =</span> <span class="dv">2</span> <span class="sc">*</span> rating_score <span class="sc">+</span> votes_score) <span class="sc">|&gt;</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_score)) </span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-calculating the standard deviations for total_score</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>SD_SCORE <span class="ot">&lt;-</span> <span class="fu">sd</span>(films_scores<span class="sc">$</span>total_score)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>MEAN_SCORE <span class="ot">&lt;-</span> <span class="fu">mean</span>(films_scores<span class="sc">$</span>total_score)</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting total_score to film_score via cumulative probabilities</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>films_scores <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span> </span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">film_score =</span> <span class="fu">pnorm</span>((total_score <span class="sc">-</span> MEAN_SCORE) <span class="sc">/</span> SD_SCORE) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(film_score)) </span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking if film_score identifies good films</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>films_scores <span class="sc">|&gt;</span> </span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(films_scores, <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle, startYear, film_score)</span>
 <span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading the historical CPI figure for each year</span></span>
-<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>HISTORICAL_CPI <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/HISTORICAL_CPI.csv"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">substring</span>(DATE,<span class="dv">1</span>,<span class="dv">4</span>))</span>
-<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a named vector for CPI figures for each year</span></span>
-<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>cpi_named_vector <span class="ot">&lt;-</span> <span class="fu">setNames</span>(HISTORICAL_CPI<span class="sc">$</span>CPIAUCNS, HISTORICAL_CPI<span class="sc">$</span>year)</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking if film_score identifies bad films</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>films_scores <span class="sc">|&gt;</span> </span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(films_scores, <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle, startYear, film_score)</span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="do">##### CONSUMER PRICE INDEX CALCULATIONS #####</span></span>
 <span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for calculating a dollar figure by 2024 dollars</span></span>
-<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>get_dollar_adjusted_value <span class="ot">&lt;-</span> <span class="cf">function</span>(budget, year){</span>
-<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (budget <span class="sc">*</span> cpi_named_vector[<span class="fu">as.character</span>(<span class="dv">2024</span>)]<span class="sc">/</span>cpi_named_vector[<span class="fu">as.character</span>(year)]) </span>
-<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Add adjusted_box_office figure now with CPI calculation</span></span>
-<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span></span>
-<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(KAGGLE_DATA, <span class="fu">join_by</span>(tconst <span class="sc">==</span> imdb_id)) <span class="sc">|&gt;</span> </span>
-<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">adjusted_box_office =</span> <span class="fu">get_dollar_adjusted_value</span>(revenue, startYear))</span>
-<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Surveying how good Film Score is at documenting box office successes</span></span>
-<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="sc">|&gt;</span> </span>
-<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle, startYear, film_score, adjusted_box_office ) <span class="sc">|&gt;</span></span>
-<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(film_score)) <span class="sc">|&gt;</span> </span>
-<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
-<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Surveying how good Film Score is at documenting box office failures</span></span>
-<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> films_scores_box_office <span class="sc">|&gt;</span> </span>
-<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(adjusted_box_office <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(count)</span>
-<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying bad films</span></span>
-<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="sc">|&gt;</span> </span>
-<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span> (votes_score <span class="sc">&gt;</span> .<span class="dv">8</span> <span class="sc">&amp;</span> adjusted_box_office <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle, startYear, total_score, adjusted_box_office ) <span class="sc">|&gt;</span></span>
-<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(total_score)</span>
-<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding Steven Spielberg</span></span>
-<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>ss_id <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span> </span>
-<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Steven Spielberg"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(nconst)</span>
-<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying all Steven Spielberg films</span></span>
-<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a>ss_films <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span> </span>
-<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nconst <span class="sc">==</span> ss_id[<span class="dv">1</span>] <span class="sc">&amp;</span> category <span class="sc">==</span> <span class="st">"director"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(tconst)</span>
-<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating average score for all Steven Spielberg films</span></span>
-<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="sc">|&gt;</span></span>
-<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> ss_films) <span class="sc">|&gt;</span></span>
-<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_film_score =</span> <span class="fu">mean</span>(film_score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(average_film_score)</span>
-<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;!--</span> [<span class="dv">1</span>] <span class="fl">88.5889</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-96"><a href="#cb15-96" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding Uwe Boll</span></span>
-<span id="cb15-97"><a href="#cb15-97" aria-hidden="true" tabindex="-1"></a>ub_id <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span> </span>
-<span id="cb15-98"><a href="#cb15-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Uwe Boll"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb15-99"><a href="#cb15-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(nconst)</span>
-<span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying all Uwe Boll films</span></span>
-<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a>ub_films <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span> </span>
-<span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nconst <span class="sc">==</span> ub_id[<span class="dv">1</span>] <span class="sc">&amp;</span> category <span class="sc">==</span> <span class="st">"director"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(tconst)</span>
-<span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-106"><a href="#cb15-106" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating the average score for all Uwe Boll films</span></span>
-<span id="cb15-107"><a href="#cb15-107" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="sc">|&gt;</span></span>
-<span id="cb15-108"><a href="#cb15-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> ub_films) <span class="sc">|&gt;</span></span>
-<span id="cb15-109"><a href="#cb15-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_film_score =</span> <span class="fu">mean</span>(film_score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb15-110"><a href="#cb15-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(average_film_score)</span>
-<span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-112"><a href="#cb15-112" aria-hidden="true" tabindex="-1"></a><span class="co"># Data Frame exported for analysis </span></span>
-<span id="cb15-113"><a href="#cb15-113" aria-hidden="true" tabindex="-1"></a>df_csv <span class="ot">&lt;-</span> films_scores_box_office <span class="sc">|&gt;</span></span>
-<span id="cb15-114"><a href="#cb15-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle, startYear, film_score, adjusted_box_office)</span>
-<span id="cb15-115"><a href="#cb15-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a><span class="co"># Export a .csv for viewing</span></span>
-<span id="cb15-117"><a href="#cb15-117" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df_csv, <span class="st">"films_scores_box_office.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading the historical CPI figure for each year</span></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>HISTORICAL_CPI <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/HISTORICAL_CPI.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">substring</span>(DATE,<span class="dv">1</span>,<span class="dv">4</span>))</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a named vector for CPI figures for each year</span></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a>cpi_named_vector <span class="ot">&lt;-</span> <span class="fu">setNames</span>(HISTORICAL_CPI<span class="sc">$</span>CPIAUCNS, HISTORICAL_CPI<span class="sc">$</span>year)</span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for calculating a dollar figure by 2024 dollars</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>get_dollar_adjusted_value <span class="ot">&lt;-</span> <span class="cf">function</span>(budget, year){</span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span> (budget <span class="sc">*</span> cpi_named_vector[<span class="fu">as.character</span>(<span class="dv">2024</span>)]<span class="sc">/</span>cpi_named_vector[<span class="fu">as.character</span>(year)]) </span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a><span class="do">#############################################</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Add adjusted_box_office figure now with CPI calculation</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(KAGGLE_DATA, <span class="fu">join_by</span>(tconst <span class="sc">==</span> imdb_id)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">adjusted_box_office =</span> <span class="fu">get_dollar_adjusted_value</span>(revenue, startYear))</span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Surveying how good film_score is at documenting box office successes</span></span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="sc">|&gt;</span> </span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle, startYear, film_score, adjusted_box_office ) <span class="sc">|&gt;</span></span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(film_score)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Surveying how good film_score is at documenting box office failures</span></span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="sc">|&gt;</span> </span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle, startYear, film_score)</span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(films_scores, <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding Steven Spielberg</span></span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a>ss_id <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span> </span>
+<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Steven Spielberg"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(nconst)</span>
+<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying all Steven Spielberg films</span></span>
+<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a>ss_films <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span> </span>
+<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nconst <span class="sc">==</span> ss_id[<span class="dv">1</span>] <span class="sc">&amp;</span> category <span class="sc">==</span> <span class="st">"director"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(tconst)</span>
+<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating average score for all Steven Spielberg films</span></span>
+<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="sc">|&gt;</span></span>
+<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> ss_films) <span class="sc">|&gt;</span></span>
+<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_film_score =</span> <span class="fu">mean</span>(film_score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(average_film_score)</span>
+<span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Finding Uwe Boll</span></span>
+<span id="cb15-96"><a href="#cb15-96" aria-hidden="true" tabindex="-1"></a>ub_id <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span> </span>
+<span id="cb15-97"><a href="#cb15-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Uwe Boll"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb15-98"><a href="#cb15-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(nconst)</span>
+<span id="cb15-99"><a href="#cb15-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying all Uwe Boll films</span></span>
+<span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a>ub_films <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span> </span>
+<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nconst <span class="sc">==</span> ub_id[<span class="dv">1</span>] <span class="sc">&amp;</span> category <span class="sc">==</span> <span class="st">"director"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(tconst)</span>
+<span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating the average score for all Uwe Boll films</span></span>
+<span id="cb15-106"><a href="#cb15-106" aria-hidden="true" tabindex="-1"></a>films_scores_box_office <span class="sc">|&gt;</span></span>
+<span id="cb15-107"><a href="#cb15-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> ub_films) <span class="sc">|&gt;</span></span>
+<span id="cb15-108"><a href="#cb15-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_film_score =</span> <span class="fu">mean</span>(film_score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb15-109"><a href="#cb15-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(average_film_score)</span>
+<span id="cb15-110"><a href="#cb15-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Data Frame exported for analysis </span></span>
+<span id="cb15-112"><a href="#cb15-112" aria-hidden="true" tabindex="-1"></a>df_csv <span class="ot">&lt;-</span> films_scores_box_office <span class="sc">|&gt;</span></span>
+<span id="cb15-113"><a href="#cb15-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryTitle, startYear, film_score, adjusted_box_office)</span>
+<span id="cb15-114"><a href="#cb15-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-115"><a href="#cb15-115" aria-hidden="true" tabindex="-1"></a><span class="co"># Export a .csv for viewing</span></span>
+<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(df_csv, <span class="st">"films_scores_box_office.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </section>
 <section id="best-in-decade" class="level2">
 <h2 class="anchored" data-anchor-id="best-in-decade">Best in Decade</h2>
+<p>Assessing the popularity of film genres across decades yields interesting insight into American Culture.</p>
+<p><img src="images/mp-02/genre-popularity-with-independent-films.jpeg" class="img-fluid"></p>
+<p>We can see <code>Western</code> indeed being a forgotten genre, falling out of favor by the time of the <code>1970</code>s and <code>1980</code>s. Same with <code>War</code>, likely a reflection of the fading legacy of America’s triumphant relationship with World War II. And for the horniest segment of this project, this chart does indeed document the famed Adult Entertainment Film Production Heyday of the <code>1970</code>s and <code>1980</code>s.</p>
+<p>The existence of <code>Comedy</code> and <code>Drama</code> is pretty steady in this data. What if we were to?:</p>
+<ol type="1">
+<li>Remove all <code>Comedy</code> and <code>Drama</code> films</li>
+<li>Remove all independent or films that did not gross any revenue</li>
+</ol>
+<!-- ![This is a caption with an aligned image.](path/to/image.png){fig-cap="This is a caption for the image." width="50%" align="center"} -->
+<!-- ![Hello How are you?](images/mp-02/genre-popularity-without-comedy-drama.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); padding: 5px; display: block; margin: auto;"} -->
+<p><img src="images/mp-02/genre-popularity-without-comedy-drama.jpeg" class="img-fluid" data-fig-cap="Hello how are you"></p>
+<p>This yields an edifying chart as it more visably identifies the rise and fall of genre trends - with the understanding <code>Comedy</code> and <code>Drama</code> are longstanding genres that are unlikely to fall out of favor anytime soon.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/mp-02/wages-by-gender.jpeg" class="img-fluid figure-img"></p>
+<figcaption>Bureau of Labor Statistics</figcaption>
+</figure>
+</div>
 <details>
 <summary>
 &gt; show the code
 </summary>
-<p>slim_title &lt;- TITLE_BASICS |&gt; filter(startYear &gt; 1940 &amp; titleType == “movie”) |&gt; select(tconst, primaryTitle, startYear, genres, titleType) |&gt; separate_rows(genres, sep = “,”) |&gt; filter(!(genres %in% c(“Music”,“Musical”, “Reality-TV”, “News”,“\N”, “Talk-Show”, “Film-Noir”,“Game-Show”, “History”,“Biography”, “Crime”, “Sport”))) |&gt; mutate(startYear = as.numeric(startYear), decade = floor(startYear / 10) * 10, decade = factor(decade, levels = sort(unique(floor(as.numeric(startYear) / 10) * 10))))</p>
-<p>nrow(slim_title)</p>
-<p>genre_count_by_decade &lt;- slim_title |&gt; group_by(decade, genres) |&gt; summarize(genre_count = n(), .groups = ‘drop’)</p>
-<p>ggplot(genre_count_by_decade, aes(x = decade, y = genre_count, fill = genres)) + geom_bar(stat = “identity”, position = “fill”, color = “black”) + scale_y_continuous(labels = scales::percent) + # Makes the y-axis percentages labs(y = “Percentage”, x = “Decade”, fill = “Genres”, title = “Genre Popularity by Decade”) + theme_minimal() + theme(plot.title = element_text(hjust = 0.5),<br>
-plot.subtitle = element_text(hjust = 0.5))</p>
-<p>slim_title_no_comedy_no_drama &lt;- TITLE_BASICS |&gt; filter(startYear &gt; 1940 &amp; titleType == “movie”) |&gt; select(tconst, primaryTitle, startYear, genres, titleType) |&gt; separate_rows(genres, sep = “,”) |&gt; filter(!(genres %in% c(“Music”,“Musical”,“Comedy”, “Drama”, “Reality-TV”, “News”,“\N”, “Talk-Show”, “Film-Noir”,“Game-Show”, “History”,“Biography”, “Crime”, “Sport”))) |&gt; mutate(startYear = as.numeric(startYear), decade = floor(startYear / 10) * 10, decade = factor(decade, levels = sort(unique(floor(as.numeric(startYear) / 10) * 10))))</p>
-<p>nrow(slim_title_no_comedy_no_drama)</p>
-<p>genre_count_by_decade_no_comedy &lt;- slim_title_no_comedy_no_drama |&gt; group_by(decade, genres) |&gt; summarize(genre_count = n(), .groups = ‘drop’)</p>
-<p>ggplot(genre_count_by_decade_no_comedy, aes(x = decade, y = genre_count, fill = genres)) + geom_bar(stat = “identity”, position = “fill”, color = “black”) + scale_y_continuous(labels = scales::percent) + # Makes the y-axis percentages labs(y = “Percentage”, x = “Decade”, fill = “Genres”, title = “Genre Popularity by Decade”, subtitle = “No Comedy or Drama”) + theme_minimal() + theme(plot.title = element_text(hjust = 0.5),<br>
-plot.subtitle = element_text(hjust = 0.5))</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>slim_title_basics <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(startYear <span class="sc">&gt;</span> <span class="dv">1940</span> <span class="sc">&amp;</span> titleType <span class="sc">==</span> <span class="st">"movie"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(tconst, primaryTitle, startYear, genres, titleType) <span class="sc">|&gt;</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span>(genres <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Music"</span>,<span class="st">"Musical"</span>, <span class="st">"Reality-TV"</span>, <span class="st">"News"</span>,<span class="st">"</span><span class="sc">\\</span><span class="st">N"</span>, <span class="st">"Talk-Show"</span>, <span class="st">"Film-Noir"</span>,<span class="st">"Game-Show"</span>,  <span class="st">"History"</span>,<span class="st">"Biography"</span>, <span class="st">"Crime"</span>, <span class="st">"Sport"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">startYear =</span> <span class="fu">as.numeric</span>(startYear), </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">decade =</span> <span class="fu">floor</span>(startYear <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">decade =</span> <span class="fu">factor</span>(decade, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(<span class="fu">floor</span>(<span class="fu">as.numeric</span>(startYear) <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span>))))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>genre_count_by_decade <span class="ot">&lt;-</span> slim_title_basics <span class="sc">|&gt;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(decade, genres) <span class="sc">|&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">genre_count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">'drop'</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(genre_count_by_decade, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> genre_count, <span class="at">fill =</span> genres)) <span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"fill"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span>  <span class="co"># Makes the y-axis percentages</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Percentage"</span>, <span class="at">x =</span> <span class="st">"Decade"</span>, <span class="at">fill =</span> <span class="st">"Genres"</span>, <span class="at">title =</span> <span class="st">"Genre Popularity by Decade"</span>,</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">subtitle =</span> <span class="st">"With Independent Films"</span>) <span class="sc">+</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),           </span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>slim_title <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span> </span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(startYear <span class="sc">&gt;</span> <span class="dv">1940</span> <span class="sc">&amp;</span> titleType <span class="sc">==</span> <span class="st">"movie"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(tconst, primaryTitle, startYear, genres, titleType) <span class="sc">|&gt;</span> </span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span>(genres <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Music"</span>,<span class="st">"Musical"</span>, <span class="st">"Reality-TV"</span>, <span class="st">"News"</span>,<span class="st">"</span><span class="sc">\\</span><span class="st">N"</span>, <span class="st">"Talk-Show"</span>, <span class="st">"Film-Noir"</span>,<span class="st">"Game-Show"</span>,  <span class="st">"History"</span>,<span class="st">"Biography"</span>, <span class="st">"Crime"</span>, <span class="st">"Sport"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">startYear =</span> <span class="fu">as.numeric</span>(startYear), </span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">decade =</span> <span class="fu">floor</span>(startYear <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span>,</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">decade =</span> <span class="fu">factor</span>(decade, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(<span class="fu">floor</span>(<span class="fu">as.numeric</span>(startYear) <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span>))))</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>genre_count_by_decade <span class="ot">&lt;-</span> slim_title <span class="sc">|&gt;</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(decade, genres) <span class="sc">|&gt;</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">genre_count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">'drop'</span>)</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(genre_count_by_decade, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> genre_count, <span class="at">fill =</span> genres)) <span class="sc">+</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"fill"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span>  <span class="co"># Makes the y-axis percentages</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Percentage"</span>, <span class="at">x =</span> <span class="st">"Decade"</span>, <span class="at">fill =</span> <span class="st">"Genres"</span>, <span class="at">title =</span> <span class="st">"Genre Popularity by Decade"</span>,</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">subtitle =</span> <span class="st">"Without Independent Films"</span>) <span class="sc">+</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),           </span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>slim_title_no_comedy_no_drama <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span> </span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(startYear <span class="sc">&gt;</span> <span class="dv">1940</span> <span class="sc">&amp;</span> titleType <span class="sc">==</span> <span class="st">"movie"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(tconst, primaryTitle, startYear, genres, titleType) <span class="sc">|&gt;</span> </span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(genres, <span class="at">sep =</span> <span class="st">","</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span>(genres <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Music"</span>,<span class="st">"Musical"</span>,<span class="st">"Comedy"</span>, <span class="st">"Drama"</span>, <span class="st">"Reality-TV"</span>, <span class="st">"News"</span>,<span class="st">"</span><span class="sc">\\</span><span class="st">N"</span>, <span class="st">"Talk-Show"</span>, <span class="st">"Film-Noir"</span>,<span class="st">"Game-Show"</span>,  <span class="st">"History"</span>,<span class="st">"Biography"</span>, <span class="st">"Crime"</span>, <span class="st">"Sport"</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">startYear =</span> <span class="fu">as.numeric</span>(startYear), </span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>         <span class="at">decade =</span> <span class="fu">floor</span>(startYear <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span>,</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>         <span class="at">decade =</span> <span class="fu">factor</span>(decade, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(<span class="fu">floor</span>(<span class="fu">as.numeric</span>(startYear) <span class="sc">/</span> <span class="dv">10</span>) <span class="sc">*</span> <span class="dv">10</span>))))</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>genre_count_by_decade_no_comedy <span class="ot">&lt;-</span> slim_title_no_comedy_no_drama <span class="sc">|&gt;</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(decade, genres) <span class="sc">|&gt;</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">genre_count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">'drop'</span>)</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(genre_count_by_decade_no_comedy, <span class="fu">aes</span>(<span class="at">x =</span> decade, <span class="at">y =</span> genre_count, <span class="at">fill =</span> genres)) <span class="sc">+</span></span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"fill"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span> </span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Percentage"</span>, <span class="at">x =</span> <span class="st">"Decade"</span>, <span class="at">fill =</span> <span class="st">"Genres"</span>, <span class="at">title =</span> <span class="st">"Genre Popularity by Decade"</span>, <span class="at">subtitle =</span> <span class="st">"Without Independent films or Comedy or Drama"</span>) <span class="sc">+</span></span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),           </span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>wages <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/wages.csv"</span>)</span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>wages<span class="sc">$</span>Men <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">""</span>, wages<span class="sc">$</span>Men))</span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>wages<span class="sc">$</span>Women <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(<span class="st">","</span>, <span class="st">""</span>, wages<span class="sc">$</span>Women))</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>wages <span class="ot">&lt;-</span> wages[<span class="sc">-</span><span class="fu">nrow</span>(wages), ]</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(wages, <span class="fu">aes</span>(<span class="at">x=</span>X)) <span class="sc">+</span></span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> Women, <span class="at">color =</span> <span class="st">"Women"</span>), <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> Men, <span class="at">color =</span> <span class="st">"Men"</span>), <span class="at">linetype =</span> <span class="st">"twodash"</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> Women), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color=</span><span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">y =</span> Men), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color=</span><span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">size =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"Weekly Wages"</span>, <span class="at">x =</span> <span class="st">"Decade"</span>, <span class="at">title =</span> <span class="st">"40 Year Trend in Wages by Gender"</span>, <span class="at">color=</span><span class="st">"Gender"</span>) <span class="sc">+</span></span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">dollar_format</span>()) <span class="sc">+</span> </span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) </span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;!--</span> genre_count_by_decade_no_comedy <span class="sc">|&gt;</span> finish <span class="cf">for</span> romance trend <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<p>polarizing_films &lt;- movie_lens_and_IMDb |&gt; group_by(IMDbId, primaryTitle, startYear, genres) |&gt; summarise(mean_rating = mean(rating), sd_rating = sd(rating), num_ratings = n()) |&gt; arrange(desc(sd_rating)) |&gt; select(-IMDbId)</p>
-<p>polarizing_films</p>
-<p>polarizing_films &lt;- movie_lens_and_IMDb |&gt; group_by(movieId, primaryTitle, startYear, genres) |&gt; summarise(mean_rating = mean(rating), iqr_rating = IQR(rating), num_ratings = n()) |&gt; arrange(desc(iqr_rating))</p>
-<p>polarizing_films &lt;- movie_lens_and_IMDb |&gt; group_by(movieId, primaryTitle, startYear, genres) |&gt; summarise(mean_rating = mean(rating), var_rating = var(rating), num_ratings = n()) |&gt; arrange(desc(var_rating))</p>
-<!-- KAGGLE -->
-<p>movie_lens_and_IMDb_and_kaggle &lt;- movie_lens_and_IMDb |&gt; inner_join(KAGGLE_DATA, join_by(tconst == IMDb_id))</p>
-<p>movie_lens_and_IMDb_and_kaggle</p>
-<p>get_dollar_adjusted_value &lt;- function(budget, year){ return (budget * cpi_named_vector[as.character(2024)]/cpi_named_vector[as.character(year)]) }</p>
-<p>votes_budget &lt;- movie_lens_and_IMDb_and_kaggle |&gt; group_by(IMDbId, primaryTitle, budget, startYear, revenue) |&gt; summarize(num_votes = n()) |&gt; mutate(adjusted_budget = get_dollar_adjusted_value(budget, startYear), adjusted_profit = get_dollar_adjusted_value(revenue, startYear) - get_dollar_adjusted_value(budget, startYear) )</p>
-<p>model_profit &lt;- lm(votes_budget<span class="math inline">\(num_votes ~  votes_budget\)</span>adjusted_profit)</p>
-<p>reg_line &lt;- function(x_val, model){ return(coef(model)[1] + coef(model)[2] * x_val) }</p>
-<p>votes_budget_profit &lt;- votes_budget |&gt; mutate(popularity_over_profit = num_votes - reg_line(adjusted_profit, model_profit)) |&gt; arrange(desc(popularity_over_profit))</p>
-<!-- why not working? -->
-<p>ggplot(data = votes_budget_profit, aes(x = adjusted_profit, y = num_votes )) + geom_point(alpha = 0.1) + geom_smooth(method=“lm”, se=FALSE)</p>
-<p>model_budget &lt;- lm(votes_budget<span class="math inline">\(num_votes ~  votes_budget\)</span>adjusted_budget)</p>
-<p>votes_budget_budget &lt;- votes_budget |&gt; mutate(popularity_over_budget = num_votes - reg_line(adjusted_budget, model_profit)) |&gt; arrange(desc(popularity_over_budget))</p>
-<p>print(votes_budget_budget, n =100)</p>
-<!-- expensive films -->
-<p>votes_budget |&gt; arrange(desc(adjusted_budget)) |&gt; print(n = 100)</p>
-<p>top_500_polarizing_films &lt;- head(polarizing_films, 500)</p>
-<p>top_500_polarizing_films_w_budget &lt;- top_500_polarizing_films |&gt; inner_join(KAGGLE_DATA, join_by(IMDbId == IMDb_id))</p>
-<p>top_500_polarizing_films_w_budget</p>
+<p>Here is an image detailing gender disparities in Hollywood.</p>
+<p><img src="images/mp-02/movie_count_film_score_gender.jpeg" class="img-fluid"></p>
+<p>Here is me looking for actors who have been in prominent films. The top 2 look like a great choice!</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Table: Actors and Actresses by Age and Movie Count</caption>
+<thead>
+<tr class="header">
+<th>Primary Name</th>
+<th>Category</th>
+<th>Age</th>
+<th>Movie Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Scarlett Johansson</td>
+<td>Actress</td>
+<td>40</td>
+<td>35</td>
+</tr>
+<tr class="even">
+<td>Jake Gyllenhaal</td>
+<td>Actor</td>
+<td>44</td>
+<td>23</td>
+</tr>
+<tr class="odd">
+<td>Chris Evans</td>
+<td>Actor</td>
+<td>43</td>
+<td>20</td>
+</tr>
+<tr class="even">
+<td>Seth Rogen</td>
+<td>Actor</td>
+<td>42</td>
+<td>17</td>
+</tr>
+<tr class="odd">
+<td>Chris Hemsworth</td>
+<td>Actor</td>
+<td>41</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>Emma Stone</td>
+<td>Actress</td>
+<td>36</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>Natalie Portman</td>
+<td>Actress</td>
+<td>43</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>Chris Pratt</td>
+<td>Actor</td>
+<td>45</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>Rajkummar Rao</td>
+<td>Actor</td>
+<td>40</td>
+<td>15</td>
+</tr>
+<tr class="even">
+<td>Kirsten Dunst</td>
+<td>Actress</td>
+<td>42</td>
+<td>14</td>
+</tr>
+</tbody>
+</table>
+<p>Top Women Directors:</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Table: Top Women Directors by Movie Count</caption>
+<thead>
+<tr class="header">
+<th>Primary Name</th>
+<th>Category</th>
+<th>Age</th>
+<th>Movie Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lilly Wachowski</td>
+<td>Director</td>
+<td>57</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>Lana Wachowski</td>
+<td>Director</td>
+<td>59</td>
+<td>5</td>
+</tr>
+<tr class="odd">
+<td>Zoya Akhtar</td>
+<td>Director</td>
+<td>52</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>Joan Chen</td>
+<td>Director</td>
+<td>63</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Gail Mancuso</td>
+<td>Director</td>
+<td>66</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Mary Elizabeth McGlynn</td>
+<td>Director</td>
+<td>58</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Jessie Nelson</td>
+<td>Director</td>
+<td>NA</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Maria Schrader</td>
+<td>Director</td>
+<td>59</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Reema Kagti</td>
+<td>Director</td>
+<td>NA</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Olivia Wilde</td>
+<td>Director</td>
+<td>40</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>Jordan Peele looks like a great choice…</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Table: Directors by Age and Movie Count</caption>
+<thead>
+<tr class="header">
+<th>Primary Name</th>
+<th>Category</th>
+<th>Age</th>
+<th>Movie Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Benny Safdie</td>
+<td>Director</td>
+<td>38</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>John Francis Daley</td>
+<td>Director</td>
+<td>39</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>Olivia Wilde</td>
+<td>Director</td>
+<td>40</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Seth Rogen</td>
+<td>Director</td>
+<td>42</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>Evan Goldberg</td>
+<td>Director</td>
+<td>42</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>Joseph Gordon-Levitt</td>
+<td>Director</td>
+<td>43</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>Fran Kranz</td>
+<td>Director</td>
+<td>43</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Jordan Peele</td>
+<td>Director</td>
+<td>45</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>John Krasinski</td>
+<td>Director</td>
+<td>45</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>Mert Baykal</td>
+<td>Director</td>
+<td>45</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>
+&gt; show the code
+</summary>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>top_movies <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(film_score <span class="sc">&gt;</span> <span class="fl">77.46</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>talent <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> top_movies<span class="sc">$</span>tconst, category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"actor"</span>, <span class="st">"actress"</span>, <span class="st">"director"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(names_in_many_big_productions, <span class="at">by =</span> <span class="st">"nconst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(films_scores, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst, primaryName, category, age) <span class="sc">|&gt;</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">movie_count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(movie_count))</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>talent_again <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> top_movies<span class="sc">$</span>tconst, category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"actor"</span>, <span class="st">"actress"</span>, <span class="st">"director"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(names_in_many_big_productions, <span class="at">by =</span> <span class="st">"nconst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(films_scores, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst, primaryName, category, age) <span class="sc">|&gt;</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">movie_count =</span> <span class="fu">n</span>(), <span class="at">mean_film_score =</span> <span class="fu">mean</span>(film_score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(movie_count))</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>top_actors <span class="ot">&lt;-</span> talent_again <span class="sc">|&gt;</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"actor"</span>, <span class="st">"actress"</span>), age <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">45</span> <span class="sc">&amp;</span> movie_count <span class="sc">&gt;</span> <span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean_film_score))</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>actors_summary <span class="ot">&lt;-</span> top_actors <span class="sc">|&gt;</span> </span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(category) <span class="sc">|&gt;</span> </span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_movie =</span> <span class="fu">sum</span>(movie_count), <span class="at">number_of_performers =</span> <span class="fu">n</span>(), <span class="at">score =</span> <span class="fu">mean</span>(mean_film_score))</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(top_actors)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_actors, <span class="fu">aes</span>(<span class="at">x =</span> mean_film_score, <span class="at">fill =</span> category)) <span class="sc">+</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Density of Mean Film Scores by Gender"</span>, <span class="at">x =</span> <span class="st">"Mean Film Score"</span>, <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_actors, <span class="fu">aes</span>(<span class="at">x =</span> movie_count, <span class="at">y =</span> mean_film_score, <span class="at">color =</span> category)) <span class="sc">+</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Movie Count vs. Mean Film Score by Gender"</span>, <span class="at">x =</span> <span class="st">"Movie Count"</span>, <span class="at">y =</span> <span class="st">"Mean Film Score"</span>, <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span>  </span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) </span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>top_directors <span class="ot">&lt;-</span> talent <span class="sc">|&gt;</span> </span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">==</span> <span class="st">"director"</span>) </span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>top_directors <span class="sc">|&gt;</span> </span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(age, <span class="fu">desc</span>(movie_count)) <span class="sc">|&gt;</span></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p>Witness jumps out at me here :</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Table: Films by Year and Film Score</caption>
+<thead>
+<tr class="header">
+<th>Title</th>
+<th>Year</th>
+<th>Film Score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Vertigo</td>
+<td>1958</td>
+<td>99.68</td>
+</tr>
+<tr class="even">
+<td>The Handmaiden</td>
+<td>2016</td>
+<td>99.20</td>
+</tr>
+<tr class="odd">
+<td>Match Point</td>
+<td>2005</td>
+<td>97.93</td>
+</tr>
+<tr class="even">
+<td>Roja</td>
+<td>1992</td>
+<td>92.96</td>
+</tr>
+<tr class="odd">
+<td>Witness</td>
+<td>1985</td>
+<td>92.05</td>
+</tr>
+<tr class="even">
+<td>The Wind</td>
+<td>1928</td>
+<td>91.02</td>
+</tr>
+<tr class="odd">
+<td>Spark: L.I.F.E.</td>
+<td>2023</td>
+<td>90.81</td>
+</tr>
+<tr class="even">
+<td>A Story from Chikamatsu</td>
+<td>1954</td>
+<td>90.76</td>
+</tr>
+<tr class="odd">
+<td>To Catch a Thief</td>
+<td>1955</td>
+<td>89.51</td>
+</tr>
+<tr class="even">
+<td>Vaalee</td>
+<td>1999</td>
+<td>89.06</td>
+</tr>
+</tbody>
+</table>
+<details>
+<p>romance_thrillers &lt;- TITLE_BASICS |&gt; filter(titleType == “movie”) |&gt;<br>
+filter(grepl(“Romance”, genres) &amp; grepl(“Thriller”, genres)) |&gt; inner_join(films_scores, by = “tconst”) |&gt; filter(film_score &gt; 77.46) |&gt; select(primaryTitle.x, startYear.x, film_score) |&gt; arrange(desc(film_score))</p>
+<p>head(romance_thrillers, 19)</p>
+nrow(romance_thrillers) glimpse(romance_thrillers) glimpse(films_scores)
+<summary>
+&gt; show me the code
+</summary>
+</details>
+<!-- ##  -->
+<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(IMDbId, -->
+<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
+<!-- mean(rating), sd_rating = sd(rating), num_ratings = n()) \|\> -->
+<!-- arrange(desc(sd_rating)) \|\> select(-IMDbId) -->
+<!-- polarizing_films -->
+<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(movieId, -->
+<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
+<!-- mean(rating), iqr_rating = IQR(rating), num_ratings = n()) \|\> -->
+<!-- arrange(desc(iqr_rating)) -->
+<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(movieId, -->
+<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
+<!-- mean(rating), var_rating = var(rating), num_ratings = n()) \|\> -->
+<!-- arrange(desc(var_rating)) -->
+<!-- <!-- KAGGLE -->
+<p>–&gt;</p>
+<!-- movie_lens_and_IMDb_and_kaggle \<- movie_lens_and_IMDb \|\> -->
+<!-- inner_join(KAGGLE_DATA, join_by(tconst == IMDb_id)) -->
+<!-- movie_lens_and_IMDb_and_kaggle -->
+<!-- get_dollar_adjusted_value \<- function(budget, year){ return (budget \* -->
+<!-- cpi_named_vector\[as.character(2024)\]/cpi_named_vector\[as.character(year)\]) -->
+<!-- } -->
+<!-- votes_budget \<- movie_lens_and_IMDb_and_kaggle \|\> group_by(IMDbId, -->
+<!-- primaryTitle, budget, startYear, revenue) \|\> summarize(num_votes = -->
+<!-- n()) \|\> mutate(adjusted_budget = get_dollar_adjusted_value(budget, -->
+<!-- startYear), adjusted_profit = get_dollar_adjusted_value(revenue, -->
+<!-- startYear) - get_dollar_adjusted_value(budget, startYear) ) -->
+<!-- model_profit \<- -->
+<!-- lm(votes_budget$num_votes ~  votes_budget$adjusted_profit) -->
+<!-- reg_line \<- function(x_val, model){ return(coef(model)\[1\] + -->
+<!-- coef(model)\[2\] \* x_val) } -->
+<!-- votes_budget_profit \<- votes_budget \|\> mutate(popularity_over_profit -->
+<!-- = num_votes - reg_line(adjusted_profit, model_profit)) \|\> -->
+<!-- arrange(desc(popularity_over_profit)) -->
+<!-- <!-- why not working? -->
+<p>–&gt;</p>
+<!-- ggplot(data = votes_budget_profit, aes(x = adjusted_profit, y = -->
+<!-- num_votes )) + geom_point(alpha = 0.1) + geom_smooth(method="lm", -->
+<!-- se=FALSE) -->
+<!-- model_budget \<- -->
+<!-- lm(votes_budget$num_votes ~  votes_budget$adjusted_budget) -->
+<!-- votes_budget_budget \<- votes_budget \|\> mutate(popularity_over_budget -->
+<!-- = num_votes - reg_line(adjusted_budget, model_profit)) \|\> -->
+<!-- arrange(desc(popularity_over_budget)) -->
+<!-- print(votes_budget_budget, n =100) -->
+<!-- <!-- expensive films -->
+<p>–&gt;</p>
+<!-- votes_budget \|\> arrange(desc(adjusted_budget)) \|\> print(n = 100) -->
+<!-- top_500_polarizing_films \<- head(polarizing_films, 500) -->
+<!-- top_500_polarizing_films_w_budget \<- top_500_polarizing_films \|\> -->
+<!-- inner_join(KAGGLE_DATA, join_by(IMDbId == IMDb_id)) -->
+<!-- top_500_polarizing_films_w_budget -->
 </section>
 <section id="appendixA" class="level2">
 <h2 class="anchored" data-anchor-id="appendixA">Appendix A</h2>
 <section id="how-data-was-loaded" class="level3">
 <h3 class="anchored" data-anchor-id="how-data-was-loaded">How Data Was Loaded</h3>
 <p>In this section, I describe how the data was loaded into the project.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>DATA_FOLDER <span class="ot">&lt;-</span> <span class="st">"data/mp02/"</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>get_IMDb_file <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>     <span class="fu">as.data.frame</span>(readr<span class="sc">::</span><span class="fu">read_csv</span>(fname, <span class="at">lazy=</span><span class="cn">FALSE</span>))</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a> }</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>create_file_ext <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>   <span class="fu">paste0</span>(DATA_FOLDER, fname)</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co"># IMDb DATA</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"NAME_BASICS.csv"</span>))</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_RATINGS.csv"</span>))</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_BASICS.csv"</span>))</span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>TITLE_CREW <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_CREW.csv"</span>))</span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>TITLE_EPISODES <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_EPISODES.csv"</span>))</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_PRINCIPALS.csv"</span>))</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">birthYear =</span> <span class="fu">as.numeric</span>(birthYear),</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">deathYear =</span> <span class="fu">as.numeric</span>(deathYear))</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>TITLE_RATINGS <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>     <span class="fu">mutate</span>(<span class="at">averageRating =</span> <span class="fu">as.numeric</span>(averageRating),</span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">numVotes =</span> <span class="fu">as.numeric</span>(numVotes))</span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>TITLE_BASICS <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">isAdult =</span> <span class="fu">as.logical</span>(isAdult),</span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>           <span class="at">runtimeMinutes =</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"[^0-9]"</span>, runtimeMinutes), <span class="cn">NA</span>, <span class="fu">as.numeric</span>(runtimeMinutes)))</span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="co"># MOVIE LENS</span></span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>MOVIE_LENS_RATINGS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/ratings.csv"</span>)</span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>MOVIE_LENS_LINKS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/links.csv"</span>)</span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>movie_lens_ratings_merged <span class="ot">&lt;-</span> MOVIE_LENS_RATINGS <span class="sc">|&gt;</span></span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>   <span class="fu">group_by</span>(movieId) <span class="sc">|&gt;</span></span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>   <span class="fu">summarize</span>(<span class="at">count_reviews =</span> <span class="fu">n</span>())</span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="co"># KAGGLE</span></span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>KAGGLE_DATA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/KAGGLE_DATA.csv"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">budget =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(budget), <span class="dv">0</span>, <span class="fu">parse_number</span>(budget)))</span>
-<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="co"># CPI</span></span>
-<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>HISTORICAL_CPI <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/HISTORICAL_CPI.csv"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">substring</span>(DATE,<span class="dv">1</span>,<span class="dv">4</span>))</span>
-<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>cpi_named_vector <span class="ot">&lt;-</span> <span class="fu">setNames</span>(HISTORICAL_CPI<span class="sc">$</span>CPIAUCNS, HISTORICAL_CPI<span class="sc">$</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;!--</span> <span class="fu">library</span>(dplyr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(tidyr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(stringr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(lubridate) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="fu">library</span>(readr) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> DATA_FOLDER <span class="ot">&lt;-</span> <span class="st">"data/mp02/"</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> get_IMDb_file <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){ <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>      <span class="fu">as.data.frame</span>(readr<span class="sc">::</span><span class="fu">read_csv</span>(fname, <span class="at">lazy=</span><span class="cn">FALSE</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>  } <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> create_file_ext <span class="ot">&lt;-</span> <span class="cf">function</span>(fname){ <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">paste0</span>(DATA_FOLDER, fname) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> } <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># IMDb DATA --&gt;</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> NAME_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"NAME_BASICS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_RATINGS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_RATINGS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_BASICS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_BASICS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_CREW <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_CREW.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_EPISODES <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_EPISODES.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_PRINCIPALS <span class="ot">&lt;-</span> <span class="fu">get_IMDb_file</span>(<span class="fu">create_file_ext</span>(<span class="st">"TITLE_PRINCIPALS.csv"</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> NAME_BASICS <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>     <span class="fu">mutate</span>(<span class="at">birthYear =</span> <span class="fu">as.numeric</span>(birthYear), <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>            <span class="at">deathYear =</span> <span class="fu">as.numeric</span>(deathYear)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_RATINGS <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>      <span class="fu">mutate</span>(<span class="at">averageRating =</span> <span class="fu">as.numeric</span>(averageRating), <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>             <span class="at">numVotes =</span> <span class="fu">as.numeric</span>(numVotes)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> TITLE_BASICS <span class="ot">&lt;-</span> TITLE_BASICS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>     <span class="fu">mutate</span>(<span class="at">isAdult =</span> <span class="fu">as.logical</span>(isAdult), <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>            <span class="at">runtimeMinutes =</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">"[^0-9]"</span>, runtimeMinutes), <span class="cn">NA</span>, <span class="fu">as.numeric</span>(runtimeMinutes))) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># MOVIE LENS --&gt;</span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> MOVIE_LENS_RATINGS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/ratings.csv"</span>) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> MOVIE_LENS_LINKS <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/ml-32m/links.csv"</span>) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> movie_lens_ratings_merged <span class="ot">&lt;-</span> MOVIE_LENS_RATINGS <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">group_by</span>(movieId) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">summarize</span>(<span class="at">count_reviews =</span> <span class="fu">n</span>()) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># KAGGLE --&gt;</span></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> KAGGLE_DATA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/KAGGLE_DATA.csv"</span>) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">mutate</span>(<span class="at">budget =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(budget), <span class="dv">0</span>, <span class="fu">parse_number</span>(budget))) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> <span class="co"># CPI --&gt;</span></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> HISTORICAL_CPI <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/mp02/HISTORICAL_CPI.csv"</span>) <span class="sc">|&gt;</span> <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span>    <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">substring</span>(DATE,<span class="dv">1</span>,<span class="dv">4</span>)) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="er">&lt;</span><span class="sc">!--</span> cpi_named_vector <span class="ot">&lt;-</span> <span class="fu">setNames</span>(HISTORICAL_CPI<span class="sc">$</span>CPIAUCNS, HISTORICAL_CPI<span class="sc">$</span>year) <span class="sc">-</span><span class="ot">-&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>head(names_in_many_big_productions) <!-- quantile(movies_with_ratings_merged$count_reviews, probs=seq(0,1, by = 0.025)) --> <!-- 95% of reviews have 1000 reviews or less... --></p>
 <!-- max(movies_with_ratings_merged$movieId) -->
 <!-- 292757 -->
 <!-- MOVIE LENS -->
-<p>movies_meeting_review_threshold &lt;- movies_lens_ratings_merged |&gt; filter(count_reviews &gt;= 1000) |&gt; pull(movieId)</p>
-<p>filtered_reviews &lt;- MOVIE_LENS_RATINGS |&gt; filter(movieId %in% movies_meeting_review_threshold)</p>
-<p>movie_lens__IMDb &lt;- filtered_reviews |&gt; inner_join(MOVIE_LENS_LINKS, by = “movieId”)</p>
+<!-- movies_meeting_review_threshold \<- movies_lens_ratings_merged \|\> -->
+<!-- filter(count_reviews \>= 1000) \|\> pull(movieId) -->
+<!-- filtered_reviews \<- MOVIE_LENS_RATINGS \|\> filter(movieId %in% -->
+<!-- movies_meeting_review_threshold) -->
+<!-- movie_lens\_\_IMDb \<- filtered_reviews \|\> -->
+<!-- inner_join(MOVIE_LENS_LINKS, by = "movieId") -->
 <details>
 <summary>
 &gt; show the code
 </summary>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>hello <span class="ot">&lt;-</span> <span class="st">"hello"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>hello <span class="ot">&lt;-</span> <span class="st">"hello"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </details>
-<!-- number of movies -->
-<p>When we say “movie” we often think of “what is opening this Friday” and with it: “what film will win the weekend box office?”</p>
-<p>If we look at the Kaggle Movie Dataset, we see</p>
-<p>quantile(KAGGLE_DATA$revenue, probs = seq(0,1,.05), na.rm=TRUE)</p>
-<p><img src="images/mp-02/1_media_types_counts.jpeg" class="img-fluid" style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
-<p>Seminal podcaster Bill Simmon’s (a man <a href="https://variety.com/2020/digital/news/spotify-acquires-the-ringer-196-million-cash-bill-simmons-1203502471/">paid 200 million dollars to podcast</a>) has argued on his #1 film podcast <a href="https://www.theringer.com/the-rewatchables">The Re-Watchables</a> that the Oscars should be awarded 5 years after a film’s release. Time-and-time again, the Academy of Motion Picture and Science awards its most prestigious award to a questionable film that years after leaves audiences scratching their heads over the decision. This is likely due to the impossibilty of fully evaluating a work of art until time finally settles and properly establishes a film’s legacy. All-too-often: out-sized marketing budgets, capricious cultural fads or unrecognized behind-the-camera politics are what grants a film the industry’s most coveted honor.</p>
-<p>Do the Right Thing (1989), Saving Private Ryan (1997), Brokeback Mountain (2005) and The Social Network (2010) are all classic examples of the essential films of their respective years, egregiously unrecognized by the academy.</p>
-<p>Thus, Simmons argues we should establish “The 5 Year Oscars.” The awards should not be awarded until 5 years prior to a film’s initial release.</p>
-<p>(Television netowrk ABC, longtime broadcast home to the Oscars broadcast, would likely not be thrilled with the decision to not embrace movie-stars-of-the-moment in the ceremony.)</p>
-<p>I’d like to extend this analysis to all films. If we ignore all film reviews for a 5 year window, will we be left be able to recongize a higher caliber or higher quality film? If we were to put film reviews into a “5 year freezer”, will it impact their rankings and perception?</p>
-<p>Most importantly, will it hurt the score of objectively terrible movie Crash (2005)?</p>
-<p>This analysis is not possible with just IMDb data. For this analysis I will need to bring in the data from review site <a href="https://grouplens.org/datasets/movielens/">Movie Lens</a>.</p>
-<p>Movie Lens offers a record for every review from each contributors - all with a time-stamp for when the review was submitted. Movie Lens first review was issued in <code>1995</code>. Thus, we can only properly evaluate films from <code>2000 - 2019</code> (5 years after <code>1995</code> and 5 years prior to <code>2024</code>) <!-- make sure TITLE_BASICS and working movie_lens data_set have similar IMDb IDs --></p>
-<p>title_basics_imdb_id &lt;- TITLE_BASICS |&gt; mutate(IMDbId = as.integer(substring(tconst, 3)), startYear = as.numeric(startYear)) |&gt; filter(startYear &gt;= 1995 &amp; startYear &lt;= 2019) |&gt; select(-runtimeMinutes, -isAdult, -titleType, -originalTitle, -endYear)</p>
-<p>movie_lens_merge_imdb &lt;- title_basics_imdb_id |&gt; inner_join(MOVIE_LENS_RATINGS, by = c(“IMDbId” = “movieId”)) |&gt; mutate(yearReview = year(as.POSIXct(timestamp, origin=“1970-01-01”)))</p>
-<!-- table(movie_lens_merge_imdb)   -->
-<!-- 2010  2011  2012  2013  2014  2015  2016  2017  2018  2019  2020  2021  2022  2023  -->
-<!--     3     1     4    70  4084 36518 40654 52189 42300 42578 51607 39313 32852 26869  -->
-<p>five_year_reviews_after &lt;- movie_lens_merge_imdb |&gt; filter((yearReview - startYear) &gt;= 5) |&gt; group_by(tconst) |&gt; summarize(after_5_year_score = mean(rating))</p>
-<p>head(five_year_reviews_after)</p>
-<p>five_year_reviews_before &lt;- movie_lens_imdb_filtered |&gt; filter(yearReview - startYear &lt; 5) |&gt; group_by(tconst) |&gt; summarize(before_5_year_score = mean(rating))</p>
-<p>head(movie_lens_imdb_filtered, 100)</p>
-<p>movie_lens__IMDb &lt;- filtered_reviews |&gt; inner_join(MOVIE_LENS_LINKS, by = “movieId”)</p>
-<p>head(title_basics_movie_lens_id)<br>
-<!-- merge the two data sets, make sure to create a year for when the review was posted --></p>
-<p>movie_lens_and_IMDb &lt;- title_basics_movie_lens_id |&gt; inner_join(movie_lens_filtered_reviews_IMDb, by = “IMDbId”) |&gt; select(-isAdult, -endYear, -runtimeMinutes, -tmdbId, -titleType) |&gt; mutate(yearReview = year(as.POSIXct(timestamp, origin=“1970-01-01”)))</p>
-<!-- now take out all reviews that were  -->
-<p>movie_lens_and_IMDb_5_year_reviews &lt;- movie_lens_and_IMDb |&gt; filter(yearReview - startYear &gt;= 5) |&gt; group_by(IMDbId, primaryTitle, startYear) |&gt; summarize(avg_review = mean(rating)) |&gt; arrange(desc(avg_review))</p>
-<p>print(movie_lens_and_IMDb_5_year_reviews, n=50)</p>
-<p>movie_lens_and_IMDb_year_review &lt;- movie_lens_and_IMDb |&gt; group_by(IMDbId, primaryTitle, startYear) |&gt; summarize(avg_review = mean(rating)) |&gt; arrange(desc(avg_review))</p>
-<p>print(movie_lens_and_IMDb_year_review, n = 50)</p>
+<!-- <!-- number of movies -->
+<p>–&gt;</p>
+<!-- When we say "movie" we often think of "what is opening this Friday" and -->
+<!-- with it: "what film will win the weekend box office?" -->
+<!-- If we look at the Kaggle Movie Dataset, we see -->
+<!-- quantile(KAGGLE_DATA\$revenue, probs = seq(0,1,.05), na.rm=TRUE) -->
+<!-- ![](images/mp-02/1_media_types_counts.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"} -->
+<!-- Seminal podcaster Bill Simmon’s (a man [paid 200 million dollars to -->
+<!-- podcast](https://variety.com/2020/digital/news/spotify-acquires-the-ringer-196-million-cash-bill-simmons-1203502471/)) -->
+<!-- has argued on his #1 film podcast [The -->
+<!-- Re-Watchables](https://www.theringer.com/the-rewatchables) that the -->
+<!-- Oscars should be awarded 5 years after a film’s release. Time-and-time -->
+<!-- again, the Academy of Motion Picture and Science awards its most -->
+<!-- prestigious award to a questionable film that years after leaves -->
+<!-- audiences scratching their heads over the decision. This is likely due -->
+<!-- to the impossibilty of fully evaluating a work of art until time finally -->
+<!-- settles and properly establishes a film's legacy. All-too-often: -->
+<!-- out-sized marketing budgets, capricious cultural fads or unrecognized -->
+<!-- behind-the-camera politics are what grants a film the industry's most -->
+<!-- coveted honor. -->
+<!-- Do the Right Thing (1989), Saving Private Ryan (1997), Brokeback -->
+<!-- Mountain (2005) and The Social Network (2010) are all classic examples -->
+<!-- of the essential films of their respective years, egregiously -->
+<!-- unrecognized by the academy. -->
+<!-- Thus, Simmons argues we should establish "The 5 Year Oscars." The awards -->
+<!-- should not be awarded until 5 years prior to a film's initial release. -->
+<!-- (Television netowrk ABC, longtime broadcast home to the Oscars -->
+<!-- broadcast, would likely not be thrilled with the decision to not embrace -->
+<!-- movie-stars-of-the-moment in the ceremony.) -->
+<!-- I'd like to extend this analysis to all films. If we ignore all film -->
+<!-- reviews for a 5 year window, will we be left be able to recongize a -->
+<!-- higher caliber or higher quality film? If we were to put film reviews -->
+<!-- into a "5 year freezer", will it impact their rankings and perception? -->
+<!-- Most importantly, will it hurt the score of objectively terrible movie -->
+<!-- Crash (2005)? -->
+<!-- This analysis is not possible with just IMDb data. For this analysis I -->
+<!-- will need to bring in the data from review site [Movie -->
+<!-- Lens](https://grouplens.org/datasets/movielens/). -->
+<!-- Movie Lens offers a record for every review from each contributors - all -->
+<!-- with a time-stamp for when the review was submitted. Movie Lens first -->
+<!-- review was issued in `1995`. Thus, we can only properly evaluate films -->
+<!-- from `2000 - 2019` (5 years after `1995` and 5 years prior to `2024`) -->
+<!-- <!-- make sure TITLE_BASICS and working movie_lens data_set have similar IMDb IDs -->
+<p>–&gt;</p>
+<!-- title_basics_imdb_id \<- TITLE_BASICS \|\> mutate(IMDbId = -->
+<!-- as.integer(substring(tconst, 3)), startYear = as.numeric(startYear)) -->
+<!-- \|\> filter(startYear \>= 1995 & startYear \<= 2019) \|\> -->
+<!-- select(-runtimeMinutes, -isAdult, -titleType, -originalTitle, -endYear) -->
+<!-- movie_lens_merge_imdb \<- title_basics_imdb_id \|\> -->
+<!-- inner_join(MOVIE_LENS_RATINGS, by = c("IMDbId" = "movieId")) \|\> -->
+<!-- mutate(yearReview = year(as.POSIXct(timestamp, origin="1970-01-01"))) -->
+<!-- <!-- table(movie_lens_merge_imdb)   -->
+<p>–&gt;</p>
+<!-- <!-- 2010  2011  2012  2013  2014  2015  2016  2017  2018  2019  2020  2021  2022  2023  -->
+<p>–&gt;</p>
+<!-- <!--     3     1     4    70  4084 36518 40654 52189 42300 42578 51607 39313 32852 26869  -->
+<p>–&gt;</p>
+<!-- five_year_reviews_after \<- movie_lens_merge_imdb \|\> -->
+<!-- filter((yearReview - startYear) \>= 5) \|\> group_by(tconst) \|\> -->
+<!-- summarize(after_5_year_score = mean(rating)) -->
+<!-- head(five_year_reviews_after) -->
+<!-- five_year_reviews_before \<- movie_lens_imdb_filtered \|\> -->
+<!-- filter(yearReview - startYear \< 5) \|\> group_by(tconst) \|\> -->
+<!-- summarize(before_5_year_score = mean(rating)) -->
+<!-- head(movie_lens_imdb_filtered, 100) -->
+<!-- movie_lens\_\_IMDb \<- filtered_reviews \|\> -->
+<!-- inner_join(MOVIE_LENS_LINKS, by = "movieId") -->
+<!-- head(title_basics_movie_lens_id)\ -->
+<!-- <!-- merge the two data sets, make sure to create a year for when the review was posted -->
+<p>–&gt;</p>
+<!-- movie_lens_and_IMDb \<- title_basics_movie_lens_id \|\> -->
+<!-- inner_join(movie_lens_filtered_reviews_IMDb, by = "IMDbId") \|\> -->
+<!-- select(-isAdult, -endYear, -runtimeMinutes, -tmdbId, -titleType) \|\> -->
+<!-- mutate(yearReview = year(as.POSIXct(timestamp, origin="1970-01-01"))) -->
+<!-- <!-- now take out all reviews that were  -->
+<p>–&gt;</p>
+<!-- movie_lens_and_IMDb_5_year_reviews \<- movie_lens_and_IMDb \|\> -->
+<!-- filter(yearReview - startYear \>= 5) \|\> group_by(IMDbId, primaryTitle, -->
+<!-- startYear) \|\> summarize(avg_review = mean(rating)) \|\> -->
+<!-- arrange(desc(avg_review)) -->
+<!-- print(movie_lens_and_IMDb_5_year_reviews, n=50) -->
+<!-- movie_lens_and_IMDb_year_review \<- movie_lens_and_IMDb \|\> -->
+<!-- group_by(IMDbId, primaryTitle, startYear) \|\> summarize(avg_review = -->
+<!-- mean(rating)) \|\> arrange(desc(avg_review)) -->
+<!-- print(movie_lens_and_IMDb_year_review, n = 50) -->
 
 
 </section>
