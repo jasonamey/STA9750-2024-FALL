@@ -88,7 +88,7 @@ does **IMDb** collect? What else is in the database?
 ![](images/mp-02/1_media_types_counts.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 I suspect the collection of `videoGames` will prove increasingly
-important as this media form grows in cultural influence. Video games are also serving as a the growing source of IP and inspiration, witnessed in recent successes like television's **The Last of Us** and in theaters last year's (`2023`) **5 Nights at Freddy's** and **Super Mario Brothers** for convincing examples of their growing influence on film culture. 
+important as this media form grows in cultural influence. Video games are also serving as a the growing source of IP and inspiration, witnessed in recent successes like television's **The Last of Us** and in theaters last year's **5 Nights at Freddy's (2023)**  and **Super Mario Brothers (2023)** for convincing examples of their growing influence on film culture. 
 
 <details>
 
