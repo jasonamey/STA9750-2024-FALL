@@ -319,34 +319,15 @@ names_in_many_big_productions |>
 
 </details>
 
-### Singular TV Episode rated highly
-
-| series_title | episode_title | year |
-|--------------|---------------|------|
-| Breaking Bad | Ozymandias    | 2013 |
-
-: Hank! {.striped .hover}
-
-<details>
-
-<summary>\> show the code</summary>
-
-``` r
-top_episodes <- TITLE_RATINGS |>
-  filter(averageRating == 10 & numVotes >= 200000)
-
-episode_details <- top_episodes |>
-  inner_join(TITLE_BASICS, by = "tconst") |>
-  inner_join(TITLE_EPISODES, by = "tconst")
-  
-episode_details |>
-  inner_join(TITLE_BASICS, join_by("parentTconst" == "tconst")) |>
-  select(series_title = primaryTitle.y, episode_title = primaryTitle.x, year = startYear.x)
-```
-
-</details>
-
 ### Star Wars and Mark Hamill
+
+With over $`10.3` billion in box office across all 9 of it’s main, episodic features, there arguable is no franchise that has loomed larger over the recent history of film than Star Wars. For some, Star Wars represents the critical turning point when movies forever became major cultural events, meant to wow, awe and captivate the film-going audience. With its fantastical promotion of technologically innovative special effects, edge-of-your-seat action both grounded in dramatic, escapist storytelling, Star Wars effectively created the template for the modern summer blockbuster.
+
+Despite its release more than 40 years ago, Star Wars continues to loom large over the popular imagination as current rights holder Disney maintains ambitious plans to push its stories and its characters into galaxies far, far away.
+
+Did the hero of Star Wars break free from the monumental legacy of such an iconic franchise, or has he forever been bound to the role of Luke Skywalker, overshadowing the rest of his career?
+
+Voice acting and *Corvette Summer* (1978) notwitstanding, it looks like Hamill will always be known as Luke Skywalker: 
 
 | primaryName | primaryTitle                                   | startYear |
 |-------------|------------------------------------------------|-----------|
@@ -374,15 +355,10 @@ mark_hamil_popular_works_IDs |>
 
 </details>
 
-<!-- find parent episode -->
-
-<!-- find all titles a person is involved with -->
-
-<!-- assess this individual's career -->
-
-<!-- 5 what television show with more than 12 episodes has the highest rating? -->
 
 ### What Television Show with at least 12 episodes has the highest average rating?
+
+Swtiching galaxies to Television, suppose we wanted to identify popular television series? Say, a series with at least 12 episodes? 
 
 This is really unsatisfactory:
 
@@ -422,7 +398,7 @@ this may miss out on underrecognized, cult programs.
 | tt0944947    | Game of Thrones    | 8.75                      |
 | tt3581920    | The Last of Us     | 8.73                      |
 
-: I had never heard of Attack on Titan. The Internet loves Anime.
+: The Internet loves Anime.
 {.striped .hover}
 
 <details>
@@ -486,6 +462,42 @@ tv_show_12_episodes_high_rating_titles <-
 ```
 
 </details>
+
+### Singular TV Episode rated highly
+
+One of the unfortunate legacies of Star Wars is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers In a audiences still crave innovative stories, strong performances and bold filmmaking. A big segment of the movie going audience exhausted by "blockbuster or bust" entertainment has shifted their attention back to smaller screens. 
+
+In the last 20 years with the rise of "prestige television" a good number of our greatest film creatives, who previously would've exclusively made movies, have turned their attention to television. In may ways, due to the inert, IP-focused model for modern movie development, a lot of the innovation we now see on screen happens in episodic television series. 
+
+Few shows have capitalized on this change in the zeitgeist and cast as large of a cultural shadow as **Breaking Bad**. Vince Gilligan's storied show documenting the transformation of an ailing, beleagured chemistry teacher into the methamphetamine king of the American southwest. 
+
+While **Breaking Bad** consistently met audience expectations, it achieved the enviable feat of building both critical and fan-approved momentum right through its final episodes. Yet no episode captured this phenomenon better than the show's antepenultimate installment, **Ozymandias** and the revies and sentiment in the **IMDb** database reflect this: 
+
+| Series Title | Episode Title | Year |
+|--------------|---------------|------|
+| Breaking Bad | Ozymandias    | 2013 |
+
+: Hank! {.striped .hover}
+
+<details>
+
+<summary>\> show the code</summary>
+
+``` r
+top_episodes <- TITLE_RATINGS |>
+  filter(averageRating == 10 & numVotes >= 200000)
+
+episode_details <- top_episodes |>
+  inner_join(TITLE_BASICS, by = "tconst") |>
+  inner_join(TITLE_EPISODES, by = "tconst")
+  
+episode_details |>
+  inner_join(TITLE_BASICS, join_by("parentTconst" == "tconst")) |>
+  select(series_title = primaryTitle.y, episode_title = primaryTitle.x, year = startYear.x)
+```
+
+</details>
+
 
 <!-- The TV series Happy Days (1974-1984) gives us the common idiom “jump the shark”. The phrase comes from a controversial fifth season episode (aired in 1977) in which a lead character literally jumped over a shark on water skis. Idiomatically, it is used to refer to the moment when a once-great show becomes ridiculous and rapidly looses quality. -->
 
@@ -958,13 +970,9 @@ ggplot(wages, aes(x=X)) +
 ```
 </details>
 
-Here is an image detailing gender disparities in Hollywood.
+Let's try to identify two romantic, nervy leads to star in our film. 
 
-![](images/mp-02/movie_count_film_score_gender.jpeg){}
-
-
-
-Here is me looking for actors who have been in prominent films. The top 2 look like a great choice! 
+The top 2 look like a great choice! Can you believe they've never worked together! 
 
 | Primary Name        | Category | Age | Movie Count |
 |---------------------|----------|-----|-------------|
@@ -982,6 +990,36 @@ Here is me looking for actors who have been in prominent films. The top 2 look l
 : Table: Actors and Actresses by Age and Movie Count {.striped .hover}
 
 
+Can we identify a top woman director to helm our production? 
+
+| ID         | Name                      | Profession | Age | Awards |
+|------------|---------------------------|------------|-----|--------|
+| nm0000229  | Steven Spielberg           | director   | 78  | 28     |
+| nm0001054  | Joel Coen                  | director   | 70  | 15     |
+| nm0000165  | Ron Howard                 | director   | 70  | 14     |
+| nm0000318  | Tim Burton                 | director   | 66  | 13     |
+| nm0000709  | Robert Zemeckis            | director   | 72  | 13     |
+| nm0001392  | Peter Jackson              | director   | 63  | 12     |
+| nm0005363  | Guy Ritchie                | director   | 56  | 11     |
+| nm0000231  | Oliver Stone               | director   | 78  | 10     |
+| nm0868219  | Guillermo del Toro         | director   | 60  | 9      |
+| nm0000116  | James Cameron              | director   | 70  | 8      |
+| nm0000600  | Sam Raimi                  | director   | 65  | 8      |
+| nm0000881  | Michael Bay                | director   | 59  | 7      |
+| nm0001675  | Robert Rodriguez           | director   | 56  | 7      |
+| nm0080220  | Sanjay Leela Bhansali      | director   | 61  | 7      |
+| nm0570912  | Adam McKay                 | director   | 56  | 7      |
+| nm0000416  | Terry Gilliam              | director   | 84  | 6      |
+| nm0000568  | Frank Oz                   | director   | 80  | 6      |
+| nm0000916  | Peter Berg                 | director   | 60  | 6      |
+| nm0001053  | Ethan Coen                 | director   | 67  | 6      |
+| nm0094435  | Bong Joon Ho               | director   | 55  | 6      |
+
+: Directors and Their Awards Count {.striped .hover}
+
+(...it goes on like this)
+
+Ok, exaclty who *are* the women in our top directors table? 
 
 Top Women Directors: 
 
@@ -1000,44 +1038,27 @@ Top Women Directors:
 
 : Table: Top Women Directors by Movie Count {.striped .hover}
 
+Hm. 
 
+It's arguably a bold choice to get the Wachowski's to direct our project.
 
-Jordan Peele looks like a great choice... 
+...once we pick a film we'll decide if they're appropriate or not, but what is going on with the gender disparities in Hollywood? 
 
-| Primary Name          | Category  | Age | Movie Count |
-|-----------------------|-----------|-----|-------------|
-| Benny Safdie           | Director  | 38  | 2           |
-| John Francis Daley     | Director  | 39  | 2           |
-| Olivia Wilde           | Director  | 40  | 1           |
-| Seth Rogen             | Director  | 42  | 2           |
-| Evan Goldberg          | Director  | 42  | 2           |
-| Joseph Gordon-Levitt   | Director  | 43  | 1           |
-| Fran Kranz             | Director  | 43  | 1           |
-| Jordan Peele           | Director  | 45  | 3           |
-| John Krasinski         | Director  | 45  | 2           |
-| Mert Baykal            | Director  | 45  | 1           |
-
-: Table: Directors by Age and Movie Count {.striped .hover}
-
+![](images/mp-02/movie_count_film_score_gender.jpeg){}
 
 <details>
 <summary>\> show the code</summary>
 
+By my `film_score` metric, men are clearly more represented than women. 
 
 ```r
+
+# Filter on all films that meet my 77.46 film score threshold
 top_movies <- films_scores |>
   filter(film_score > 77.46)
 
-
-
-talent <- TITLE_PRINCIPALS |>
-  filter(tconst %in% top_movies$tconst, category %in% c("actor", "actress", "director")) |>
-  inner_join(names_in_many_big_productions, by = "nconst") |>
-  inner_join(films_scores, by = "tconst") |>
-  group_by(nconst, primaryName, category, age) |>
-  summarize(movie_count = n()) |>
-  arrange(desc(movie_count))
-
+# Find actors, actresses and directors and sum the films they've done that are strong
+# film_score scorers
 talent_again <- TITLE_PRINCIPALS |>
   filter(tconst %in% top_movies$tconst, category %in% c("actor", "actress", "director")) |>
   inner_join(names_in_many_big_productions, by = "nconst") |>
@@ -1046,31 +1067,34 @@ talent_again <- TITLE_PRINCIPALS |>
   summarize(movie_count = n(), mean_film_score = mean(film_score, na.rm = TRUE)) |>
   arrange(desc(movie_count))
 
-
+# Look for younger performers
 top_actors <- talent_again |>
   filter(category %in% c("actor", "actress"), age >= 20 & age <= 45 & movie_count > 4) |>
   arrange(desc(mean_film_score))
 
+# Count their inclusions
 actors_summary <- top_actors |> 
   group_by(category) |> 
   summarize(total_movie = sum(movie_count), number_of_performers = n(), score = mean(mean_film_score))
 
-glimpse(top_actors)
-
+# Plot top actors that are high film score participants
 ggplot(top_actors, aes(x = mean_film_score, fill = category)) +
   geom_density(alpha = 0.6) +
   labs(title = "Density of Mean Film Scores by Gender", x = "Mean Film Score", y = "Density") +
   theme_minimal()
-  
+ 
+# Plot top actresses that are high film score participants
 ggplot(top_actors, aes(x = movie_count, y = mean_film_score, color = category)) +
   geom_point(alpha = 0.5, size = 3) +
   labs(title = "Movie Count vs. Mean Film Score by Gender", x = "Movie Count", y = "Mean Film Score", color = NULL) +  
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5)) 
 
+# Identify directors
 top_directors <- talent |> 
   filter(category == "director") 
-
+  
+# Single out the top 20
 top_directors |> 
   arrange(age, desc(movie_count)) |>
   head(20)
@@ -1100,8 +1124,6 @@ Cast Lukas Haas as the villain.
 ![](images/mp-02/witness.jpg){style="display: block; margin:auto; width:65%"}
 
 <details>
-
-
 <summary>\> show me the code</summary>
 
 ```r
@@ -1128,77 +1150,6 @@ head(witness_films)
 ```
 </details>
 
-
-<!-- ##  -->
-<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(IMDbId, -->
-<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
-<!-- mean(rating), sd_rating = sd(rating), num_ratings = n()) \|\> -->
-<!-- arrange(desc(sd_rating)) \|\> select(-IMDbId) -->
-
-<!-- polarizing_films -->
-
-<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(movieId, -->
-<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
-<!-- mean(rating), iqr_rating = IQR(rating), num_ratings = n()) \|\> -->
-<!-- arrange(desc(iqr_rating)) -->
-
-<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(movieId, -->
-<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
-<!-- mean(rating), var_rating = var(rating), num_ratings = n()) \|\> -->
-<!-- arrange(desc(var_rating)) -->
-
-<!-- <!-- KAGGLE --> -->
-
-<!-- movie_lens_and_IMDb_and_kaggle \<- movie_lens_and_IMDb \|\> -->
-<!-- inner_join(KAGGLE_DATA, join_by(tconst == IMDb_id)) -->
-
-<!-- movie_lens_and_IMDb_and_kaggle -->
-
-<!-- get_dollar_adjusted_value \<- function(budget, year){ return (budget \* -->
-<!-- cpi_named_vector\[as.character(2024)\]/cpi_named_vector\[as.character(year)\]) -->
-<!-- } -->
-
-<!-- votes_budget \<- movie_lens_and_IMDb_and_kaggle \|\> group_by(IMDbId, -->
-<!-- primaryTitle, budget, startYear, revenue) \|\> summarize(num_votes = -->
-<!-- n()) \|\> mutate(adjusted_budget = get_dollar_adjusted_value(budget, -->
-<!-- startYear), adjusted_profit = get_dollar_adjusted_value(revenue, -->
-<!-- startYear) - get_dollar_adjusted_value(budget, startYear) ) -->
-
-<!-- model_profit \<- -->
-<!-- lm(votes_budget$num_votes ~  votes_budget$adjusted_profit) -->
-
-<!-- reg_line \<- function(x_val, model){ return(coef(model)\[1\] + -->
-<!-- coef(model)\[2\] \* x_val) } -->
-
-<!-- votes_budget_profit \<- votes_budget \|\> mutate(popularity_over_profit -->
-<!-- = num_votes - reg_line(adjusted_profit, model_profit)) \|\> -->
-<!-- arrange(desc(popularity_over_profit)) -->
-
-<!-- <!-- why not working? --> -->
-
-<!-- ggplot(data = votes_budget_profit, aes(x = adjusted_profit, y = -->
-<!-- num_votes )) + geom_point(alpha = 0.1) + geom_smooth(method="lm", -->
-<!-- se=FALSE) -->
-
-<!-- model_budget \<- -->
-<!-- lm(votes_budget$num_votes ~  votes_budget$adjusted_budget) -->
-
-<!-- votes_budget_budget \<- votes_budget \|\> mutate(popularity_over_budget -->
-<!-- = num_votes - reg_line(adjusted_budget, model_profit)) \|\> -->
-<!-- arrange(desc(popularity_over_budget)) -->
-
-<!-- print(votes_budget_budget, n =100) -->
-
-<!-- <!-- expensive films --> -->
-
-<!-- votes_budget \|\> arrange(desc(adjusted_budget)) \|\> print(n = 100) -->
-
-<!-- top_500_polarizing_films \<- head(polarizing_films, 500) -->
-
-<!-- top_500_polarizing_films_w_budget \<- top_500_polarizing_films \|\> -->
-<!-- inner_join(KAGGLE_DATA, join_by(IMDbId == IMDb_id)) -->
-
-<!-- top_500_polarizing_films_w_budget -->
 
 ## Appendix A {#appendixA}
 
