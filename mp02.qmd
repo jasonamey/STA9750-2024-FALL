@@ -1126,9 +1126,9 @@ Searching for films identified as both `Romance` and `Thriller` and a fantastic 
 
 : Table: Films by Year and Film Score {.striped .hover}
 
-*Witness*(1985)! 
+**Witness (1985)**! 
 
-Witness' core themes of cultural clash, love, and justice are forever relevant. Exploring the tension between the modern world and an insular community like the Amish, especially in a world driven by technology and changing social norms, could truly resonate with contemporary audiences.
+**Witness**' core themes of cultural clash, love, and justice are forever relevant. Exploring the tension between the modern world and an insular community like the Amish, especially in a world driven by technology and changing social norms, could truly resonate with contemporary audiences.
 
 A modern remake could also offer new insights by exploring evolving dynamics between urban and rural life, highlighting current issues like surveillance, policing, or cultural identity.
 
