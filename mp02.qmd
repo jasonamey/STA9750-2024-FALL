@@ -557,7 +557,7 @@ happy_days_episodes_after_shark <- happy_days_episodes_ratings |>
 mean(happy_days_episodes_ratings_before_shark$averageRating)
 mean(happy_days_episodes_after_shark$averageRating)
 ```
-<details>
+</details>
 
 <!-- Season 5, episode 3 -->
 
