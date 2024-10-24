@@ -969,6 +969,8 @@ ggplot(wages, aes(x=X)) +
 ```
 </details>
 
+## Staring Who? Directed By?
+
 Let's try to identify two romantic, nervy leads to star in our film. 
 
 The top 2 look like a great choice! Can you believe they've never worked together! 
@@ -1102,6 +1104,8 @@ top_directors |>
 
 ```
 </details>
+
+## Witness (2024)
 
 In an attempt to cash in on the ongoing popularity of `Thriller`s mixed with the underexplored opportunity in `Romance` film productions, can we identify a **Romantic Thriller** to remake? Can we convince a studio to finance our project by resting on existing, tested IP? 
 
