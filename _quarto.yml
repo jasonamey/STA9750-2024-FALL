@@ -11,7 +11,10 @@ website:
     background: secondary
     search: false
   
-    
+include-in-header:
+  - text: |
+     <link rel = "shortcut icon" href = "images/favicon.ico" />
+  
 format:
   html:
     theme: cosmo
