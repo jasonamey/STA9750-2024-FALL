@@ -24,7 +24,7 @@ library(scales)
 ```
 
 
-Originating in the proto-Internet era of Usenet groups in the early 1990s, **The Internet Movie Database** (with its instantly recognizable acronym, **IMDb**) has evolved from a small hobbyist project into a global resource, deeply embedded in the fabric of popular culture. Originally started as a collaborative database by movie fans sharing information on films and, **IMDb** quickly became the go-to source for movie buffs, film industry professionals, trivia enthusiasts, and casual web surfers alike.
+Originating in the proto-Internet era of Usenet groups in the early 1990s, **The Internet Movie Database** (with its instantly recognizable acronym, **IMDb**) has evolved from a small hobbyist project into a global resource to a significant part of popular culture. Originally started as a collaborative database by movie fans sharing information on films and, **IMDb** has quickly become the go-to source for movie buffs, film industry professionals, trivia enthusiasts, and casual web surfers alike.
 
 With a dynamic catalog that collects not only motion pictures but also television, video games, and even web series, **IMDb** provides users with comprehensive information on cast, crew and reviews. **IMDb** stands as the the favorite resource for anyone engaged in the rich history of motion pictures. Today, it's not just a website, but a symbol of how the Internet has transformed how we both catalog, and enjoy the art of film. 
 
