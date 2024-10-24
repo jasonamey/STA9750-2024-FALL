@@ -465,7 +465,7 @@ tv_show_12_episodes_high_rating_titles <-
 
 ### Singular TV Episode rated highly
 
-One of the unfortunate legacies of **Star Wars** is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers despite audiences still crave innovative stories, strong performances and bold filmmaking. A big segment of the movie going audience exhausted by "blockbuster or bust" entertainment has shifted their attention back to smaller screens. 
+One of the unfortunate legacies of **Star Wars** is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers despite audiences still wanting innovative stories, strong performances and bold filmmaking. A big segment of this movie going audience exhausted by "blockbuster or bust" entertainment has shifted their attention back to smaller screens. 
 
 In the last 20 years with the rise of "prestige television" a good number of our greatest film creatives, who previously would've exclusively made movies, have turned their attention to television. In may ways, due to the inert, IP-focused model for modern movie development, a lot of the innovation we now see on screen happens in episodic television series. 
 
