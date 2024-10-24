@@ -465,13 +465,13 @@ tv_show_12_episodes_high_rating_titles <-
 
 ### Singular TV Episode rated highly
 
-One of the unfortunate legacies of **Star Wars** is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers In a audiences still crave innovative stories, strong performances and bold filmmaking. A big segment of the movie going audience exhausted by "blockbuster or bust" entertainment has shifted their attention back to smaller screens. 
+One of the unfortunate legacies of **Star Wars** is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers despite audiences still crave innovative stories, strong performances and bold filmmaking. A big segment of the movie going audience exhausted by "blockbuster or bust" entertainment has shifted their attention back to smaller screens. 
 
 In the last 20 years with the rise of "prestige television" a good number of our greatest film creatives, who previously would've exclusively made movies, have turned their attention to television. In may ways, due to the inert, IP-focused model for modern movie development, a lot of the innovation we now see on screen happens in episodic television series. 
 
-Few shows have capitalized on this change in the zeitgeist and cast as large of a cultural shadow as **Breaking Bad**. Vince Gilligan's storied show documenting the transformation of an ailing, beleagured chemistry teacher into the methamphetamine king of the American southwest. 
+Few shows have capitalized on this change in the zeitgeist and cast as large of a cultural shadow as **Breaking Bad**, Vince Gilligan's storied show documenting the transformation of an ailing, beleagured chemistry teacher into the methamphetamine king of the American southwest. 
 
-While **Breaking Bad** consistently met audience expectations, it achieved the enviable feat of building both critical and fan-approved momentum right through its final episodes. Yet no episode captured this phenomenon better than the show's antepenultimate installment, **Ozymandias** and the revies and sentiment in the **IMDb** database reflect this: 
+While **Breaking Bad** consistently met audience expectations, it achieved the enviable feat of building both critical and fan-approved momentum right through its final episodes. Yet no episode captured this phenomenon better than the show's antepenultimate installment, **Ozymandias** and both the reviews and sentiment in the **IMDb** database reflect this: 
 
 | Series Title | Episode Title | Year |
 |--------------|---------------|------|
@@ -501,9 +501,9 @@ episode_details |>
 
 Unfortunately not all shows can go out on top like **Breaking Bad**. 
 
-Many shows build an audience but eventually the creative well runs dray and end up disappointing fans. This common phenomenon of a show growing in stature and adulation, but eventually reaching a peak of popularity that ultimately turns into a downswing of audience disappointment. That is, the moment when a show's popularity peaks, and then dramaitically wanes as audiences lose interest after a shows' writers cross a line with a ridiculous gimmick, plot contrivance or unbelievable absurdity. 
+Many shows build an audience but eventually the creative well runs dry and end up disappointing fans. This common phenomenon of a show growing in stature and adulation, but eventually reaching a peak of popularity that ultimately turns into a downswing of audience disappointment. That is, the moment when a show's popularity peaks, and then dramaitically wanes as audiences lose interest after a shows' writers cross a line with a ridiculous gimmick, plot contrivance or unbelievable absurdity. 
 
-This pivotal moment in a show's trajectory has been identified as "jumping the shark" and it's named after a famous episode of the 1950s nostalgia sitcom **Happy Days** when its iconic character "The Fonze" waterski-jumped over an actual shark. **Happy Days**  
+This pivotal moment in a show's trajectory has been identified as "jumping the shark" and it's named after a famous episode of the 1950s nostalgia sitcom **Happy Days** when its iconic character "The Fonze" waterski-jumped over an actual shark.  
 
 **Happy Days** is now arguably known for this meta-moment in pop culture than its many years of success. But is this fair? Did **Happy Days** "jump the shark"? Does this silly episode in fact represent the famed turning point for **Happy Days** fortunes as the culture now believes? 
 
@@ -636,7 +636,7 @@ as useless unless the numbers are controlled in constant dollars. To correct for
 
 $\text{Box Office Adjusted in 2024 Dollars} = \text{Box Office} \times \frac{\text{Consumer Price Index 2024}}{\text{Consumer Price Index Historical Year}}$
 
-It's always interesting to view films ranked by adjust box office figures : 
+It's always interesting to view films ranked by adjusted box office figures : 
 
 | Primary Title                                    | Start Year| Adjusted Box Office      |
 |--------------------------------------------------|-----------|--------------------------|
