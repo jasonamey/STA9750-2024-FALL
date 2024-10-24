@@ -38,7 +38,7 @@ A](#appendixA).
 
 
 
-### How many green lights have been granted in Hollywood?
+### How Many Green Lights Have Been Granted in Hollywood?
 
 The "**M**" in the moniker obviously denotes "movie" and there are indeed
 `131,890` traditional "movies" in **IMDb**. However, many take a different
@@ -88,7 +88,7 @@ does **IMDb** collect? What else is in the database?
 ![](images/mp-02/1_media_types_counts.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 I suspect the collection of `videoGames` will prove increasingly
-important as this media form grows in cultural influence. Video games are also serving as a the growing source of IP and inspiration, witnessed in recent successes like television's *The Last of Us* and in theaters last year's (`2023`) *5 Nights at Freddy's* and *Super Mario Brothers* for convincing examples of their growing influence on film culture. 
+important as this media form grows in cultural influence. Video games are also serving as a the growing source of IP and inspiration, witnessed in recent successes like television's **The Last of Us** and in theaters last year's (`2023`) **5 Nights at Freddy's** and **Super Mario Brothers** for convincing examples of their growing influence on film culture. 
 
 <details>
 
@@ -246,7 +246,7 @@ in this data set:
 
 : What a great find! {.striped .hover}
 
-**Mel Brooks** is a singular lion of comedy history responsible for some of the greatest comedic films over the past 40 - 50 years. He also experienced a noteworthy second act as a Broadway producer with his early 2000s theatrical production of *The Producers* a timely film of his that lampoons how dark attidues on fascism never seem to fall out of faver. **Mel Brooks** is a fitting talent to identify as the dataset's oldest talent. 
+**Mel Brooks** is a singular lion of comedy history responsible for some of the greatest comedic films over the past 40 - 50 years. He also experienced a noteworthy second act as a Broadway producer with his early 2000s theatrical production of **The Producers** a timely film of his that lampoons how dark attidues on fascism never seem to fall out of faver. **Mel Brooks** is a fitting talent to identify as the dataset's oldest talent. 
 
 <details>
 
@@ -321,15 +321,15 @@ names_in_many_big_productions |>
 
 ### Star Wars and Mark Hamill
 
-With over $`10.3` billion in box office across all 9 of it’s main, episodic features, there arguable is no franchise that has loomed larger over the recent history of film than Star Wars. For some, Star Wars represents the critical turning point when movies forever became major cultural events, meant to wow, awe and captivate the film-going audience. With its fantastical promotion of technologically innovative special effects, edge-of-your-seat action both grounded in dramatic, escapist storytelling, Star Wars effectively created the template for the modern summer blockbuster.
+With over $`10.3` billion in box office across all 9 of it’s main, episodic features, there arguable is no franchise that has loomed larger over the recent history of film than Star Wars. For some, **Star Wars** represents the critical turning point when movies forever became major cultural events, meant to wow, awe and captivate the film-going audience. With its fantastical promotion of technologically innovative special effects, edge-of-your-seat action both grounded in dramatic, escapist storytelling, **Star Wars** effectively created the template for the modern summer blockbuster.
 
-Despite its release more than 40 years ago, Star Wars continues to loom large over the popular imagination as current rights holder Disney maintains ambitious plans to push its stories and its characters into galaxies far, far away.
+Despite its release more than 40 years ago, **Star Wars** continues to loom large over the popular imagination as current rights holder Disney maintains ambitious plans to push its stories and its characters into galaxies far, far away.
 
-Did the hero of Star Wars break free from the monumental legacy of such an iconic franchise, or has he forever been bound to the role of Luke Skywalker, overshadowing the rest of his career?
+Did the hero of **Star Wars** break free from the monumental legacy of such an iconic franchise, or has he forever been bound to the role of Luke Skywalker, overshadowing the rest of his career?
 
-Voice acting and *Corvette Summer* (1978) notwitstanding, it looks like Hamill will always be known as Luke Skywalker: 
+Voice acting and **Corvette Summer (1978)** notwitstanding, it looks like Hamill will always be known as Luke Skywalker: 
 
-| primaryName | primaryTitle                                   | startYear |
+| Primary Name | Primary Title                                   | Start Year |
 |-------------|------------------------------------------------|-----------|
 | Mark Hamill | Star Wars: Episode IV - A New Hope             | 1977      |
 | Mark Hamill | Star Wars: Episode V - The Empire Strikes Back | 1980      |
@@ -362,7 +362,7 @@ Swtiching galaxies to Television, suppose we wanted to identify popular televisi
 
 This is really unsatisfactory:
 
-| parentTconst | primaryTitle                          | average_rating_for_series |
+| parentTconst | Primary Title                          | Average Rating For Series |
 |-------------------|-------------------------------|----------------------|
 | tt0409579    | Made                                  | 10                        |
 | tt11289784   | Unus Annus                            | 10                        |
@@ -385,7 +385,7 @@ Discounting the disotrting effect of few people voting on a television
 program, we'll settle on the the top 10% most popular shows, Admittedly
 this may miss out on underrecognized, cult programs.
 
-| parentTconst | primaryTitle       | average_rating_for_series |
+| parentTconst | Primary Title       | Average Rating for Series |
 |--------------|--------------------|---------------------------|
 | tt2560140    | Attack on Titan    | 9.02                      |
 | tt0903747    | Breaking Bad       | 8.96                      |
@@ -465,7 +465,7 @@ tv_show_12_episodes_high_rating_titles <-
 
 ### Singular TV Episode rated highly
 
-One of the unfortunate legacies of Star Wars is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers In a audiences still crave innovative stories, strong performances and bold filmmaking. A big segment of the movie going audience exhausted by "blockbuster or bust" entertainment has shifted their attention back to smaller screens. 
+One of the unfortunate legacies of **Star Wars** is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers In a audiences still crave innovative stories, strong performances and bold filmmaking. A big segment of the movie going audience exhausted by "blockbuster or bust" entertainment has shifted their attention back to smaller screens. 
 
 In the last 20 years with the rise of "prestige television" a good number of our greatest film creatives, who previously would've exclusively made movies, have turned their attention to television. In may ways, due to the inert, IP-focused model for modern movie development, a lot of the innovation we now see on screen happens in episodic television series. 
 
@@ -557,7 +557,6 @@ happy_days_episodes_after_shark <- happy_days_episodes_ratings |>
 mean(happy_days_episodes_ratings_before_shark$averageRating)
 mean(happy_days_episodes_after_shark$averageRating)
 ```
-
 <details>
 
 <!-- Season 5, episode 3 -->
@@ -625,7 +624,6 @@ $$
 
 : Table: Movies with Low Film Scores {.striped .hover}
 
-
 Movie Box Office is reported in several popular, widely available media outlets
 and box office data is the type of low-stakes, hobby-friendly metrics
 that Internet-curated resources like [Kaggle](https://www.kaggle.com/) are uniquely suited for. To check the box office returns of the Total Score
@@ -676,7 +674,7 @@ Here now is our data with our box office figures. This table suggests Film Score
 : Table: Top 10 Movies by Film Score and Adjusted Box Office {.striped .hover}
 
 
-While The Shawshank Redemption looks like a 
+While **The Shawshank Redemption** looks like a 
 "failure" here, it famously more than made up for its lackluster Box Office returns in [DVD sales, cable television licensing and streaming agreements](https://www.slashfilm.com/1670564/the-shawshank-redemption-box-office-flop-30-years-ago/):
 
 >"It's an incredible moneymaking asset that continues to resonate with viewers," said Jeff Baker, 
@@ -684,7 +682,7 @@ While The Shawshank Redemption looks like a
 >theatrical catalog, in that Wall Street Journal piece. "Shawshank" is one of the best performers 
 >in the studio's library, in no small part thanks to strong DVD/Blu-ray sales, not to mention streaming
 
-Does `Film Score` work in reverse? Does it correctly identify "bad" movies? 
+Does `film_score` work in reverse? Does it correctly identify "bad" movies? 
 
 Filtering for films that are in the top `80%` of movies voted on, and sorting on `film_score` yields some truly terrible films:
 
@@ -704,7 +702,7 @@ Filtering for films that are in the top `80%` of movies voted on, and sorting on
 : Table: Movies with Moderate Film Scores and Adjusted Box Office {.striped .hover}
 
 How about examining a prominent director? Is there any direcor more prominent than Steven Spielberg? 
-Querying for `film_score`, we find Steven Spielberg's films score : 
+Querying for `film_score`, we find **Steven Spielberg**'s films score : 
 
 ```r
 [1] 88.5889
@@ -714,17 +712,17 @@ Even including *Indiana Jones and the Kingdom of the Crystal Skull (2008)*, *The
 
 How does another director compare to Steven Spielberg? 
 
-Direcor Uwe Boll is famous for being a critically reviled filmmaker.  He's actually known as ["The Worst Director in the World"](https://www.vice.com/en/article/the-worst-director-in-the-world/). 
+Direcor **Uwe Boll** is famous for being a critically reviled filmmaker.  He's actually known as ["The Worst Director in the World"](https://www.vice.com/en/article/the-worst-director-in-the-world/). 
 
 Does `film_score` correctly identify Uwe Boll's filmography as not-Spielbergian?  
 
-It certainly does. Here is the collective `film_score` rating of all Uwe Boll films: 
+It certainly does. Here is the collective `film_score` rating of all **Uwe Boll** films: 
 
 ```r
 [1] 14.53452
 ```
 
-To identify a `film_score` cut-off, I exported the data into a spread sheet for ease of viewing. I scrolled through the films assessing the quality of the neighboring films until I started to identify a good number of forgettable films. I used the entirely scientific process of scanning this list until I reached the point of "I really don't see many good films below this number." I found a fitting threshold with *Indiana Jones and the Kingdom of the Crystal Skull (2008)*. 
+To identify a `film_score` cut-off, I exported the data into a spread sheet for ease of viewing. I scrolled through the films assessing the quality of the neighboring films until I started to identify a good number of forgettable films. I used the entirely scientific process of scanning this list until I reached the point of "I really don't see many good films below this number." I found a fitting threshold with **Indiana Jones and the Kingdom of the Crystal Skull (2008)**. 
 
 I'm going to settle on `77.46` as the `film_score` threshold dividing "good movie" from "bad movie":
 
@@ -741,8 +739,6 @@ quantile(TITLE_RATINGS$numVotes, probs=seq(0,1,0.05))
 # Filtering those films accordingly 
 filtered_title_ratings <- TITLE_RATINGS |> 
   filter(numVotes > 3335)
-
-
 
 # Finding the standard deviations and mean for ratings and votes
 SD_RATING <- sd(filtered_title_ratings$averageRating)
@@ -761,7 +757,6 @@ films_scores <- filtered_title_ratings |>
   ) |>
   mutate(total_score = 2 * rating_score + votes_score) |>
   arrange(desc(total_score)) 
-
 
 # Re-calculating the standard deviations for total_score
 SD_SCORE <- sd(films_scores$total_score)
@@ -884,7 +879,7 @@ Is the rise in the `Thriller` genre in recent years commenting at all on our col
 
 But while the popularity of `Thriller`s are not in doubt, what has become of the `Romance` movie? 
 
-Considering the recent box office succes *Anyone But You* (2023) is Hollywood narrow-mindedly avoiding romance movies and with it, is Hollywood neglecting women audiences?  
+Considering the recent box office succes **Anyone But You (2023)** is Hollywood narrow-mindedly avoiding romance movies and with it, is Hollywood neglecting women audiences?  
 
 If you were to survey wage trends from the **Bureau of Labor Statistics**, there exists an unmistakable upward trend in women's wages that does not appear likely to receed. What's more, over a few decades time, women's wages continue to make inroads in narrowing the stubborn income gap with men. 
 
@@ -1046,14 +1041,16 @@ Hm.
 
 It's arguably a bold choice to get the Wachowski's to direct our project.
 
-...once we pick a film we'll decide if they're appropriate or not, but what is going on with the gender disparities in Hollywood? 
+...once we pick a film we'll decide if they're appropriate or not, but what is going on with the gender disparities in Hollywood?!?! 
+
+By my `film_score` metric, men are noticeably more represented than women. 
+
+I believe this is a market inefficiency and we should seek to develop more women-centered entertainment... 
 
 ![](images/mp-02/movie_count_film_score_gender.jpeg){}
 
 <details>
 <summary>\> show the code</summary>
-
-By my `film_score` metric, men are clearly more represented than women. 
 
 ```r
 
