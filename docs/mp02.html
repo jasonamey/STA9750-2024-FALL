@@ -462,43 +462,12 @@ tvMovie     The Day After   1983</code></pre>
 
 </details>
 </section>
-<section id="singular-tv-episode-rated-highly" class="level3">
-<h3 class="anchored" data-anchor-id="singular-tv-episode-rated-highly">Singular TV Episode rated highly</h3>
-<table class="table-striped table-hover caption-top table">
-<caption>Hank!</caption>
-<thead>
-<tr class="header">
-<th>series_title</th>
-<th>episode_title</th>
-<th>year</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Breaking Bad</td>
-<td>Ozymandias</td>
-<td>2013</td>
-</tr>
-</tbody>
-</table>
-<details>
-<summary>
-&gt; show the code
-</summary>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>top_episodes <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(averageRating <span class="sc">==</span> <span class="dv">10</span> <span class="sc">&amp;</span> numVotes <span class="sc">&gt;=</span> <span class="dv">200000</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>episode_details <span class="ot">&lt;-</span> top_episodes <span class="sc">|&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_EPISODES, <span class="at">by =</span> <span class="st">"tconst"</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>episode_details <span class="sc">|&gt;</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(<span class="st">"parentTconst"</span> <span class="sc">==</span> <span class="st">"tconst"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">series_title =</span> primaryTitle.y, <span class="at">episode_title =</span> primaryTitle.x, <span class="at">year =</span> startYear.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</section>
 <section id="star-wars-and-mark-hamill" class="level3">
 <h3 class="anchored" data-anchor-id="star-wars-and-mark-hamill">Star Wars and Mark Hamill</h3>
+<p>With over $<code>10.3</code> billion in box office across all 9 of it’s main, episodic features, there arguable is no franchise that has loomed larger over the recent history of film than Star Wars. For some, Star Wars represents the critical turning point when movies forever became major cultural events, meant to wow, awe and captivate the film-going audience. With its fantastical promotion of technologically innovative special effects, edge-of-your-seat action both grounded in dramatic, escapist storytelling, Star Wars effectively created the template for the modern summer blockbuster.</p>
+<p>Despite its release more than 40 years ago, Star Wars continues to loom large over the popular imagination as current rights holder Disney maintains ambitious plans to push its stories and its characters into galaxies far, far away.</p>
+<p>Did the hero of Star Wars break free from the monumental legacy of such an iconic franchise, or has he forever been bound to the role of Luke Skywalker, overshadowing the rest of his career?</p>
+<p>Voice acting and <em>Corvette Summer</em> (1978) notwitstanding, it looks like Hamill will always be known as Luke Skywalker:</p>
 <table class="table-striped table-hover caption-top table">
 <caption>Data for Mark Hamill’s Star Wars Movies</caption>
 <colgroup>
@@ -540,22 +509,19 @@ tvMovie     The Day After   1983</code></pre>
 <summary>
 &gt; show the code
 </summary>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mark_hamil_popular_works_IDs <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Mark Hamill"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(knownForTitles, <span class="at">sep =</span><span class="st">","</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>mark_hamil_popular_works_IDs <span class="sc">|&gt;</span> </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"knownForTitles"</span> <span class="ot">=</span> <span class="st">"tconst"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, primaryTitle, startYear) <span class="sc">|&gt;</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(startYear)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mark_hamil_popular_works_IDs <span class="ot">&lt;-</span> NAME_BASICS <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(primaryName <span class="sc">==</span> <span class="st">"Mark Hamill"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(knownForTitles, <span class="at">sep =</span><span class="st">","</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>mark_hamil_popular_works_IDs <span class="sc">|&gt;</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"knownForTitles"</span> <span class="ot">=</span> <span class="st">"tconst"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(primaryName, primaryTitle, startYear) <span class="sc">|&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(startYear)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<!-- find parent episode -->
-<!-- find all titles a person is involved with -->
-<!-- assess this individual's career -->
-<!-- 5 what television show with more than 12 episodes has the highest rating? -->
 </section>
 <section id="what-television-show-with-at-least-12-episodes-has-the-highest-average-rating" class="level3">
 <h3 class="anchored" data-anchor-id="what-television-show-with-at-least-12-episodes-has-the-highest-average-rating">What Television Show with at least 12 episodes has the highest average rating?</h3>
+<p>Swtiching galaxies to Television, suppose we wanted to identify popular television series? Say, a series with at least 12 episodes?</p>
 <p>This is really unsatisfactory:</p>
 <table class="table-striped table-hover caption-top table">
 <caption>Data for TV Series and Their Average Ratings</caption>
@@ -628,7 +594,7 @@ tvMovie     The Day After   1983</code></pre>
 <p><img src="images/mp-02/2_quantile_breakdown_of_num_of_votes.jpeg" class="img-fluid" style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
 <p>Discounting the disotrting effect of few people voting on a television program, we’ll settle on the the top 10% most popular shows, Admittedly this may miss out on underrecognized, cult programs.</p>
 <table class="table-striped table-hover caption-top table">
-<caption>I had never heard of Attack on Titan. The Internet loves Anime. </caption>
+<caption>The Internet loves Anime. </caption>
 <thead>
 <tr class="header">
 <th>parentTconst</th>
@@ -693,73 +659,115 @@ tvMovie     The Day After   1983</code></pre>
 <summary>
 &gt; show the code
 </summary>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group television shows by their parents</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes <span class="ot">&lt;-</span> </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  TITLE_EPISODES <span class="sc">|&gt;</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst) <span class="sc">|&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">numberOfEpisodes =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span>  </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(numberOfEpisodes <span class="sc">&gt;</span> <span class="dv">12</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(numberOfEpisodes))</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify the popular series by averaging the ratings of all episodes</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_ID <span class="ot">&lt;-</span> </span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes <span class="sc">|&gt;</span> </span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_RATINGS, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>seasonNumber, <span class="sc">-</span>episodeNumber, <span class="sc">-</span>tconst) <span class="sc">|&gt;</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst) <span class="sc">|&gt;</span> </span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">average_rating_for_series =</span> <span class="fu">mean</span>(averageRating), <span class="at">total_votes =</span> <span class="fu">sum</span>(numVotes))</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Join our working list with the master Title list to identify the series</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) </span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Investigate the name of the most popular shows</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles <span class="ot">&lt;-</span> </span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst, primaryTitle) <span class="sc">|&gt;</span>  </span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_rating_for_series =</span> <span class="fu">first</span>(average_rating_for_series), <span class="at">.groups =</span> <span class="st">'drop'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(average_rating_for_series))  </span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="co"># This yielded unsatisfactory, unidentifiable series, let's try to limit by quantile</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(tv_show_12_episodes_high_rating_ID<span class="sc">$</span>total_votes, <span class="at">prob =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,.<span class="dv">1</span>))</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph used to visualize the quantiles</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(quantile_data, <span class="fu">aes</span>(<span class="at">x =</span> quantile, <span class="at">y =</span> votes, <span class="at">fill =</span> quantile)) <span class="sc">+</span> </span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set3"</span>) <span class="sc">+</span>  </span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Quantile Breakdown of Number of Votes"</span>, </span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Percentage of Shows Receiving Votes"</span>, </span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Votes"</span>) <span class="sc">+</span></span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">scale_cut =</span> <span class="fu">cut_short_scale</span>())) <span class="sc">+</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,  <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))  </span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Investegating the top 10% of shows </span></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles <span class="ot">&lt;-</span> </span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(total_votes <span class="sc">&gt;</span> <span class="dv">327732</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst, primaryTitle) <span class="sc">|&gt;</span>  </span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_rating_for_series =</span> <span class="fu">first</span>(average_rating_for_series), <span class="at">.groups =</span> <span class="st">'drop'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(average_rating_for_series)) <span class="sc">|&gt;</span></span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> average_rating_for_series, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Group television shows by their parents</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes <span class="ot">&lt;-</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  TITLE_EPISODES <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst) <span class="sc">|&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">numberOfEpisodes =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(numberOfEpisodes <span class="sc">&gt;</span> <span class="dv">12</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(numberOfEpisodes))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify the popular series by averaging the ratings of all episodes</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_ID <span class="ot">&lt;-</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes <span class="sc">|&gt;</span> </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_RATINGS, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>seasonNumber, <span class="sc">-</span>episodeNumber, <span class="sc">-</span>tconst) <span class="sc">|&gt;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst) <span class="sc">|&gt;</span> </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">average_rating_for_series =</span> <span class="fu">mean</span>(averageRating), <span class="at">total_votes =</span> <span class="fu">sum</span>(numVotes))</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Join our working list with the master Title list to identify the series</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) </span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Investigate the name of the most popular shows</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles <span class="ot">&lt;-</span> </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst, primaryTitle) <span class="sc">|&gt;</span>  </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_rating_for_series =</span> <span class="fu">first</span>(average_rating_for_series), <span class="at">.groups =</span> <span class="st">'drop'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(average_rating_for_series))  </span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co"># This yielded unsatisfactory, unidentifiable series, let's try to limit by quantile</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(tv_show_12_episodes_high_rating_ID<span class="sc">$</span>total_votes, <span class="at">prob =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,.<span class="dv">1</span>))</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Graph used to visualize the quantiles</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(quantile_data, <span class="fu">aes</span>(<span class="at">x =</span> quantile, <span class="at">y =</span> votes, <span class="at">fill =</span> quantile)) <span class="sc">+</span> </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set3"</span>) <span class="sc">+</span>  </span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Quantile Breakdown of Number of Votes"</span>, </span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Percentage of Shows Receiving Votes"</span>, </span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Votes"</span>) <span class="sc">+</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">scale_cut =</span> <span class="fu">cut_short_scale</span>())) <span class="sc">+</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,  <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))  </span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Investegating the top 10% of shows </span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>tv_show_12_episodes_high_rating_titles <span class="ot">&lt;-</span> </span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  tv_show_12_episodes_high_rating_ID <span class="sc">|&gt;</span> </span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(parentTconst <span class="sc">==</span> tconst)) <span class="sc">|&gt;</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(total_votes <span class="sc">&gt;</span> <span class="dv">327732</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(parentTconst, primaryTitle) <span class="sc">|&gt;</span>  </span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_rating_for_series =</span> <span class="fu">first</span>(average_rating_for_series), <span class="at">.groups =</span> <span class="st">'drop'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(average_rating_for_series)) <span class="sc">|&gt;</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> average_rating_for_series, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<!-- The TV series Happy Days (1974-1984) gives us the common idiom “jump the shark”. The phrase comes from a controversial fifth season episode (aired in 1977) in which a lead character literally jumped over a shark on water skis. Idiomatically, it is used to refer to the moment when a once-great show becomes ridiculous and rapidly looses quality. -->
+</section>
+<section id="singular-tv-episode-rated-highly" class="level3">
+<h3 class="anchored" data-anchor-id="singular-tv-episode-rated-highly">Singular TV Episode rated highly</h3>
+<p>One of the unfortunate legacies of Star Wars is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers In a audiences still crave innovative stories, strong performances and bold filmmaking. A big segment of the movie going audience exhausted by “blockbuster or bust” entertainment has shifted their attention back to smaller screens.</p>
+<p>In the last 20 years with the rise of “prestige television” a good number of our greatest film creatives, who previously would’ve exclusively made movies, have turned their attention to television. In may ways, due to the inert, IP-focused model for modern movie development, a lot of the innovation we now see on screen happens in episodic television series.</p>
+<p>Few shows have capitalized on this change in the zeitgeist and cast as large of a cultural shadow as <strong>Breaking Bad</strong>. Vince Gilligan’s storied show documenting the transformation of an ailing, beleagured chemistry teacher into the methamphetamine king of the American southwest.</p>
+<p>While <strong>Breaking Bad</strong> consistently met audience expectations, it achieved the enviable feat of building both critical and fan-approved momentum right through its final episodes. Yet no episode captured this phenomenon better than the show’s antepenultimate installment, <strong>Ozymandias</strong> and the revies and sentiment in the <strong>IMDb</strong> database reflect this:</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Hank!</caption>
+<thead>
+<tr class="header">
+<th>Series Title</th>
+<th>Episode Title</th>
+<th>Year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Breaking Bad</td>
+<td>Ozymandias</td>
+<td>2013</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>
+&gt; show the code
+</summary>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>top_episodes <span class="ot">&lt;-</span> TITLE_RATINGS <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(averageRating <span class="sc">==</span> <span class="dv">10</span> <span class="sc">&amp;</span> numVotes <span class="sc">&gt;=</span> <span class="dv">200000</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>episode_details <span class="ot">&lt;-</span> top_episodes <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_EPISODES, <span class="at">by =</span> <span class="st">"tconst"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>episode_details <span class="sc">|&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(TITLE_BASICS, <span class="fu">join_by</span>(<span class="st">"parentTconst"</span> <span class="sc">==</span> <span class="st">"tconst"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">series_title =</span> primaryTitle.y, <span class="at">episode_title =</span> primaryTitle.x, <span class="at">year =</span> startYear.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </section>
 <section id="jump-the-shark-with-happy-days" class="level3">
 <h3 class="anchored" data-anchor-id="jump-the-shark-with-happy-days">Jump the Shark with Happy Days</h3>
+<p>Unfortunately not all shows can go out on top like <strong>Breaking Bad</strong>.</p>
+<p>Many shows build an audience but eventually the creative well runs dray and end up disappointing fans. This common phenomenon of a show growing in stature and adulation, but eventually reaching a peak of popularity that ultimately turns into a downswing of audience disappointment. That is, the moment when a show’s popularity peaks, and then dramaitically wanes as audiences lose interest after a shows’ writers cross a line with a ridiculous gimmick, plot contrivance or unbelievable absurdity.</p>
+<p>This pivotal moment in a show’s trajectory has been identified as “jumping the shark” and it’s named after a famous episode of the 1950s nostalgia sitcom <strong>Happy Days</strong> when its iconic character “The Fonze” waterski-jumped over an actual shark. <strong>Happy Days</strong></p>
+<p><strong>Happy Days</strong> is now arguably known for this meta-moment in pop culture than its many years of success. But is this fair? Did <strong>Happy Days</strong> “jump the shark”? Does this silly episode in fact represent the famed turning point for <strong>Happy Days</strong> fortunes as the culture now believes?</p>
 <p>Wikipedia suggests the famous “jumping the shark” episode from Happy Days happened episode <code>3</code> season <code>5</code>.</p>
-<p>After we identify all the episdoes of Happy Days in our <strong>IMDb</strong> data we create two sets of data filtered around the pivot point of season <code>5</code> episode <code>3</code> : <strong>before shark</strong> and <strong>after shark</strong>.</p>
+<p>After we identify all the episdoes of <strong>Happy Days</strong> in our <strong>IMDb</strong> data we create two sets of data filtered around the pivot point of season <code>5</code> episode <code>3</code> : <strong>before shark</strong> and <strong>after shark</strong>.</p>
 <p>Performing calculations on these two sets we see:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">mean</span>(happy_days_episodes_ratings_before_shark<span class="sc">$</span>averageRating)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">7.484404</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">mean</span>(happy_days_episodes_after_shark<span class="sc">$</span>averageRating)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">6.878571</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Happy Days did, in fact, jump its own proverbial shark.</p>
+<p>It look like “yes” <strong>Happy Days</strong> did, in fact, jump its own proverbial shark.</p>
 <details>
 <summary>
 &gt; show the code
@@ -1410,9 +1418,8 @@ tvMovie     The Day After   1983</code></pre>
 <span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<p>Here is an image detailing gender disparities in Hollywood.</p>
-<p><img src="images/mp-02/movie_count_film_score_gender.jpeg" class="img-fluid"></p>
-<p>Here is me looking for actors who have been in prominent films. The top 2 look like a great choice!</p>
+<p>Let’s try to identify two romantic, nervy leads to star in our film.</p>
+<p>The top 2 look like a great choice! Can you believe they’ve never worked together!</p>
 <table class="table-striped table-hover caption-top table">
 <caption>Table: Actors and Actresses by Age and Movie Count</caption>
 <thead>
@@ -1486,6 +1493,163 @@ tvMovie     The Day After   1983</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Can we identify a top woman director to helm our production?</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Directors and Their Awards Count</caption>
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>Name</th>
+<th>Profession</th>
+<th>Age</th>
+<th>Awards</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>nm0000229</td>
+<td>Steven Spielberg</td>
+<td>director</td>
+<td>78</td>
+<td>28</td>
+</tr>
+<tr class="even">
+<td>nm0001054</td>
+<td>Joel Coen</td>
+<td>director</td>
+<td>70</td>
+<td>15</td>
+</tr>
+<tr class="odd">
+<td>nm0000165</td>
+<td>Ron Howard</td>
+<td>director</td>
+<td>70</td>
+<td>14</td>
+</tr>
+<tr class="even">
+<td>nm0000318</td>
+<td>Tim Burton</td>
+<td>director</td>
+<td>66</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td>nm0000709</td>
+<td>Robert Zemeckis</td>
+<td>director</td>
+<td>72</td>
+<td>13</td>
+</tr>
+<tr class="even">
+<td>nm0001392</td>
+<td>Peter Jackson</td>
+<td>director</td>
+<td>63</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>nm0005363</td>
+<td>Guy Ritchie</td>
+<td>director</td>
+<td>56</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td>nm0000231</td>
+<td>Oliver Stone</td>
+<td>director</td>
+<td>78</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>nm0868219</td>
+<td>Guillermo del Toro</td>
+<td>director</td>
+<td>60</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>nm0000116</td>
+<td>James Cameron</td>
+<td>director</td>
+<td>70</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>nm0000600</td>
+<td>Sam Raimi</td>
+<td>director</td>
+<td>65</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td>nm0000881</td>
+<td>Michael Bay</td>
+<td>director</td>
+<td>59</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>nm0001675</td>
+<td>Robert Rodriguez</td>
+<td>director</td>
+<td>56</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>nm0080220</td>
+<td>Sanjay Leela Bhansali</td>
+<td>director</td>
+<td>61</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>nm0570912</td>
+<td>Adam McKay</td>
+<td>director</td>
+<td>56</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>nm0000416</td>
+<td>Terry Gilliam</td>
+<td>director</td>
+<td>84</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>nm0000568</td>
+<td>Frank Oz</td>
+<td>director</td>
+<td>80</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>nm0000916</td>
+<td>Peter Berg</td>
+<td>director</td>
+<td>60</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td>nm0001053</td>
+<td>Ethan Coen</td>
+<td>director</td>
+<td>67</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>nm0094435</td>
+<td>Bong Joon Ho</td>
+<td>director</td>
+<td>55</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>(…it goes on like this)</p>
+<p>Ok, exaclty who <em>are</em> the women in our top directors table?</p>
 <p>Top Women Directors:</p>
 <table class="table-striped table-hover caption-top table">
 <caption>Table: Top Women Directors by Movie Count</caption>
@@ -1560,135 +1724,64 @@ tvMovie     The Day After   1983</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Jordan Peele looks like a great choice…</p>
-<table class="table-striped table-hover caption-top table">
-<caption>Table: Directors by Age and Movie Count</caption>
-<thead>
-<tr class="header">
-<th>Primary Name</th>
-<th>Category</th>
-<th>Age</th>
-<th>Movie Count</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Benny Safdie</td>
-<td>Director</td>
-<td>38</td>
-<td>2</td>
-</tr>
-<tr class="even">
-<td>John Francis Daley</td>
-<td>Director</td>
-<td>39</td>
-<td>2</td>
-</tr>
-<tr class="odd">
-<td>Olivia Wilde</td>
-<td>Director</td>
-<td>40</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>Seth Rogen</td>
-<td>Director</td>
-<td>42</td>
-<td>2</td>
-</tr>
-<tr class="odd">
-<td>Evan Goldberg</td>
-<td>Director</td>
-<td>42</td>
-<td>2</td>
-</tr>
-<tr class="even">
-<td>Joseph Gordon-Levitt</td>
-<td>Director</td>
-<td>43</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>Fran Kranz</td>
-<td>Director</td>
-<td>43</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>Jordan Peele</td>
-<td>Director</td>
-<td>45</td>
-<td>3</td>
-</tr>
-<tr class="odd">
-<td>John Krasinski</td>
-<td>Director</td>
-<td>45</td>
-<td>2</td>
-</tr>
-<tr class="even">
-<td>Mert Baykal</td>
-<td>Director</td>
-<td>45</td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
+<p>Hm.</p>
+<p>It’s arguably a bold choice to get the Wachowski’s to direct our project.</p>
+<p>…once we pick a film we’ll decide if they’re appropriate or not, but what is going on with the gender disparities in Hollywood?</p>
+<p><img src="images/mp-02/movie_count_film_score_gender.jpeg" class="img-fluid"></p>
 <details>
 <summary>
 &gt; show the code
 </summary>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>top_movies <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(film_score <span class="sc">&gt;</span> <span class="fl">77.46</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<p>By my <code>film_score</code> metric, men are clearly more represented than women.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter on all films that meet my 77.46 film score threshold</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>top_movies <span class="ot">&lt;-</span> films_scores <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(film_score <span class="sc">&gt;</span> <span class="fl">77.46</span>)</span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>talent <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> top_movies<span class="sc">$</span>tconst, category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"actor"</span>, <span class="st">"actress"</span>, <span class="st">"director"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(names_in_many_big_productions, <span class="at">by =</span> <span class="st">"nconst"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(films_scores, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst, primaryName, category, age) <span class="sc">|&gt;</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">movie_count =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(movie_count))</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>talent_again <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> top_movies<span class="sc">$</span>tconst, category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"actor"</span>, <span class="st">"actress"</span>, <span class="st">"director"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(names_in_many_big_productions, <span class="at">by =</span> <span class="st">"nconst"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(films_scores, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst, primaryName, category, age) <span class="sc">|&gt;</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">movie_count =</span> <span class="fu">n</span>(), <span class="at">mean_film_score =</span> <span class="fu">mean</span>(film_score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(movie_count))</span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>top_actors <span class="ot">&lt;-</span> talent_again <span class="sc">|&gt;</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"actor"</span>, <span class="st">"actress"</span>), age <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">45</span> <span class="sc">&amp;</span> movie_count <span class="sc">&gt;</span> <span class="dv">4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean_film_score))</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>actors_summary <span class="ot">&lt;-</span> top_actors <span class="sc">|&gt;</span> </span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(category) <span class="sc">|&gt;</span> </span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_movie =</span> <span class="fu">sum</span>(movie_count), <span class="at">number_of_performers =</span> <span class="fu">n</span>(), <span class="at">score =</span> <span class="fu">mean</span>(mean_film_score))</span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(top_actors)</span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_actors, <span class="fu">aes</span>(<span class="at">x =</span> mean_film_score, <span class="at">fill =</span> category)) <span class="sc">+</span></span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Density of Mean Film Scores by Gender"</span>, <span class="at">x =</span> <span class="st">"Mean Film Score"</span>, <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span></span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_actors, <span class="fu">aes</span>(<span class="at">x =</span> movie_count, <span class="at">y =</span> mean_film_score, <span class="at">color =</span> category)) <span class="sc">+</span></span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Movie Count vs. Mean Film Score by Gender"</span>, <span class="at">x =</span> <span class="st">"Movie Count"</span>, <span class="at">y =</span> <span class="st">"Mean Film Score"</span>, <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span>  </span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) </span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>top_directors <span class="ot">&lt;-</span> talent <span class="sc">|&gt;</span> </span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">==</span> <span class="st">"director"</span>) </span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>top_directors <span class="sc">|&gt;</span> </span>
-<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(age, <span class="fu">desc</span>(movie_count)) <span class="sc">|&gt;</span></span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Find actors, actresses and directors and sum the films they've done that are strong</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># film_score scorers</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>talent_again <span class="ot">&lt;-</span> TITLE_PRINCIPALS <span class="sc">|&gt;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tconst <span class="sc">%in%</span> top_movies<span class="sc">$</span>tconst, category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"actor"</span>, <span class="st">"actress"</span>, <span class="st">"director"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(names_in_many_big_productions, <span class="at">by =</span> <span class="st">"nconst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(films_scores, <span class="at">by =</span> <span class="st">"tconst"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(nconst, primaryName, category, age) <span class="sc">|&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">movie_count =</span> <span class="fu">n</span>(), <span class="at">mean_film_score =</span> <span class="fu">mean</span>(film_score, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(movie_count))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Look for younger performers</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>top_actors <span class="ot">&lt;-</span> talent_again <span class="sc">|&gt;</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"actor"</span>, <span class="st">"actress"</span>), age <span class="sc">&gt;=</span> <span class="dv">20</span> <span class="sc">&amp;</span> age <span class="sc">&lt;=</span> <span class="dv">45</span> <span class="sc">&amp;</span> movie_count <span class="sc">&gt;</span> <span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean_film_score))</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Count their inclusions</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>actors_summary <span class="ot">&lt;-</span> top_actors <span class="sc">|&gt;</span> </span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(category) <span class="sc">|&gt;</span> </span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">total_movie =</span> <span class="fu">sum</span>(movie_count), <span class="at">number_of_performers =</span> <span class="fu">n</span>(), <span class="at">score =</span> <span class="fu">mean</span>(mean_film_score))</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot top actors that are high film score participants</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_actors, <span class="fu">aes</span>(<span class="at">x =</span> mean_film_score, <span class="at">fill =</span> category)) <span class="sc">+</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Density of Mean Film Scores by Gender"</span>, <span class="at">x =</span> <span class="st">"Mean Film Score"</span>, <span class="at">y =</span> <span class="st">"Density"</span>) <span class="sc">+</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot top actresses that are high film score participants</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top_actors, <span class="fu">aes</span>(<span class="at">x =</span> movie_count, <span class="at">y =</span> mean_film_score, <span class="at">color =</span> category)) <span class="sc">+</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Movie Count vs. Mean Film Score by Gender"</span>, <span class="at">x =</span> <span class="st">"Movie Count"</span>, <span class="at">y =</span> <span class="st">"Mean Film Score"</span>, <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span>  </span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) </span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify directors</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>top_directors <span class="ot">&lt;-</span> talent <span class="sc">|&gt;</span> </span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">==</span> <span class="st">"director"</span>) </span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Single out the top 20</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>top_directors <span class="sc">|&gt;</span> </span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(age, <span class="fu">desc</span>(movie_count)) <span class="sc">|&gt;</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<p>Witness jumps out at me here :</p>
+<p>In an attempt to cash in on the ongoing popularity of <code>Thriller</code>s mixed with the underexplored opportunity in <code>Romance</code> film productions, can we identify a <strong>Romantic Thriller</strong> to remake? Can we convince a studio to finance our project by resting on existing, tested IP?</p>
+<p>Searching for films identified as both <code>Romance</code> and <code>Thriller</code> and a fantastic candidate jumps off the screen:</p>
 <table class="table-striped table-hover caption-top table">
 <caption>Table: Films by Year and Film Score</caption>
 <thead>
@@ -1751,7 +1844,19 @@ tvMovie     The Day After   1983</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Cast Lukas Haas as the villain.</p>
+<p><em>Witness</em>(1985)!</p>
+<p>Witness’ core themes of cultural clash, love, and justice are forever relevant. Exploring the tension between the modern world and an insular community like the Amish, especially in a world driven by technology and changing social norms, could truly resonate with contemporary audiences.</p>
+<p>A modern remake could also offer new insights by exploring evolving dynamics between urban and rural life, highlighting current issues like surveillance, policing, or cultural identity.</p>
+<p>The film continues to have a strong cult following, but a remake could introduce the story to a younger generation, giving them a chance to experience its narrative through a modern lens.</p>
+<p><strong>The Wachowskis</strong> would be perfect directors for this film as the clash between the modern world and the isolated Amish offers rich potential for the <strong>Wachowskis</strong>’ thematic exploration of duality and identity. The original <em>Witness</em> garnered significant Oscar attention and a modern remake could finally position The Wachowskis for over-due awards-season recognition.</p>
+<p><strong>Jake Gyllenhaal</strong> and <strong>Scarlett Johansson</strong> would be perfect leads for a Witness remake due to their range and potential for chemistry. With <strong>Gyllenhaal</strong>’s intensity and emotional depth he would no doubt thrive in the role of John Book. <strong>Scarlett Johansson</strong> versatility and strong presence would bring nuance and vulnerability to Rachel. It’s strong pairing for sure.</p>
+<p>In an appeal to fan service, we can re-cast Lukas Haas, he of the memorable child performance in the 1985 original, into the film’s villain…</p>
+<p><em>From the visionary directors who brought you The Matrix and Cloud Atlas…</em></p>
+<p><em>And starring Jake Gyllenhaal, the beloved star of Nightcrawler…</em></p>
+<p><em>Alongside Scarlett Johansson, Hollywood icon of action and drama…</em></p>
+<p><em>Comes a reimagining of a timeless classic…</em></p>
+<p><em>Witness. A story of secrets, survival, and sacrifice.</em></p>
+<p><em>Coming soon to a theater near you!</em></p>
 <p><img src="images/mp-02/witness.jpg" class="img-fluid" style="display: block; margin:auto; width:65%"></p>
 <details>
 <summary>
@@ -1777,58 +1882,6 @@ tvMovie     The Day After   1983</code></pre>
 <span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(witness_films) </span>
 <span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<!-- ##  -->
-<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(IMDbId, -->
-<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
-<!-- mean(rating), sd_rating = sd(rating), num_ratings = n()) \|\> -->
-<!-- arrange(desc(sd_rating)) \|\> select(-IMDbId) -->
-<!-- polarizing_films -->
-<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(movieId, -->
-<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
-<!-- mean(rating), iqr_rating = IQR(rating), num_ratings = n()) \|\> -->
-<!-- arrange(desc(iqr_rating)) -->
-<!-- polarizing_films \<- movie_lens_and_IMDb \|\> group_by(movieId, -->
-<!-- primaryTitle, startYear, genres) \|\> summarise(mean_rating = -->
-<!-- mean(rating), var_rating = var(rating), num_ratings = n()) \|\> -->
-<!-- arrange(desc(var_rating)) -->
-<!-- <!-- KAGGLE -->
-<p>–&gt;</p>
-<!-- movie_lens_and_IMDb_and_kaggle \<- movie_lens_and_IMDb \|\> -->
-<!-- inner_join(KAGGLE_DATA, join_by(tconst == IMDb_id)) -->
-<!-- movie_lens_and_IMDb_and_kaggle -->
-<!-- get_dollar_adjusted_value \<- function(budget, year){ return (budget \* -->
-<!-- cpi_named_vector\[as.character(2024)\]/cpi_named_vector\[as.character(year)\]) -->
-<!-- } -->
-<!-- votes_budget \<- movie_lens_and_IMDb_and_kaggle \|\> group_by(IMDbId, -->
-<!-- primaryTitle, budget, startYear, revenue) \|\> summarize(num_votes = -->
-<!-- n()) \|\> mutate(adjusted_budget = get_dollar_adjusted_value(budget, -->
-<!-- startYear), adjusted_profit = get_dollar_adjusted_value(revenue, -->
-<!-- startYear) - get_dollar_adjusted_value(budget, startYear) ) -->
-<!-- model_profit \<- -->
-<!-- lm(votes_budget$num_votes ~  votes_budget$adjusted_profit) -->
-<!-- reg_line \<- function(x_val, model){ return(coef(model)\[1\] + -->
-<!-- coef(model)\[2\] \* x_val) } -->
-<!-- votes_budget_profit \<- votes_budget \|\> mutate(popularity_over_profit -->
-<!-- = num_votes - reg_line(adjusted_profit, model_profit)) \|\> -->
-<!-- arrange(desc(popularity_over_profit)) -->
-<!-- <!-- why not working? -->
-<p>–&gt;</p>
-<!-- ggplot(data = votes_budget_profit, aes(x = adjusted_profit, y = -->
-<!-- num_votes )) + geom_point(alpha = 0.1) + geom_smooth(method="lm", -->
-<!-- se=FALSE) -->
-<!-- model_budget \<- -->
-<!-- lm(votes_budget$num_votes ~  votes_budget$adjusted_budget) -->
-<!-- votes_budget_budget \<- votes_budget \|\> mutate(popularity_over_budget -->
-<!-- = num_votes - reg_line(adjusted_budget, model_profit)) \|\> -->
-<!-- arrange(desc(popularity_over_budget)) -->
-<!-- print(votes_budget_budget, n =100) -->
-<!-- <!-- expensive films -->
-<p>–&gt;</p>
-<!-- votes_budget \|\> arrange(desc(adjusted_budget)) \|\> print(n = 100) -->
-<!-- top_500_polarizing_films \<- head(polarizing_films, 500) -->
-<!-- top_500_polarizing_films_w_budget \<- top_500_polarizing_films \|\> -->
-<!-- inner_join(KAGGLE_DATA, join_by(IMDbId == IMDb_id)) -->
-<!-- top_500_polarizing_films_w_budget -->
 </section>
 <section id="appendixA" class="level2">
 <h2 class="anchored" data-anchor-id="appendixA">Appendix A</h2>

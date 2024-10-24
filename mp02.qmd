@@ -495,18 +495,22 @@ episode_details |>
   inner_join(TITLE_BASICS, join_by("parentTconst" == "tconst")) |>
   select(series_title = primaryTitle.y, episode_title = primaryTitle.x, year = startYear.x)
 ```
-
 </details>
 
-
-<!-- The TV series Happy Days (1974-1984) gives us the common idiom “jump the shark”. The phrase comes from a controversial fifth season episode (aired in 1977) in which a lead character literally jumped over a shark on water skis. Idiomatically, it is used to refer to the moment when a once-great show becomes ridiculous and rapidly looses quality. -->
-
 ### Jump the Shark with Happy Days
+
+Unfortunately not all shows can go out on top like **Breaking Bad**. 
+
+Many shows build an audience but eventually the creative well runs dray and end up disappointing fans. This common phenomenon of a show growing in stature and adulation, but eventually reaching a peak of popularity that ultimately turns into a downswing of audience disappointment. That is, the moment when a show's popularity peaks, and then dramaitically wanes as audiences lose interest after a shows' writers cross a line with a ridiculous gimmick, plot contrivance or unbelievable absurdity. 
+
+This pivotal moment in a show's trajectory has been identified as "jumping the shark" and it's named after a famous episode of the 1950s nostalgia sitcom **Happy Days** when its iconic character "The Fonze" waterski-jumped over an actual shark. **Happy Days**  
+
+**Happy Days** is now arguably known for this meta-moment in pop culture than its many years of success. But is this fair? Did **Happy Days** "jump the shark"? Does this silly episode in fact represent the famed turning point for **Happy Days** fortunes as the culture now believes? 
 
 Wikipedia suggests the famous "jumping the shark" episode from Happy
 Days happened episode `3` season `5`.
 
-After we identify all the episdoes of Happy Days in our **IMDb** data we
+After we identify all the episdoes of **Happy Days** in our **IMDb** data we
 create two sets of data filtered around the pivot point of season `5`
 episode `3` : **before shark** and **after shark**.
 
@@ -520,7 +524,7 @@ Performing calculations on these two sets we see:
 [1] 6.878571
 ```
 
-Happy Days did, in fact, jump its own proverbial shark.
+It look like "yes" **Happy Days** did, in fact, jump its own proverbial shark.
 
 <details>
 
@@ -1102,7 +1106,9 @@ top_directors |>
 ```
 </details>
 
-Witness jumps out at me here :
+In an attempt to cash in on the ongoing popularity of `Thriller`s mixed with the underexplored opportunity in `Romance` film productions, can we identify a **Romantic Thriller** to remake? Can we convince a studio to finance our project by resting on existing, tested IP? 
+
+Searching for films identified as both `Romance` and `Thriller` and a fantastic candidate jumps off the screen: 
 
 | Title                       | Year  | Film Score  |
 |-----------------------------|------|------------|
@@ -1119,7 +1125,31 @@ Witness jumps out at me here :
 
 : Table: Films by Year and Film Score {.striped .hover}
 
-Cast Lukas Haas as the villain. 
+*Witness*(1985)! 
+
+Witness' core themes of cultural clash, love, and justice are forever relevant. Exploring the tension between the modern world and an insular community like the Amish, especially in a world driven by technology and changing social norms, could truly resonate with contemporary audiences.
+
+A modern remake could also offer new insights by exploring evolving dynamics between urban and rural life, highlighting current issues like surveillance, policing, or cultural identity.
+
+The film continues to have a strong cult following, but a remake could introduce the story to a younger generation, giving them a chance to experience its narrative through a modern lens.
+
+**The Wachowskis** would be perfect directors for this film as the clash between the modern world and the isolated Amish offers rich potential for the **Wachowskis**’ thematic exploration of duality and identity. The original *Witness* garnered significant Oscar attention and a modern remake could finally position The Wachowskis for over-due awards-season recognition.
+
+**Jake Gyllenhaal** and **Scarlett Johansson** would be perfect leads for a Witness remake due to their range and potential for chemistry. With **Gyllenhaal**’s intensity and emotional depth he would no doubt thrive in the role of John Book. **Scarlett Johansson** versatility and strong presence would bring nuance and vulnerability to Rachel. It's strong pairing for sure. 
+
+In an appeal to fan service, we can re-cast Lukas Haas, he of the memorable child performance in the 1985 original, into the film's villain... 
+
+*From the visionary directors who brought you The Matrix and Cloud Atlas…*
+
+*And starring Jake Gyllenhaal, the beloved star of Nightcrawler…*
+
+*Alongside Scarlett Johansson, Hollywood icon of action and drama…*
+
+*Comes a reimagining of a timeless classic…*
+
+*Witness. A story of secrets, survival, and sacrifice.*
+
+*Coming soon to a theater near you!*
 
 ![](images/mp-02/witness.jpg){style="display: block; margin:auto; width:65%"}
 
