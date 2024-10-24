@@ -23,33 +23,32 @@ library(scales)
 
 ```
 
-*This project useses the following packagaes*: `dplyr`, `tidyr`,
-`stringr`, `lubridate`, `readr`, `scales`
+
+Originating in the proto-Internet era of Usenet groups in the early 1990s, **The Internet Movie Database** (with its instantly recognizable acronym, **IMDb**) has evolved from a small hobbyist project into a global resource, deeply embedded in the fabric of popular culture. Originally started as a collaborative database by movie fans sharing information on films and, **IMDb** quickly became the go-to source for movie buffs, film industry professionals, trivia enthusiasts, and casual web surfers alike.
+
+With a dynamic catalog that collects not only motion pictures but also television, video games, and even web series, **IMDb** provides users with comprehensive information on cast, crew and reviews. **IMDb** stands as the the favorite resource for anyone engaged in the rich history of motion pictures. Today, it's not just a website, but a symbol of how the Internet has transformed how we both catalog, and enjoy the art of film. 
+
+## What's in the Box?
 
 *For details on the data used for this project see* [Appendix
 A](#appendixA).
 
+*This project useses the following packagaes*: `dplyr`, `tidyr`,
+`stringr`, `lubridate`, `readr`, `scales`
 
-Originating in the proto-Internet era of Usenet groups in the early
-1990s, the Internet Movie Database (with its instantly recognizable
-acronym: IMDb) has long been an indispensable source of pop culture
-information. Movie buffs, film industry professionals, trivia
-enthusiasts, and casual web surfers all agree IMDb is the go-to resource
-for anyone engaged in the history of motion pictures.
 
-## What's in the box?
 
 ### How many green lights have been granted in Hollywood?
 
-The "M" in the moniker obviously denotes "movie" and there are indeed
-`131,890` traditional "movies" in IMDb. However, many take a different
-interpretations as to what is - and what is not - a "movie" and IMDb
+The "**M**" in the moniker obviously denotes "movie" and there are indeed
+`131,890` traditional "movies" in **IMDb**. However, many take a different
+interpretations as to what is - and what is not - a "movie" and **IMDb**
 maintains a separate designation for `tvMovie`.
 
 The author contends that the films produced by the premium television
-outlet Home Box Office are significant films all-too-often overlooked by
-film afficianados and sure enough, HBO films are considered television
-films by IMDb :
+outlet **Home Box Office** are significant films all-too-often overlooked by
+film afficianados and sure enough, **HBO** films are considered television
+films by **IMDb** :
 
 ```         
 titleType   primaryTitle            startYear
@@ -72,27 +71,24 @@ tvMovie     The Day After   1983
 ```
 
 The above are all noteworthy (underrated) films more than deserving to
-be considered and counted alongside IMDb's critera for "movie". If we
+be considered and counted alongside **IMDb**'s critera for "movie". If we
 were to count both `movie` and `tvMovie` we would find `146,915` movie
-titles in IMDb.
+titles in **IMDb**.
 
-...Speaking of television, that "M" in IMDb can be something of a
-misnomer. IMDb collects data on both film and television too. And within
-the database, IMDb doesn't just maintain an entry for every television
+...Speaking of television, that "M" in **IMDb** can be something of a
+misnomer. **IMDb** collects data on both film and television too. And within
+the database, **IMDb** doesn't just maintain an entry for every television
 series, but actually has a record for each televison season and a record
 for every televsion episode. All told there are `29,868` series within
-IMDb represented by over `3,012,678` individual episdoes.
+**IMDb** represented by over `3,012,678` individual episdoes.
 
 If television is collected this extensively in the database, what else
-does IMDb collect? What else is in the database?
+does **IMDb** collect? What else is in the database?
 
 ![](images/mp-02/1_media_types_counts.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
-I'd argue the collection of Video Games will prove increasingly
-important as this media form grows in cultural influence. I can
-certainly see a future where Video Games are of equal cultural
-significance (...if were not at that momemnt already?) as film and TV is
-today.
+I suspect the collection of `videoGames` will prove increasingly
+important as this media form grows in cultural influence. Video games are also serving as a the growing source of IP and inspiration, witnessed in recent successes like television's *The Last of Us* and in theaters last year's (`2023`) *5 Nights at Freddy's* and *Super Mario Brothers* for convincing examples of their growing influence on film culture. 
 
 <details>
 
@@ -140,12 +136,12 @@ ggplot(title_type_counts, aes(x = "", y = count, fill = titleType)) +
 </summary>
 </details>
 
-### 110 years old you reach, look as good you will not
+### 110 Years Old You Reach, Look as Good You Will Not
 
 IMBb is a unrivaled resource for assessing film history. And by history,
-there is actually some capital "H" history in IMDb.
+there is actually some capital "**H**" history in **IMDb**.
 
-IMDb counts `4` as the oldest `birthYear` for any individual in its
+**IMDb** counts `4` as the oldest `birthYear` for any individual in its
 dataset. And not just `4`, there are also `birthYear` values for `46`,
 `69`, `70`, `163`, `254`. As far as we know, film production is a \~150
 year old technology.
@@ -154,33 +150,35 @@ What is going on?
 
 Who was born in year `4`? Year `46`? Year `69`?
 
-``` r
-             primaryName
-1       Flavius Josephus
-2 Publius Vergilius Maro
-3                   Ovid
-4  Titus Maccius Plautus
-5     Lucio Anneo Seneca
-6            Cassius Dio
-7               Plutarch
-8              Suetonius
-```
+| Primary Name           |
+|-----------------------|
+| Flavius Josephus       |
+| Publius Vergilius Maro |
+| Ovid                  |
+| Titus Maccius Plautus  |
+| Lucio Anneo Seneca     |
+| Cassius Dio            |
+| Plutarch              |
+| Suetonius             |
 
-Are you entertained? A fascinating qwirk of IMDb database is that it
+: Classics behind the camera {.striped .hover}
+
+
+Are you entertained? A fascinating qwirk of **IMDb** database is that it
 credits classical writers and historians for modern film production,
-again, proving IMDb is if nothing else an historical resource and begs
+again, proving **IMDb** is if nothing else an historical resource and begs
 the important question?
 
-*Does Zach Snyder share [300](https://en.wikipedia.org/wiki/300_(film))
-points with Plutarch?*
+Does **Zach Snyder** share [300](https://en.wikipedia.org/wiki/300_(film))
+points with **Plutarch**?
 
 But how about someone we know or can identify? Who is eldest creator
-still alive in the IMDb database? A seemingly easy way to identify
-"oldest creator in IMDb" would be to seek out creators with an `NA` for
+still alive in the **IMDb** database? A seemingly easy way to identify
+"oldest creator in **IMDb**" would be to seek out creators with an `NA` for
 `deathYear`.
 
-Unfortunately there are quite a few people IMDb considers living in
-their sunset years. IMDb idetifies 2,514 "supercentarians" - individuals
+Unfortunately there are quite a few people **IMDb** considers living in
+their sunset years. **IMDb** idetifies 2,514 "supercentarians" - individuals
 110 years of age or older - who at one time worked the film industry.
 
 The [Gerontology Research Group](https://www.grg-supercentenarians.org/)
@@ -188,7 +186,7 @@ rigorously counts "supercentarians" around the world. A supercentarian
 is an individual equal-to, or older-than, the age of 110. At current
 count, there are approximately \~310 supercentarians in the world.
 
-Clearly there is an issue with the IMDb dataset identifying `2,514`
+Clearly there is an issue with the **IMDb** dataset identifying `2,514`
 supercentarians in the film industry. There obviously are a multitude of
 deaths unreported in this data.
 
@@ -226,7 +224,7 @@ industry as someone who has worked on `20+` such productions. Sorted on
 `number_of_big_productions` worked on, sure enough this yields useful
 information:
 
-| Name              | Birth Year | number_of_big_productions | age | deathYear |
+| Name              | Birth Year | Number of Big Productions | Age | Death Year |
 |-------------------|------------|---------------------------|-----|-----------|
 | Seth MacFarlane   | 1973       | 2505                      | 51  | 0         |
 | Dee Bradley Baker | 1962       | 2311                      | 62  | 0         |
@@ -235,18 +233,20 @@ information:
 | Harry Shearer     | 1943       | 2162                      | 81  | 0         |
 | Eric Stuart       | 1967       | 2043                      | 57  | 0         |
 
-: Data for Big Productions by Various Individuals, Including Age
+: Voice actors, unfortunately a dying breed in Hollywood
 {.striped .hover}
 
 These names are all identifiable as prominent voice actors. So with this
 collection of notable individuals, let's idenfity the oldest individual
 in this data set:
 
-| primaryName | birthYear | number_of_big_productions | age | deathYear |
+| Primary Name | Birth Year | Number of Big Productions | Age | Death Year |
 |-------------|-----------|---------------------------|-----|-----------|
 | Mel Brooks  | 1926      | 37                        | 98  | 0         |
 
-: What a find {.striped .hover}
+: What a great find! {.striped .hover}
+
+**Mel Brooks** is a singular lion of comedy history responsible for some of the greatest comedic films over the past 40 - 50 years. He also experienced a noteworthy second act as a Broadway producer with his early 2000s theatrical production of *The Producers* a timely film of his that lampoons how dark attidues on fascism never seem to fall out of faver. **Mel Brooks** is a fitting talent to identify as the dataset's oldest talent. 
 
 <details>
 
@@ -494,7 +494,7 @@ tv_show_12_episodes_high_rating_titles <-
 Wikipedia suggests the famous "jumping the shark" episode from Happy
 Days happened episode `3` season `5`.
 
-After we identify all the episdoes of Happy Days in our IMDb data we
+After we identify all the episdoes of Happy Days in our **IMDb** data we
 create two sets of data filtered around the pivot point of season `5`
 episode `3` : **before shark** and **after shark**.
 
@@ -548,7 +548,7 @@ mean(happy_days_episodes_after_shark$averageRating)
 
 ## Beyond the Spotlight
 
-We're going to use ratings in IMDb to create a measure to document the significant, successful films. IMDb ratings are crowdsources from its users.  Films with more votes are going to have more stable rating and there is a left skew to the distribution of films and the number of individuals who have rated the film: 
+We're going to use ratings in **IMDb** to create a measure to document the significant, successful films. **IMDb** ratings are crowdsources from its users.  Films with more votes are going to have more stable rating and there is a left skew to the distribution of films and the number of individuals who have rated the film: 
 ```
      0%     10%     20%     30%     40%     50%     60%     70%     80%     90% 
     100     120     148     187     246     332     473     738    1332    3355
@@ -557,8 +557,8 @@ We're going to use ratings in IMDb to create a measure to document the significa
 I'm going to filter out the top `~20%` of rated films. 
 
 In an attempt to single out noteworthy remaining films, I created a statistical
-quantification of a movie's positioning by evaluating both its IMDb
-rating and the number of IMDb users who voted on the film. This approach
+quantification of a movie's positioning by evaluating both its **IMDb**
+rating and the number of **IMDb** users who voted on the film. This approach
 aims to capture both the **quality** (via the rating) and the
 **popularity** (via the number of votes) of the film.
 
@@ -842,31 +842,54 @@ write.csv(df_csv, "films_scores_box_office.csv", row.names = FALSE)
 
 ## Best in Decade
 
-Assessing the popularity of film genres across decades yields interesting insight into American Culture. 
+They say every picture tells a story. These graphs scream the narrative loud and clear.
+
+Exploring the popularity of film genres across decades reveals fascinating insights into culture and how it inevitably reflects culture. 
 
 ![](images/mp-02/genre-popularity-with-independent-films.jpeg){}
 
-We can see `Western` indeed being a forgotten genre, falling out of favor by the time of the `1970`s and `1980`s. Same with `War`, likely a reflection of the fading legacy of America's triumphant relationship with World War II. And for the horniest segment of this project, this chart does indeed document the famed Adult Entertainment Film Production Heyday of the `1970`s and `1980`s.  
+Look no futher than `Western` indeed being a forgotten genre, falling out of favor by the time of the `1970`s and `1980`s. Same with `War`, likely a reflection of the fading legacy of America's triumphant relationship with World War II. 
 
-The existence of `Comedy` and `Drama` is pretty steady in this data. What if we were to?:  
+And for the horniest segment of this project, this chart documents the famed Adult Entertainment Film Production Heyday of the `1970`s and `1980`s.  
+
+This graphic is a little crowded by existence of `Comedy` and `Drama` both of which occupy a steady, unflappable positioning this data (suggesting the enduring audience appetite for both genres). What if we were to?:  
 
 1. Remove all `Comedy` and `Drama` films 
 2. Remove all independent or films that did not gross any revenue
 
-<!-- ![This is a caption with an aligned image.](path/to/image.png){fig-cap="This is a caption for the image." width="50%" align="center"} -->
-
-
-<!-- ![Hello How are you?](images/mp-02/genre-popularity-without-comedy-drama.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); padding: 5px; display: block; margin: auto;"} -->
 ![](images/mp-02/genre-popularity-without-comedy-drama.jpeg){fig-cap="Hello how are you"}  
 
 
-This yields an edifying chart as it more visably identifies the rise and fall of genre trends - with the understanding `Comedy` and `Drama` are longstanding genres that are unlikely to fall out of favor anytime soon. 
+This yields an more satisfying chart as it visably identifies the rise and fall of genre trends - with the understanding `Comedy` and `Drama` are longstanding genres that are unlikely to fall out of favor anytime soon. 
+
+Another historical observation: was the retreat of the `Action` genre in the `2000`s initiated by a post 9/11 public less-tolerant of the fanciful absurdities of `80`s and `90`s action films?
+
+Is the rise in the `Thriller` genre in recent years commenting at all on our collective psychologies? Does is speak to a rising anxiety among us? 
+
+But while the popularity of `Thriller`s are not in doubt, what has become of the `Romance` movie? 
+
+Considering the recent box office succes *Anyone But You* (2023) is Hollywood narrow-mindedly avoiding romance movies and with it, is Hollywood neglecting women audiences?  
+
+If you were to survey wage trends from the **Bureau of Labor Statistics**, there exists an unmistakable upward trend in women's wages that does not appear likely to receed. What's more, over a few decades time, women's wages continue to make inroads in narrowing the stubborn income gap with men. 
 
 ![Bureau of Labor Statistics](images/mp-02/wages-by-gender.jpeg){}
+
+Is Hollywood leaving money on the table? Is there opportunity to market to a consistently neglected segment of the film-going audience?
+
+Is there a chance to innovate? A chance to develop a film that is at once, a part of genre that serves an underrepresented demographic, while also captializing on a genre that contintues to demonstrate grown and consistent popularity? 
+
+![](images/mp-02/romance-thriller-trends.jpg){}
+ 
+ 
+ The big pitch idea: 
+
+ *Can we develop a romance thriller?* 
 
 <details> 
 <summary>\> show the code</summary>
 ```r
+
+# Narrow down titles and filter out televsion 
 slim_title_basics <- TITLE_BASICS |> 
   filter(startYear > 1940 & titleType == "movie") |> 
   select(tconst, primaryTitle, startYear, genres, titleType) |> 
@@ -876,10 +899,12 @@ slim_title_basics <- TITLE_BASICS |>
          decade = floor(startYear / 10) * 10,
          decade = factor(decade, levels = sort(unique(floor(as.numeric(startYear) / 10) * 10))))
 
+# Identify gentre counts by the decades from 1940+
 genre_count_by_decade <- slim_title_basics |>
   group_by(decade, genres) |>
   summarize(genre_count = n(), .groups = 'drop')
 
+# Create an chart with our findings
 ggplot(genre_count_by_decade, aes(x = decade, y = genre_count, fill = genres)) +
   geom_bar(stat = "identity", position = "fill", color = "black") +
   scale_y_continuous(labels = scales::percent) +  # Makes the y-axis percentages
@@ -889,28 +914,7 @@ ggplot(genre_count_by_decade, aes(x = decade, y = genre_count, fill = genres)) +
   theme(plot.title = element_text(hjust = 0.5),           
         plot.subtitle = element_text(hjust = 0.5))
 
-slim_title <- films_scores |> 
-  filter(startYear > 1940 & titleType == "movie") |> 
-  select(tconst, primaryTitle, startYear, genres, titleType) |> 
-  separate_rows(genres, sep = ",") |> 
-    filter(!(genres %in% c("Music","Musical", "Reality-TV", "News","\\N", "Talk-Show", "Film-Noir","Game-Show",  "History","Biography", "Crime", "Sport"))) |>
-  mutate(startYear = as.numeric(startYear), 
-         decade = floor(startYear / 10) * 10,
-         decade = factor(decade, levels = sort(unique(floor(as.numeric(startYear) / 10) * 10))))
-
-genre_count_by_decade <- slim_title |>
-  group_by(decade, genres) |>
-  summarize(genre_count = n(), .groups = 'drop')
-
-ggplot(genre_count_by_decade, aes(x = decade, y = genre_count, fill = genres)) +
-  geom_bar(stat = "identity", position = "fill", color = "black") +
-  scale_y_continuous(labels = scales::percent) +  # Makes the y-axis percentages
-  labs(y = "Percentage", x = "Decade", fill = "Genres", title = "Genre Popularity by Decade",
-  subtitle = "Without Independent Films") +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5),           
-        plot.subtitle = element_text(hjust = 0.5))
-  
+# Re-create our data but this time without Drama and Comedy
 slim_title_no_comedy_no_drama <- films_scores |> 
   filter(startYear > 1940 & titleType == "movie") |> 
   select(tconst, primaryTitle, startYear, genres, titleType) |> 
@@ -920,10 +924,12 @@ slim_title_no_comedy_no_drama <- films_scores |>
          decade = floor(startYear / 10) * 10,
          decade = factor(decade, levels = sort(unique(floor(as.numeric(startYear) / 10) * 10))))
 
+# Re-count our findings
 genre_count_by_decade_no_comedy <- slim_title_no_comedy_no_drama |>
   group_by(decade, genres) |>
   summarize(genre_count = n(), .groups = 'drop')
 
+# Re-plot 
 ggplot(genre_count_by_decade_no_comedy, aes(x = decade, y = genre_count, fill = genres)) +
   geom_bar(stat = "identity", position = "fill", color = "black") +
   scale_y_continuous(labels = scales::percent) + 
@@ -931,12 +937,14 @@ ggplot(genre_count_by_decade_no_comedy, aes(x = decade, y = genre_count, fill = 
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5),           
         plot.subtitle = element_text(hjust = 0.5))
-        
+
+# Load our wage data       
 wages <- read.csv("data/mp02/wages.csv")
 wages$Men <- as.numeric(gsub(",", "", wages$Men))
 wages$Women <- as.numeric(gsub(",", "", wages$Women))
 wages <- wages[-nrow(wages), ]
 
+# Plot the distinction between men's and women's wages
 ggplot(wages, aes(x=X)) +
   geom_line(aes(y = Women, color = "Women"), size = 1.2) +
   geom_line(aes(y = Men, color = "Men"), linetype = "twodash", size = 1.2) +
@@ -947,9 +955,6 @@ ggplot(wages, aes(x=X)) +
   theme_bw() +
   theme(plot.title = element_text(hjust = 0.5)) 
 
-
-<!-- genre_count_by_decade_no_comedy |> finish for romance trend -->
-  
 ```
 </details>
 
@@ -1197,201 +1202,63 @@ head(witness_films)
 
 ## Appendix A {#appendixA}
 
-### How Data Was Loaded
+### I’d Like to Thank my Data - the Real Star of the Show 
 
-In this section, I describe how the data was loaded into the project.
+The IMDb data used for this project is detailed [here](https://developer.imdb.com/non-commercial-datasets/#titleakastsvgz)
 
-``` r
-<!-- library(dplyr) -->
-<!-- library(tidyr) -->
-<!-- library(stringr) -->
-<!-- library(lubridate) -->
-<!-- library(readr) -->
-
-<!-- DATA_FOLDER <- "data/mp02/" -->
-
-<!-- get_IMDb_file <- function(fname){ -->
-<!--      as.data.frame(readr::read_csv(fname, lazy=FALSE)) -->
-<!--  } -->
-
-<!-- create_file_ext <- function(fname){ -->
-<!--    paste0(DATA_FOLDER, fname) -->
-<!-- } -->
-
-<!-- # IMDb DATA -->
-
-<!-- NAME_BASICS <- get_IMDb_file(create_file_ext("NAME_BASICS.csv")) -->
-<!-- TITLE_RATINGS <- get_IMDb_file(create_file_ext("TITLE_RATINGS.csv")) -->
-<!-- TITLE_BASICS <- get_IMDb_file(create_file_ext("TITLE_BASICS.csv")) -->
-<!-- TITLE_CREW <- get_IMDb_file(create_file_ext("TITLE_CREW.csv")) -->
-<!-- TITLE_EPISODES <- get_IMDb_file(create_file_ext("TITLE_EPISODES.csv")) -->
-<!-- TITLE_PRINCIPALS <- get_IMDb_file(create_file_ext("TITLE_PRINCIPALS.csv")) -->
-
-<!-- NAME_BASICS <- NAME_BASICS |> -->
-<!--     mutate(birthYear = as.numeric(birthYear), -->
-<!--            deathYear = as.numeric(deathYear)) -->
-
-<!-- TITLE_RATINGS <- TITLE_RATINGS |> -->
-<!--      mutate(averageRating = as.numeric(averageRating), -->
-<!--             numVotes = as.numeric(numVotes)) -->
-
-<!-- TITLE_BASICS <- TITLE_BASICS |> -->
-<!--     mutate(isAdult = as.logical(isAdult), -->
-<!--            runtimeMinutes = ifelse(grepl("[^0-9]", runtimeMinutes), NA, as.numeric(runtimeMinutes))) -->
-
-<!-- # MOVIE LENS -->
-
-<!-- MOVIE_LENS_RATINGS <- read.csv("data/mp02/ml-32m/ratings.csv") -->
-
-<!-- MOVIE_LENS_LINKS <- read.csv("data/mp02/ml-32m/links.csv") -->
-
-<!-- movie_lens_ratings_merged <- MOVIE_LENS_RATINGS |> -->
-<!--    group_by(movieId) |> -->
-<!--    summarize(count_reviews = n()) -->
-
-<!-- # KAGGLE -->
-
-<!-- KAGGLE_DATA <- read.csv("data/mp02/KAGGLE_DATA.csv") |> -->
-<!--    mutate(budget = ifelse(is.na(budget), 0, parse_number(budget))) -->
-
-<!-- # CPI -->
-
-<!-- HISTORICAL_CPI <- read.csv("data/mp02/HISTORICAL_CPI.csv") |> -->
-<!--    mutate(year = substring(DATE,1,4)) -->
-
-<!-- cpi_named_vector <- setNames(HISTORICAL_CPI$CPIAUCNS, HISTORICAL_CPI$year) -->
-```
-
-head(names_in_many_big_productions)
-<!-- quantile(movies_with_ratings_merged$count_reviews, probs=seq(0,1, by = 0.025)) -->
-<!-- 95% of reviews have 1000 reviews or less... -->
-
-<!-- max(movies_with_ratings_merged$movieId) -->
-
-<!-- 292757 -->
-
-<!-- MOVIE LENS -->
-
-<!-- movies_meeting_review_threshold \<- movies_lens_ratings_merged \|\> -->
-<!-- filter(count_reviews \>= 1000) \|\> pull(movieId) -->
-
-<!-- filtered_reviews \<- MOVIE_LENS_RATINGS \|\> filter(movieId %in% -->
-<!-- movies_meeting_review_threshold) -->
-
-<!-- movie_lens\_\_IMDb \<- filtered_reviews \|\> -->
-<!-- inner_join(MOVIE_LENS_LINKS, by = "movieId") -->
+The Kaggle Movies Dataset can be found [here](https://www.kaggle.com/datasets/rounakbanik/the-movies-dataset)
 
 <details>
+<summary>\>show the code</summary>
+``` r
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(lubridate)
+library(readr)v
 
-<summary>\> show the code</summary>
+# Variable for data location
+DATA_FOLDER <- "data/mp02/" -->
 
-```{r}
-hello <- "hello"
+# Function to create file name
+create_file_ext <- function(fname){
+   paste0(DATA_FOLDER, fname)
+}
+
+# Function to retrieve file as data frame
+get_IMDb_file <- function(fname){
+     as.data.frame(read_csv(fname, lazy=FALSE))
+ }
+
+# loading all IMDb DATA from their respective .csv files
+NAME_BASICS <- get_IMDb_file(create_file_ext("NAME_BASICS.csv"))
+TITLE_RATINGS <- get_IMDb_file(create_file_ext("TITLE_RATINGS.csv"))
+TITLE_BASICS <- get_IMDb_file(create_file_ext("TITLE_BASICS.csv"))
+TITLE_CREW <- get_IMDb_file(create_file_ext("TITLE_CREW.csv"))
+TITLE_EPISODES <- get_IMDb_file(create_file_ext("TITLE_EPISODES.csv"))
+TITLE_PRINCIPALS <- get_IMDb_file(create_file_ext("TITLE_PRINCIPALS.csv"))
+
+# Data wrangling correct data types
+NAME_BASICS <- NAME_BASICS |>
+    mutate(birthYear = as.numeric(birthYear),
+           deathYear = as.numeric(deathYear))
+
+TITLE_RATINGS <- TITLE_RATINGS |>
+     mutate(averageRating = as.numeric(averageRating),
+            numVotes = as.numeric(numVotes))
+
+TITLE_BASICS <- TITLE_BASICS |>
+    mutate(isAdult = as.logical(isAdult),
+           runtimeMinutes = ifelse(grepl("[^0-9]", runtimeMinutes), NA, as.numeric(runtimeMinutes)))
+
+# looading Kaggle Data            
+KAGGLE_DATA <- read.csv("data/mp02/KAGGLE_DATA.csv") |>
+   mutate(budget = ifelse(is.na(budget), 0, parse_number(budget)))
 
 ```
 
-</details>
-
-<!-- <!-- number of movies --> -->
-
-<!-- When we say "movie" we often think of "what is opening this Friday" and -->
-<!-- with it: "what film will win the weekend box office?" -->
-
-<!-- If we look at the Kaggle Movie Dataset, we see -->
-
-<!-- quantile(KAGGLE_DATA\$revenue, probs = seq(0,1,.05), na.rm=TRUE) -->
-
-<!-- ![](images/mp-02/1_media_types_counts.jpeg){style="width:75%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"} -->
-
-<!-- Seminal podcaster Bill Simmon’s (a man [paid 200 million dollars to -->
-<!-- podcast](https://variety.com/2020/digital/news/spotify-acquires-the-ringer-196-million-cash-bill-simmons-1203502471/)) -->
-<!-- has argued on his #1 film podcast [The -->
-<!-- Re-Watchables](https://www.theringer.com/the-rewatchables) that the -->
-<!-- Oscars should be awarded 5 years after a film’s release. Time-and-time -->
-<!-- again, the Academy of Motion Picture and Science awards its most -->
-<!-- prestigious award to a questionable film that years after leaves -->
-<!-- audiences scratching their heads over the decision. This is likely due -->
-<!-- to the impossibilty of fully evaluating a work of art until time finally -->
-<!-- settles and properly establishes a film's legacy. All-too-often: -->
-<!-- out-sized marketing budgets, capricious cultural fads or unrecognized -->
-<!-- behind-the-camera politics are what grants a film the industry's most -->
-<!-- coveted honor. -->
-
-<!-- Do the Right Thing (1989), Saving Private Ryan (1997), Brokeback -->
-<!-- Mountain (2005) and The Social Network (2010) are all classic examples -->
-<!-- of the essential films of their respective years, egregiously -->
-<!-- unrecognized by the academy. -->
-
-<!-- Thus, Simmons argues we should establish "The 5 Year Oscars." The awards -->
-<!-- should not be awarded until 5 years prior to a film's initial release. -->
-
-<!-- (Television netowrk ABC, longtime broadcast home to the Oscars -->
-<!-- broadcast, would likely not be thrilled with the decision to not embrace -->
-<!-- movie-stars-of-the-moment in the ceremony.) -->
-
-<!-- I'd like to extend this analysis to all films. If we ignore all film -->
-<!-- reviews for a 5 year window, will we be left be able to recongize a -->
-<!-- higher caliber or higher quality film? If we were to put film reviews -->
-<!-- into a "5 year freezer", will it impact their rankings and perception? -->
-
-<!-- Most importantly, will it hurt the score of objectively terrible movie -->
-<!-- Crash (2005)? -->
-
-<!-- This analysis is not possible with just IMDb data. For this analysis I -->
-<!-- will need to bring in the data from review site [Movie -->
-<!-- Lens](https://grouplens.org/datasets/movielens/). -->
-
-Movie Lens offers a record for every review from each contributors - all
-with a time-stamp for when the review was submitted. Movie Lens first
-review was issued in `1995`. Thus, we can only properly evaluate films
-from `2000 - 2019` (5 years after `1995` and 5 years prior to `2024`)
-<!-- make sure TITLE_BASICS and working movie_lens data_set have similar IMDb IDs -->
-
-title_basics_imdb_id \<- TITLE_BASICS \|\> mutate(IMDbId =
-as.integer(substring(tconst, 3)), startYear = as.numeric(startYear))
-\|\> filter(startYear \>= 1995 & startYear \<= 2019) \|\>
-select(-runtimeMinutes, -isAdult, -titleType, -originalTitle, -endYear)
-
-movie_lens_merge_imdb \<- title_basics_imdb_id \|\>
-inner_join(MOVIE_LENS_RATINGS, by = c("IMDbId" = "movieId")) \|\>
-mutate(yearReview = year(as.POSIXct(timestamp, origin="1970-01-01")))
 
 
-five_year_reviews_after \<- movie_lens_merge_imdb \|\>
-filter((yearReview - startYear) \>= 5) \|\> group_by(tconst) \|\>
-summarize(after_5_year_score = mean(rating))
 
-head(five_year_reviews_after)
 
-five_year_reviews_before \<- movie_lens_imdb_filtered \|\>
-filter(yearReview - startYear \< 5) \|\> group_by(tconst) \|\>
-summarize(before_5_year_score = mean(rating))
-
-head(movie_lens_imdb_filtered, 100)
-
-movie_lens\_\_IMDb \<- filtered_reviews \|\>
-inner_join(MOVIE_LENS_LINKS, by = "movieId")
-
-head(title_basics_movie_lens_id)\
-<!-- merge the two data sets, make sure to create a year for when the review was posted
-
-movie_lens_and_IMDb \<- title_basics_movie_lens_id \|\>
-inner_join(movie_lens_filtered_reviews_IMDb, by = "IMDbId") \|\>
-select(-isAdult, -endYear, -runtimeMinutes, -tmdbId, -titleType) \|\>
-mutate(yearReview = year(as.POSIXct(timestamp, origin="1970-01-01")))
-
-<!-- now take out all reviews that were  -->
-
-movie_lens_and_IMDb_5_year_reviews \<- movie_lens_and_IMDb \|\>
-filter(yearReview - startYear \>= 5) \|\> group_by(IMDbId, primaryTitle,
-startYear) \|\> summarize(avg_review = mean(rating)) \|\>
-arrange(desc(avg_review))
-
-print(movie_lens_and_IMDb_5_year_reviews, n=50)
-
-movie_lens_and_IMDb_year_review \<- movie_lens_and_IMDb \|\>
-group_by(IMDbId, primaryTitle, startYear) \|\> summarize(avg_review =
-mean(rating)) \|\> arrange(desc(avg_review))
-
-print(movie_lens_and_IMDb_year_review, n = 50)
 
