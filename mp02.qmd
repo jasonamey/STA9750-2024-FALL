@@ -1155,7 +1155,7 @@ In an appeal to fan service, we can re-cast Lukas Haas, he of the memorable chil
 ![](images/mp-02/witness.jpg){style="display: block; margin:auto; width:65%"}
 
 <details>
-<summary>\> show me code</summary>
+<summary>\> show the code</summary>
 
 ```r
 # Searching for all Romance Thrillers
