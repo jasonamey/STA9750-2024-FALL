@@ -708,9 +708,9 @@ Querying for `film_score`, we find **Steven Spielberg**'s films score :
 [1] 88.5889
 ```
 
-Even including *Indiana Jones and the Kingdom of the Crystal Skull (2008)*, *The BFG (2016)*, and *Always (1989)* Steven Spielberg films collectively average in the top `89%` of all films. `film_score` correctly identifies the most prominent talent in the industry.
+Even including **Indiana Jones and the Kingdom of the Crystal Skull (2008)**, **The BFG (2016)**, and **Always (1989)**, **Steven Spielberg** films collectively average in the top `89%` of all films. `film_score` correctly identifies the most prominent talent in the industry.
 
-How does another director compare to Steven Spielberg? 
+How does another director compare to **Steven Spielberg**? 
 
 Direcor **Uwe Boll** is famous for being a critically reviled filmmaker.  He's actually known as ["The Worst Director in the World"](https://www.vice.com/en/article/the-worst-director-in-the-world/). 
 
