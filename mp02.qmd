@@ -179,12 +179,12 @@ still alive in the **IMDb** database? A seemingly easy way to identify
 
 Unfortunately there are quite a few people **IMDb** considers living in
 their sunset years. **IMDb** idetifies 2,514 "supercentarians" - individuals
-110 years of age or older - who at one time worked the film industry.
+`110` years of age or older - who at one time worked the film industry.
 
 The [Gerontology Research Group](https://www.grg-supercentenarians.org/)
 rigorously counts "supercentarians" around the world. A supercentarian
-is an individual equal-to, or older-than, the age of 110. At current
-count, there are approximately \~310 supercentarians in the world.
+is an individual equal-to, or older-than, the age of `110`. At current
+count, there are approximately \~`310` supercentarians in the world.
 
 Clearly there is an issue with the **IMDb** dataset identifying `2,514`
 supercentarians in the film industry. There obviously are a multitude of
@@ -246,7 +246,7 @@ in this data set:
 
 : What a great find! {.striped .hover}
 
-**Mel Brooks** is a singular lion of comedy history responsible for some of the greatest comedic films over the past 40 - 50 years. He also experienced a noteworthy second act as a Broadway producer with his early 2000s theatrical production of **The Producers** a timely film of his that lampoons how dark attidues on fascism never seem to fall out of faver. **Mel Brooks** is a fitting talent to identify as the dataset's oldest talent. 
+**Mel Brooks** is a singular lion of comedy history responsible for some of the greatest comedic films over the past 40 - 50 years. He also experienced a noteworthy second act as a Broadway producer with his early `2000`s theatrical production of **The Producers** a timely film of his that lampoons how dark attidues on fascism never seem to fall out of faver. **Mel Brooks** is a fitting talent to identify as the dataset's oldest talent. 
 
 <details>
 
@@ -321,9 +321,9 @@ names_in_many_big_productions |>
 
 ### Star Wars and Mark Hamill
 
-With over $`10.3` billion in box office across all 9 of it’s main, episodic features, there arguable is no franchise that has loomed larger over the recent history of film than Star Wars. For some, **Star Wars** represents the critical turning point when movies forever became major cultural events, meant to wow, awe and captivate the film-going audience. With its fantastical promotion of technologically innovative special effects, edge-of-your-seat action both grounded in dramatic, escapist storytelling, **Star Wars** effectively created the template for the modern summer blockbuster.
+With over $`10.3` billion in box office across all `9` of it’s main, episodic features, there arguable is no franchise that has loomed larger over the recent history of film than Star Wars. For some, **Star Wars** represents the critical turning point when movies forever became major cultural events, meant to wow, awe and captivate the film-going audience. With its fantastical promotion of technologically innovative special effects, edge-of-your-seat action both grounded in dramatic, escapist storytelling, **Star Wars** effectively created the template for the modern summer blockbuster.
 
-Despite its release more than 40 years ago, **Star Wars** continues to loom large over the popular imagination as current rights holder Disney maintains ambitious plans to push its stories and its characters into galaxies far, far away.
+Despite its release more than `40` years ago, **Star Wars** continues to loom large over the popular imagination as current rights holder Disney maintains ambitious plans to push its stories and its characters into galaxies far, far away.
 
 Did the hero of **Star Wars** break free from the monumental legacy of such an iconic franchise, or has he forever been bound to the role of Luke Skywalker, overshadowing the rest of his career?
 
@@ -358,7 +358,7 @@ mark_hamil_popular_works_IDs |>
 
 ### What Television Show with at least 12 episodes has the highest average rating?
 
-Swtiching galaxies to Television, suppose we wanted to identify popular television series? Say, a series with at least 12 episodes? 
+Swtiching galaxies to Television, suppose we wanted to identify popular television series? Say, a series with at least `12` episodes? 
 
 This is really unsatisfactory:
 
@@ -467,7 +467,7 @@ tv_show_12_episodes_high_rating_titles <-
 
 One of the unfortunate legacies of **Star Wars** is that many films have become risk adverse, bottom-line motivated entities that will only pursue formulaic, blockbuster-by-numbers despite audiences still wanting innovative stories, strong performances and bold filmmaking. A big segment of this movie going audience exhausted by "blockbuster or bust" entertainment has shifted their attention back to smaller screens. 
 
-In the last 20 years with the rise of "prestige television" a good number of our greatest film creatives, who previously would've exclusively made movies, have turned their attention to television. In may ways, due to the inert, IP-focused model for modern movie development, a lot of the innovation we now see on screen happens in episodic television series. 
+In the last `20` years with the rise of "prestige television" a good number of our greatest film creatives, who previously would've exclusively made movies, have turned their attention to television. In may ways, due to the inert, IP-focused model for modern movie development, a lot of the innovation we now see on screen happens in episodic television series. 
 
 Few shows have capitalized on this change in the zeitgeist and cast as large of a cultural shadow as **Breaking Bad**, Vince Gilligan's storied show documenting the transformation of an ailing, beleagured chemistry teacher into the methamphetamine king of the American southwest. 
 
@@ -887,7 +887,7 @@ If you were to survey wage trends from the **Bureau of Labor Statistics**, there
 
 Is Hollywood leaving money on the table? Is there opportunity to market to a consistently neglected segment of the film-going audience?
 
-Is there a chance to innovate? A chance to develop a film that is at once, a part of genre that serves an underrepresented demographic, while also captializing on a genre that contintues to demonstrate grown and consistent popularity? 
+Is there a chance to innovate? A chance to develop a film that is at once, a part of genre that serves an underrepresented demographic, while also captializing on a genre that contintues to demonstrate growth and consistent popularity? 
 
 ![](images/mp-02/romance-thriller-trends.jpg){}
  
