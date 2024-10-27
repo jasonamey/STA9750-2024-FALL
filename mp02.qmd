@@ -853,7 +853,7 @@ write.csv(df_csv, "films_scores_box_office.csv", row.names = FALSE)
 
 ## Best in Decade
 
-They say every picture tells a story. These graphs scream the narrative loud and clear.
+They say every picture tells a story. These charts scream the narrative loud and clear.
 
 Exploring the popularity of film genres across decades reveals fascinating insights into culture and how it inevitably reflects culture. 
 
