@@ -164,7 +164,7 @@ Who was born in year `4`? Year `46`? Year `69`?
 : Classics behind the camera {.striped .hover}
 
 
-Are you entertained? A fascinating qwirk of **IMDb** database is that it
+Are you entertained? A fascinating quirk of **IMDb** database is that it
 credits classical writers and historians for modern film production,
 again, proving **IMDb** is if nothing else an historical resource and begs
 the important question?
