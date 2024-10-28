@@ -211,7 +211,7 @@ interest to some studio or production company." So I'm going to count
 the number of crew on a film and look for a threshold for top
 produciton.
 
-Here are the quantiles for the crew counts:
+Here are the percentiles for the crew counts:
 
 ```         
 10%  20%  30%  40%  50%  60%  70%  80%  90% 100% 
