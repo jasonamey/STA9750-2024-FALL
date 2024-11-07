@@ -51,7 +51,7 @@ format: revealjs
 ![](images/final-project-presentation-check-in/9-data-definitions.jpg)
 
 
-## This Department of Finance tool documents increasing property values under “Total Value”
+## This Department of Finance tool documents increasing property values under **Total Value**
 
 ![](images/final-project-presentation-check-in/10-online-lookup.jpg)
 
@@ -61,7 +61,7 @@ format: revealjs
 ![](images/final-project-presentation-check-in/11-text-transformation.jpg)
 
 
-## Identify field that corresponds to “Total Value”
+## Identify field that corresponds to **Total Value**
 
 ![](images/final-project-presentation-check-in/12-total-value-id.jpg)
 
@@ -74,11 +74,6 @@ format: revealjs
 ## Challenges with pre-2014 tax assessment data
 
 ![](images/final-project-presentation-check-in/14-ms-access.jpg)
-
-## SKELETON
-
-![](images/final-project-presentation-check-in/14-ms-access.jpg)
-
 
 ## The Department of Finance Tax Assessment Archives
 
