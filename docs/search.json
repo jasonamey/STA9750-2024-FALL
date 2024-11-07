@@ -362,5 +362,159 @@
     "title": "IMDb and Me",
     "section": "Witness (2024)",
     "text": "Witness (2024)\nIn an attempt to cash in on the ongoing popularity of Thrillers mixed with the underexplored opportunity in Romance film productions, can we identify a Romantic Thriller to remake? Can we convince a studio to finance our project by resting on existing, tested IP?\nSearching for films identified as both Romance and Thriller and a fantastic candidate jumps off the screen:\n\nTable: Films by Year and Film Score\n\n\nTitle\nYear\nFilm Score\n\n\n\n\nVertigo\n1958\n99.68\n\n\nThe Handmaiden\n2016\n99.20\n\n\nMatch Point\n2005\n97.93\n\n\nRoja\n1992\n92.96\n\n\nWitness\n1985\n92.05\n\n\nThe Wind\n1928\n91.02\n\n\nSpark: L.I.F.E.\n2023\n90.81\n\n\nA Story from Chikamatsu\n1954\n90.76\n\n\nTo Catch a Thief\n1955\n89.51\n\n\nVaalee\n1999\n89.06\n\n\n\nWitness (1985)!\nWitness’ core themes of cultural clash, love, and justice are forever relevant. Exploring the tension between the modern world and an insular community like the Amish, especially in a world driven by technology and changing social norms, a Witness remake could resonate with contemporary audiences.\nOur new Witness can also offer new insights by exploring evolving dynamics between urban and rural life, highlighting current issues like surveillance, policing, or cultural identity.\nSince *Witness** continues to have a strong cult following, a remake could introduce the story to a younger generation, giving them a chance to experience its narrative through a modern lens.\nThe Wachowskis would be perfect directors for this film as the clash between the modern world and the isolated Amish offers rich potential for the Wachowskis’ thematic exploration of duality and identity. The original Witness garnered significant Oscar attention and a modern remake could finally position The Wachowskis for over-due awards-season recognition.\nJake Gyllenhaal and Scarlett Johansson would be perfect leads for a Witness remake due to their range and potential for chemistry. With Gyllenhaal’s intensity and emotional depth he would no doubt thrive in the role of John Book. Scarlett Johansson versatility and strong presence would bring nuance and vulnerability to Rachel. It’s strong pairing for sure.\nIn an appeal to fan service, we can re-cast Lukas Haas, he of the memorable child performance in the 1985 original, into the film’s villain…\nFrom the visionary directors who brought you The Matrix and Cloud Atlas…\nAnd starring Jake Gyllenhaal, the beloved star of Nightcrawler…\nAlongside Scarlett Johansson, Hollywood icon of action and drama…\nComes a reimagining of a timeless classic…\nWitness. A story of secrets, survival, and sacrifice.\nComing soon to a theater near you!\n\n\n\n&gt; show the code\n\n# Searching for all Romance Thrillers\nromance_thrillers &lt;- TITLE_BASICS |&gt;\n  filter(titleType == \"movie\") |&gt;  \n  filter(grepl(\"Romance\", genres) & grepl(\"Thriller\", genres)) |&gt;\n  inner_join(films_scores, by = \"tconst\") |&gt;\n  filter(film_score &gt; 77.46) |&gt;\n  select(primaryTitle.x, startYear.x, film_score) |&gt;\n  arrange(desc(film_score))\n  \n# This yields 19 films, lets investigate them\nhead(romance_thrillers, 19)\n\n# Has Witness been remade? \nwitness_films &lt;- TITLE_BASICS |&gt; \n  filter(titleType == \"movie\" & primaryTitle == \"Witness\" ) \n  \n# There is another Witness in the dataset, but it's an unrelated film from India\nhead(witness_films)"
+  },
+  {
+    "objectID": "mp03.html",
+    "href": "mp03.html",
+    "title": "STA 9750 Fall 2024 - Jason Amey",
+    "section": "",
+    "text": "This project uses packages readr, dplyr, tidy\nWhat are the states to lose the most Electoral College votes since 1976?\nWhat are the states to gain the most Electoral College votes since 1976?"
+  },
+  {
+    "objectID": "data/mp03/dataversefiles/codebook-us-house-1976–2020.html",
+    "href": "data/mp03/dataversefiles/codebook-us-house-1976–2020.html",
+    "title": "STA 9750 Fall 2024 - Jason Amey",
+    "section": "",
+    "text": "#Codebook for U.S. House Returns 1976–2020\nThe data file 1976-2020-house contains constituency (district) returns for elections to the U.S. House of Representatives from 1976 to 2020. The data source is the document “Statistics of the Congressional Election,” published biennially by the Clerk of the U.S. House of Representatives. 2018 data comes from official state election websites, and for Kansas, come from Stephen Pettigrew and the Kansas Secretary of State office (in some cases, they are marked as unofficial, and will be updated at a later time).\nAll string variables are in upper case.\n##Variables The variables are listed as they appear in the data file.\n###year - Description: year in which election was held\n\n###state - Description: state name\n\n###state_po - Description: U.S. postal code state abbreviation\n\n###state_fips - Description: State FIPS code\n\n###state_cen - Description: U.S. Census state code\n\n\nstate_ic\n\nDescription: ICPSR state code\n\n\n###office - Description: U.S. House (constant)\n\n\n\ndistrict\n\nDescription: district number\n****Note****: At-large districts are coded as 0 (zero).\n\n\n\n\nstage\n\nDescription: electoral stage\nCoding:\n\n\n\n\ncode\ndefinition\n\n\n\n\n“gen”\ngeneral elections\n\n\n“pri”\nprimary elections\n\n\n\n\nNote: Only appears in special cases. Consult original House Clerk report for these cases.\n\n\n\n\nspecial\n\nDescription: special election\nCoding\n\n\n\n\ncode\ndefinition\n\n\n\n\n“TRUE”\nspecial elections\n\n\n“FALSE”\nregular elections\n\n\n\n\n\n\ncandidate\n\nDescription: name of the candidate\nNote: The name is as it appears in the House Clerk report.\n\n\n\n\nparty\n\nDescription: party of the candidate (always entirely lowercase)\n\nNote: Parties are as they appear in the House Clerk report. In states that allow candidates to appear on multiple party lines, separate vote totals are indicated for each party. Therefore, for analysis that involves candidate totals, it will be necessary to aggregate across all party lines within a district. For analysis that focuses on two-party vote totals, it will be necessary to account for major party candidates who receive votes under multiple party labels. Minnesota party labels are given as they appear on the Minnesota ballots. Future versions of this file will include codes for candidates who are endorsed by major parties, regardless of the party label under which they receive votes.\n\n\n\n\n\nwritein\n\nDescription: vote totals associated with write-in candidates\nCoding:\n\n\n\n\ncode\ndefinition\n\n\n\n\n“TRUE”\nwrite-in candidates\n\n\n“FALSE”\nnon-write-in candidates\n\n\n\n\n\n\nmode\n\nDescription: mode of voting; states with data that doesn’t break down returns by mode are marked as “total”\n\n\n\n\ncandidatevotes\n\nDescription: votes received by this candidate for this particular party\n\n\n\n\ntotalvotes\n\nDescription: total number of votes cast for this election\n\n\n\n\nfusion_ticket\n\nDescription: A TRUE/FALSE indicator as to whether the given candidate is running on a fusion party ticket, which will in turn mean that a candidate will appear multiple times, but by different parties, for a given election. States with fusion tickets include Connecticut, New Jersey, New York, and South Carolina.\n\n\n\n\n\n\n\n## unofficial Description: TRUE/FALSE indicator for unofficial result (to be updated later); this appears only for 2018 data in some cases\n\n\n\n\n\nversion\n\nDescription: date when this dataset was finalized\n\n##NOTES:\ncandidatevotes: for uncontested races, value is set to 1 in FL. Should user want to set a higher value for analysis purposes, consider setting the value as the maximum for a given state-year. The code in R would be the following: df &lt;- read.csv(“1976-2018-house.csv”, stringsAsFactors = FALSE) df &lt;- df %&gt;% group_by(state_po,district) %&gt;% mutate(max_st_year_vote = max(candidatevotes, na.rm=T)\nThe following code should be used if the user would like to assume that uncontested candidates would have recieved as many votes as the best contested candidate.\ndistrict: district is set to 0 for single member states.\nparty and candidate: candidate - party combinations are recorded as they were on the state elections website. This means that for states where the same candidate might appear on multiple parties, like in NY, they are recorded as such. Therefore, for users interested in finding the primary party, run the following code:\ndf &lt;- read.csv(“1976-2020-house.csv”, stringsAsFactors = FALSE) df\\(district &lt;- str_pad(df\\)district, width=2, pad=“0”, side=“left) df\\(state_fips &lt;- str_pad(df\\)state_fips, width=2, pad=”0”, side=“left) df\\(GEOID &lt;- paste(df\\)state_fips, df$district, sep=”“) df_max &lt;- df %&gt;% group_by(candidate, GEOID, year) %&gt;% slice(which.max(candidatevotes) df_sum &lt;- df %&gt;% group_by(candidate, GEOID, year) %&gt;% aggregate(candvotes_sum = sum(candvotes))"
+  },
+  {
+    "objectID": "final_project.html",
+    "href": "final_project.html",
+    "title": "STA 9750 Fall 2024 - Jason Amey",
+    "section": "",
+    "text": "library(readr)\nBBL &lt;- read_csv(“data/final_project/finance/avroll.csv”)\nfinance_data_2010_residential &lt;- finance_data_2010 |&gt; filter(TAXCLASS != “4” & TAXCLASS != “3” & B == 3)\ndata &lt;- finance_data_2010 |&gt; filter(B == 3 & BLOCK == 1068 & LOT == 37)\nglimpse(data)\n\npark_corner &lt;- finance_data_2010_residential |&gt; filter(BLOCK == 1068 & LOT == 37)\npark_corner$FULLVAL\nglimpse(finance_data_2010_residential)\n\n```r\n# Import real estate valuations from NYC Department of Finance \nfinance_data_2010 &lt;- read_csv(\"data/final_project/finance/avroll.csv\")\n\n# Import all finance data for tax classes 2, 3 and 4\nfinance_data_class_234 &lt;- read_csv(\"data/final_project/finance/tc234_2010.csv\") |&gt;\n\n# Limit to Brooklyn and the residential tax class of 2, and the \nbk_finance_data_class_2_2010 &lt;- finance_data_class_234 |&gt;\n  filter(BORO == 3 & TXCL == 2)\n\nbk_finance_data_class_2_2010\n\n# Import all finance data for tax classes 2, 3 and 4\nfinance_data_class_1 &lt;- read_csv(\"data/final_project/finance/tc1_2010.csv\") \n\n# Limit to Brooklyn:\nbk_finance_data_class_1_2010 &lt;- finance_data_class_1 |&gt;\n  filter(BORO == 3)\n  \nbk_finance_data_class_1_2010 &lt;- bk_finance_data_class_1_2010 |&gt; \n  select()\n  \nView(bk_finance_data_class_1_2010)\n  \n# Convert EASE column to consistent data types for row binding\nbk_finance_data_class_1_2010 &lt;- bk_finance_data_class_1_2010 %&gt;% mutate(EASE = as.character(EASE))\nbk_finance_data_class_2_2010 &lt;- bk_finance_data_class_2_2010 %&gt;% mutate(EASE = as.character(EASE))\n\n\n\nbk_finance_data_2010 &lt;- bind_rows(bk_finance_data_class_1_2010, bk_finance_data_class_2_2010)\n\nbk_finance_data_2010\n\n#Re-create dataset with just Brooklyn data, borough 3 \nbrooklyn_2010 &lt;- finance_data_2010 |&gt;\n  filter(B == 3)\n\n#Save new dataset to csv\nwrite_csv(brooklyn_2010, \"data/final_project/brooklyn_2010.csv\")\n\n#Import Borough, Block, Lot info for PPW from The NYC Department of Planning\nBBL &lt;- read_csv(\"data/final_project/planning/lot_selector_PPW_PLUTO.csv\")"
+  },
+  {
+    "objectID": "mp03.html#data-prep",
+    "href": "mp03.html#data-prep",
+    "title": "STA 9750 Fall 2024 - Jason Amey",
+    "section": "Data Prep",
+    "text": "Data Prep\n\n\n&gt; show the code\n\n#data download\n\nELECTION_DATA &lt;- read_csv(\"data/mp03/dataversefiles/1976-2022-house.csv\")\n\n\ncongress_shapefiles_ucla &lt;- function(start = 95, end = 112) {\n  BASE_URL &lt;- \"https://cdmaps.polisci.ucla.edu/shp/districts\"\n  \n  # Create directory if it doesn't exist\n  if (!dir.exists(\"data/mp03/congress_shapefiles\")) {\n    dir.create(\"data/mp03/congress_shapefiles\", recursive = TRUE)\n  }\n  \n  for (congress in start:end) {\n    # Format congress number with leading zeros\n    congress_str &lt;- sprintf(\"%03d\", congress)\n    \n    # Construct URL and destination path\n    file_url &lt;- paste0(BASE_URL, congress_str, \".zip\")\n    dest_file &lt;- paste0(\"data/mp03/congress_shapefiles/congress_\", congress_str, \"_shapefile.zip\")\n    \n    if (!file.exists(dest_file)) {\n      # Download file and check for success\n      tryCatch({\n        download.file(file_url, destfile = dest_file, mode = \"wb\")\n        message(\"Downloaded shapefile for Congress \", congress_str)\n      }, error = function(e) {\n        message(\"Failed to download for Congress \", congress_str, \": \", e)\n      })\n    } else {\n      message(\"File for Congress \", congress_str, \" already exists. Skipping download.\")\n    }\n  }\n}\n\n# Run function\ncongress_shapefiles_ucla(95, 98)\n\n#####\n\ncongress_shapefiles_census &lt;- function(start_year = 2013, end_year = 2023) {\n  BASE_URL &lt;- \"https://www2.census.gov/geo/tiger/TIGER\"\n  \n  # Create the download directory if it doesn’t exist\n  if (!dir.exists(\"data/mp03/census_congress_shapefiles\")) {\n    dir.create(\"data/census_congress_shapefiles\", recursive = TRUE)\n  }\n  \n  # Determine Congress numbers based on years\n  congress_numbers &lt;- seq(113, 113 + (end_year - start_year) / 2, by = 1)\n  years &lt;- seq(start_year, end_year, by = 2)  # Only even years\n\n  # Loop over the years and corresponding congress numbers\n  for (i in seq_along(years)) {\n    year &lt;- years[i]\n    congress &lt;- congress_numbers[i]\n    congress_str &lt;- sprintf(\"cd%d\", congress)  # Format as 'cd113', 'cd114', etc.\n    \n    # Construct URL and destination path\n    file_url &lt;- paste0(BASE_URL, year, \"/CD/tl_\", year, \"_us_\", congress_str, \".zip\")\n    dest_file &lt;- paste0(\"data/mp03/census_congress_shapefiles/tl_\", year, \"_us_\", congress_str, \".zip\")\n    \n    # Check if file already exists to avoid re-downloading\n    if (!file.exists(dest_file)) {\n      # try catch for for successful downloading\n      tryCatch({\n        download.file(file_url, destfile = dest_file, mode = \"wb\")\n        print(\"Downloaded shapefile for \", congress_str, \" (Year \", year, \")\")\n      }, error = function(e) {\n        print(\"Failed to download for \", congress_str, \" (Year \", year, \"): \", e)\n      })\n    } else {\n      message(\"File for \", congress_str, \" (Year \", year, \") already exists. Skipping download.\")\n    }\n  }\n}\n\n#Run function\ncongress_shapefiles_census(2013, 2023)"
+  },
+  {
+    "objectID": "mp03.html#data-prep-readjust",
+    "href": "mp03.html#data-prep-readjust",
+    "title": "STA 9750 Fall 2024 - Jason Amey",
+    "section": "DATA PREP READJUST",
+    "text": "DATA PREP READJUST\n\n\n&gt; show the code\n\n#data download\n\nELECTION_DATA_HOUSE &lt;- read_csv(\"data/mp03/dataversefiles/1976-2022-house.csv\")\nELECTION_DATA_PRESIDENT &lt;- read_csv(\"data/mp03/dataversefiles/1976-2020-president.csv\")\n\n\ncongress_shapefiles_ucla &lt;- function(start = 95, end = 112) {\n  BASE_URL &lt;- \"https://cdmaps.polisci.ucla.edu/shp/districts\"\n  \n  # Create directory if it doesn't exist\n  if (!dir.exists(\"data/mp03/congress_shapefiles\")) {\n    dir.create(\"data/mp03/congress_shapefiles\", recursive = TRUE)\n  }\n  \n  for (congress in start:end) {\n    # Format congress number with leading zeros\n    congress_str &lt;- sprintf(\"%03d\", congress)\n    \n    # Construct URL and destination path\n    file_url &lt;- paste0(BASE_URL, congress_str, \".zip\")\n    dest_file &lt;- paste0(\"data/mp03/congress_shapefiles/congress_\", congress_str, \"_shapefile.zip\")\n    \n    if (!file.exists(dest_file)) {\n      # Download file and check for success\n      tryCatch({\n        download.file(file_url, destfile = dest_file, mode = \"wb\")\n        message(\"Downloaded shapefile for Congress \", congress_str)\n      }, error = function(e) {\n        message(\"Failed to download for Congress \", congress_str, \": \", e)\n      })\n    } else {\n      message(\"File for Congress \", congress_str, \" already exists. Skipping download.\")\n    }\n  }\n}\n\n# Run function\ncongress_shapefiles_ucla(95, 98)\n\n#####\n\ncongress_shapefiles_census &lt;- function(start_year = 2013, end_year = 2023) {\n  BASE_URL &lt;- \"https://www2.census.gov/geo/tiger/TIGER\"\n  \n  # Create the download directory if it doesn’t exist\n  if (!dir.exists(\"data/mp03/census_congress_shapefiles\")) {\n    dir.create(\"data/census_congress_shapefiles\", recursive = TRUE)\n  }\n  \n  # Determine Congress numbers based on years\n  congress_numbers &lt;- seq(113, 113 + (end_year - start_year) / 2, by = 1)\n  years &lt;- seq(start_year, end_year, by = 2)  # Only even years\n\n  # Loop over the years and corresponding congress numbers\n  for (i in seq_along(years)) {\n    year &lt;- years[i]\n    congress &lt;- congress_numbers[i]\n    congress_str &lt;- sprintf(\"cd%d\", congress)  # Format as 'cd113', 'cd114', etc.\n    \n    # Construct URL and destination path\n    file_url &lt;- paste0(BASE_URL, year, \"/CD/tl_\", year, \"_us_\", congress_str, \".zip\")\n    dest_file &lt;- paste0(\"data/mp03/census_congress_shapefiles/tl_\", year, \"_us_\", congress_str, \".zip\")\n    \n    # Check if file already exists to avoid re-downloading\n    if (!file.exists(dest_file)) {\n      # try catch for for successful downloading\n      tryCatch({\n        download.file(file_url, destfile = dest_file, mode = \"wb\")\n        print(\"Downloaded shapefile for \", congress_str, \" (Year \", year, \")\")\n      }, error = function(e) {\n        print(\"Failed to download for \", congress_str, \" (Year \", year, \"): \", e)\n      })\n    } else {\n      message(\"File for \", congress_str, \" (Year \", year, \") already exists. Skipping download.\")\n    }\n  }\n}\n\n#Run function\ncongress_shapefiles_census(2013, 2023)"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#thesis-to-explore",
+    "href": "final_project_presentation_check_in.html#thesis-to-explore",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "Thesis to explore:",
+    "text": "Thesis to explore:"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#has-this-topic-been-studied-in-new-york-city",
+    "href": "final_project_presentation_check_in.html#has-this-topic-been-studied-in-new-york-city",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "Has this topic been studied? In New York City?:",
+    "text": "Has this topic been studied? In New York City?:"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#we-have-re-scoped-our-projects-ambitions",
+    "href": "final_project_presentation_check_in.html#we-have-re-scoped-our-projects-ambitions",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "We have re-scoped our project’s ambitions",
+    "text": "We have re-scoped our project’s ambitions"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#prospect-park-west-bike-lane-brooklyn-ny",
+    "href": "final_project_presentation_check_in.html#prospect-park-west-bike-lane-brooklyn-ny",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "2010 Prospect Park West Bike Lane, Brooklyn NY",
+    "text": "2010 Prospect Park West Bike Lane, Brooklyn NY"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#this-project-received-significant-media-attention",
+    "href": "final_project_presentation_check_in.html#this-project-received-significant-media-attention",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "This project received significant media attention",
+    "text": "This project received significant media attention"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#by-safety-metrics-this-project-has-been-a-success",
+    "href": "final_project_presentation_check_in.html#by-safety-metrics-this-project-has-been-a-success",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "By safety metrics this project has been a success",
+    "text": "By safety metrics this project has been a success"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#did-the-prospect-park-west-traffic-calming-project-impact-property-values-on-ppw",
+    "href": "final_project_presentation_check_in.html#did-the-prospect-park-west-traffic-calming-project-impact-property-values-on-ppw",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "Did the Prospect Park West traffic calming project impact property values on PPW?",
+    "text": "Did the Prospect Park West traffic calming project impact property values on PPW?"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#the-department-of-finance-tax-assessment-archives",
+    "href": "final_project_presentation_check_in.html#the-department-of-finance-tax-assessment-archives",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "The Department of Finance Tax Assessment Archives",
+    "text": "The Department of Finance Tax Assessment Archives"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#fields-for-data-definitions",
+    "href": "final_project_presentation_check_in.html#fields-for-data-definitions",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "~130 fields for data definitions",
+    "text": "~130 fields for data definitions"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#this-department-of-finance-tool-documents-increasing-property-values-under-total-value",
+    "href": "final_project_presentation_check_in.html#this-department-of-finance-tool-documents-increasing-property-values-under-total-value",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "This Department of Finance tool documents increasing property values under “Total Value”",
+    "text": "This Department of Finance tool documents increasing property values under “Total Value”"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#transformation-of-tax-assessment-data-into-r-data-frame",
+    "href": "final_project_presentation_check_in.html#transformation-of-tax-assessment-data-into-r-data-frame",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "Transformation of tax assessment data into R data frame",
+    "text": "Transformation of tax assessment data into R data frame"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#identify-field-that-corresponds-to-total-value",
+    "href": "final_project_presentation_check_in.html#identify-field-that-corresponds-to-total-value",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "Identify field that corresponds to “Total Value”",
+    "text": "Identify field that corresponds to “Total Value”"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#now-need-to-look-look-up-all-relevant-property-values",
+    "href": "final_project_presentation_check_in.html#now-need-to-look-look-up-all-relevant-property-values",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "Now need to look look up all relevant property values",
+    "text": "Now need to look look up all relevant property values"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#challenges-with-pre-2014-tax-assessment-data",
+    "href": "final_project_presentation_check_in.html#challenges-with-pre-2014-tax-assessment-data",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "Challenges with pre-2014 tax assessment data",
+    "text": "Challenges with pre-2014 tax assessment data"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#skeleton",
+    "href": "final_project_presentation_check_in.html#skeleton",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "SKELETON",
+    "text": "SKELETON"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#the-department-of-finance-tax-assessment-archives-1",
+    "href": "final_project_presentation_check_in.html#the-department-of-finance-tax-assessment-archives-1",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "The Department of Finance Tax Assessment Archives",
+    "text": "The Department of Finance Tax Assessment Archives"
+  },
+  {
+    "objectID": "final_project_presentation_check_in.html#thank-you-clinta-and-jason--",
+    "href": "final_project_presentation_check_in.html#thank-you-clinta-and-jason--",
+    "title": "STA 9750 Final Project Presentation Check In",
+    "section": "Thank you, Clinta and Jason :-)",
+    "text": "Thank you, Clinta and Jason :-)"
   }
 ]

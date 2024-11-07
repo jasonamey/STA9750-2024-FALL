@@ -1,0 +1,87 @@
+---
+title: "STA 9750 Final Project Presentation Check In"
+author: "Clinta Varghese and Jason Amey CA$H-VZ"
+format: revealjs
+---
+
+
+  
+## Thesis to explore:
+  
+![](images/final-project-presentation-check-in/1-thesis.jpg)
+
+
+## Has this topic been studied? In New York City?: 
+
+![](images/final-project-presentation-check-in/2-research.jpg)
+
+
+
+## We have re-scoped our project’s ambitions
+
+![](images/final-project-presentation-check-in/3-rescope.jpg)
+
+## 2010 Prospect Park West Bike Lane, Brooklyn NY 
+
+![](images/final-project-presentation-check-in/4-ppw-lane.jpg)
+
+
+## This project received significant media attention
+
+![](images/final-project-presentation-check-in/5-media.jpg)
+
+
+## By safety metrics this project has been a success
+
+![](images/final-project-presentation-check-in/6-safety.jpg)
+
+
+## Did the Prospect Park West traffic calming project impact property values on PPW?
+
+![](images/final-project-presentation-check-in/7-control.jpg)
+
+
+## The Department of Finance Tax Assessment Archives
+
+![](images/final-project-presentation-check-in/8-finance-tax.jpg)
+
+
+## ~130 fields for data definitions
+
+![](images/final-project-presentation-check-in/9-data-definitions.jpg)
+
+
+## This Department of Finance tool documents increasing property values under “Total Value”
+
+![](images/final-project-presentation-check-in/10-online-lookup.jpg)
+
+
+## Transformation of tax assessment data into R data frame
+
+![](images/final-project-presentation-check-in/11-text-transformation.jpg)
+
+
+## Identify field that corresponds to “Total Value”
+
+![](images/final-project-presentation-check-in/12-total-value-id.jpg)
+
+
+## Now need to look look up all relevant property values
+
+![](images/final-project-presentation-check-in/13-work-to-do.jpg)
+
+
+## Challenges with pre-2014 tax assessment data
+
+![](images/final-project-presentation-check-in/14-ms-access.jpg)
+
+## SKELETON
+
+![](images/final-project-presentation-check-in/14-ms-access.jpg)
+
+
+## The Department of Finance Tax Assessment Archives
+
+![](images/final-project-presentation-check-in/16-color-shp-files.jpg)
+
+## Thank you, Clinta and Jason :-) 

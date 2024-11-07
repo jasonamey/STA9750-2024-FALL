@@ -1,0 +1,468 @@
+<!-- library(readr) -->
+<!-- library(dplyr) -->
+<!-- library(tidyr) -->
+
+This project uses packages `readr`, `dplyr`, `tidy`
+
+<!-- The MIT Election Data Science Lab collects votes from all biennial congressional races in all 50 states here. Download this data as a CSV file using your web browser. Note that you will need to provide your contact info and agree to cite this data set in your final report.4 Make sure to include this citation! -->
+
+<!-- Additionally, download statewide presidential vote counts from 1976 to 2022 here. As before, it will likely be easiest to download this data by hand using your web browser. -->
+
+<!-- get_imdb_file <- function(fname){ -->
+<!--     BASE_URL <- "https://datasets.imdbws.com/" -->
+<!--     fname_ext <- paste0(fname, ".tsv.gz") -->
+<!--     if(!file.exists(fname_ext)){ -->
+<!--         FILE_URL <- paste0(BASE_URL, fname_ext) -->
+<!--         download.file(FILE_URL,  -->
+<!--                       destfile = fname_ext) -->
+<!--     } -->
+<!--     as.data.frame(readr::read_tsv(fname_ext, lazy=FALSE)) -->
+<!-- } -->
+
+<!-- NAME_BASICS      <- get_imdb_file("name.basics") -->
+
+
+<!-- install.packages("sf") -->
+<!-- library(sf) -->
+<!-- library(ggplot2) -->
+<!-- library(readr) -->
+<!-- nyc_demos <- read_csv("data/in_class/nyc_demos.csv") -->
+<!-- districts <- read_sf("data/mp03/districtShapes/districts111.shp") -->
+<!-- str(districts) -->
+<!-- shp_data <- st_read(districts) -->
+<!-- print(shp_data) -->
+
+<!-- election_data <- read_csv("data/mp03/dataversefiles/1976-2022-house.csv") -->
+<!-- glimpse(election_data) -->
+<!-- ggplot(nycc, aes(geometry = geometry)) + -->
+<!--   geom_sf() -->
+
+<!-- str(shp_data) -->
+<!-- children_under_5 <- nyc_demos |>  -->
+<!--   filter(field == "Under 5 years") -->
+<!-- glimpse(children_under_5) -->
+
+<!-- https://cdmaps.polisci.ucla.edu/shp/districts103.zip -->
+
+What are the states to lose the most Electoral College votes since 1976? 
+
+| State        | 1976 | 2022 | Change |
+|--------------|------|------|--------|
+| New York     | 41   | 28   | -13    |
+| Ohio         | 25   | 17   | -8     |
+| Pennsylvania | 27   | 19   | -8     |
+| Illinois     | 26   | 19   | -7     |
+| Michigan     | 21   | 15   | -6     |
+
+: Electoral Vote Losses By State (1976 vs. 2022)
+{.striped .hover}
+
+
+What are the states to gain the most Electoral College votes since 1976?
+
+
+| State      | 1976 | 2022 | Change |
+|------------|------|------|--------|
+| Texas      | 26   | 40   | 14     |
+| Florida    | 17   | 30   | 13     |
+| California | 45   | 54   | 9      |
+| Arizona    | 6    | 11   | 5      |
+| Georgia    | 12   | 16   | 4      |
+
+: Congressional District Growth By State (1976 vs. 2022)
+{.striped .hover}
+
+<details>
+<summary>\>show the code</summary>
+
+``` r
+
+
+electoral_votes_76_22 <- ELECTION_DATA |> 
+  filter(year == 1976 | year == 2022 ) |>
+  group_by(year, state) |>
+  summarize(votes = n_distinct(district) + 2) |> 
+  pivot_wider(names_from = year, values_from = votes) |>
+  mutate(change = `2022` - `1976`)
+
+electoral_votes_76_22 |> 
+  arrange(change)
+
+electoral_votes_76_22 |> 
+  arrange(desc(change))
+
+View(election_data)
+
+```
+</details>
+
+
+| Year | State    | District | Candidate          | Party        | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|--------------|------------|------------|--------|
+| 1980 | New York | 3        | Gregory W Carman   | Conservative | 0.0745     | 0.501      | TRUE   |
+| 1980 | New York | 3        | Gregory W Carman   | Republican   | 0.426      | 0.501      | TRUE   |
+| 1980 | New York | 3        | **Jerome A Ambro Jr** | Democrat  | **0.429** | 0.475      | FALSE  |
+| 1980 | New York | 3        | Jerome A Ambro Jr  | Right to Life| 0.0455     | 0.475      | FALSE  |
+
+: Data for NY19803 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party        | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|--------------|------------|------------|--------|
+| 1980 | New York | 6        | John LeBoutillier  | Conservative | 0.0665     | 0.528      | TRUE   |
+| 1980 | New York | 6        | John LeBoutillier  | Republican   | 0.423      | 0.528      | TRUE   |
+| 1980 | New York | 6        | John LeBoutillier  | Right to Life| 0.0390     | 0.528      | TRUE   |
+| 1980 | New York | 6        | **Lester L Wolff** | Democrat     | **0.437**  | 0.472      | FALSE  |
+| 1980 | New York | 6        | Lester L Wolff     | Liberal      | 0.0347     | 0.472      | FALSE  |
+
+: Data for NY19806 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party        | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|--------------|------------|------------|--------|
+| 1986 | New York | 27       | George C Wortley   | Conservative | 0.0372     | 0.497      | TRUE   |
+| 1986 | New York | 27       | George C Wortley   | Republican   | 0.459      | 0.497      | TRUE   |
+| 1986 | New York | 27       | **Rosemary S Pooler** | Democrat | **0.483** | 0.491      | FALSE  |
+| 1986 | New York | 27       | Rosemary S Pooler  | Effective    | 0.00808    | 0.491      | FALSE  |
+
+: Data for NY198627 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party        | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|--------------|------------|------------|--------|
+| 1994 | New York | 1        | **George J Hochbrueckner** | Democrat | **0.428**      | 0.435      | FALSE  |
+| 1994 | New York | 1        | George J Hochbrueckner | Long Island First | 0.00790 | 0.435 | FALSE  |
+| 1994 | New York | 1        | Michael P Forbes | Conservative | 0.0551 | 0.492      | TRUE   |
+| 1994 | New York | 1        | Michael P Forbes   | Republican   | 0.391      | 0.492      | TRUE   |
+| 1994 | New York | 1        | Michael P Forbes   | Right to Life| 0.0451     | 0.492      | TRUE   |
+
+: Data for NY19941 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 1996 | New York | 1        | Michael P Forbes   | Conservative    | 0.0508     | 0.495      | TRUE   |
+| 1996 | New York | 1        | Michael P Forbes   | Independent     | 0.0280     | 0.495      | TRUE   |
+| 1996 | New York | 1        | Michael P Forbes   | Republican      | 0.382      | 0.495      | TRUE   |
+| 1996 | New York | 1        | Michael P Forbes   | Right to Life   | 0.0342     | 0.495      | TRUE   |
+| 1996 | New York | 1        | **Nora L Bredes**  | Democrat        | **0.398**  | 0.410      | FALSE  |
+| 1996 | New York | 1        | Nora L Bredes      | Save Our State  | 0.0114     | 0.410      | FALSE  |
+
+: Data for NY19961 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 1996 | New York | 30       | **Francis J Pordum**   | Democrat        | **0.405**      | 0.414      | FALSE  |
+| 1996 | New York | 30       | Francis J Pordum   | Protection Party| 0.00975    | 0.414      | FALSE  |
+| 1996 | New York | 30       | Jack Quinn         | Conservative    | 0.0510     | 0.503      | TRUE   |
+| 1996 | New York | 30       | Jack Quinn         | Freedom Party   | 0.00880    | 0.503      | TRUE   |
+| 1996 | New York | 30       | Jack Quinn         | Independent     | 0.0398     | 0.503      | TRUE   |
+| 1996 | New York | 30       | Jack Quinn         | Republican      | 0.403      | 0.503      | TRUE   |
+
+: Data for NY199630 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2006 | New York | 25       | **Dan Maffei**         | Democrat        | **0.443**      | 0.471      | FALSE  |
+| 2006 | New York | 25       | Dan Maffei         | Working Families| 0.0286     | 0.471      | FALSE  |
+| 2006 | New York | 25       | James T Walsh      | Conservative    | 0.0512     | 0.486      | TRUE   |
+| 2006 | New York | 25       | James T Walsh      | Independent     | 0.0339     | 0.486      | TRUE   |
+| 2006 | New York | 25       | James T Walsh      | Republican      | 0.401      | 0.486      | TRUE   |
+
+: Data for NY200625 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2006 | New York | 29       | **Eric J Massa**       | Democrat        | **0.436**      | 0.462      | FALSE  |
+| 2006 | New York | 29       | Eric J Massa       | Working Families| 0.0251     | 0.462      | FALSE  |
+| 2006 | New York | 29       | John R "Randy"     | Conservative    | 0.0435     | 0.489      | TRUE   |
+| 2006 | New York | 29       | John R "Randy"     | Independent     | 0.0243     | 0.489      | TRUE   |
+| 2006 | New York | 29       | John R "Randy"     | Republican      | 0.422      | 0.489      | TRUE   |
+
+: Data for NY200629 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2012 | New York | 27       | Chris Collins      | Conservative    | 0.0727     | 0.489      | TRUE   |
+| 2012 | New York | 27       | Chris Collins      | Republican      | 0.416      | 0.489      | TRUE   |
+| 2012 | New York | 27       | **Kathleen C Hochul** | Democrat    | **0.425**  | 0.474      | FALSE  |
+| 2012 | New York | 27       | Kathleen C Hochul  | Working Families| 0.0492     | 0.474      | FALSE  |
+
+: Data for NY201227 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2018 | New York | 1        | Lee M Zeldin       | Conservative    | 0.0529     | 0.515      | TRUE   |
+| 2018 | New York | 1        | Lee M Zeldin       | Independent     | 0.00997    | 0.515      | TRUE   |
+| 2018 | New York | 1        | Lee M Zeldin       | Reform Party    | 0.00181    | 0.515      | TRUE   |
+| 2018 | New York | 1        | Lee M Zeldin       | Republican      | 0.450      | 0.515      | TRUE   |
+| 2018 | New York | 1        | **Perry Gershon**  | Democrat        | **0.460**  | 0.474      | FALSE  |
+| 2018 | New York | 1        | Perry Gershon      | Working Families| 0.0140     | 0.474      | FALSE  |
+
+: Data for NY20181 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2018 | New York | 24       | **Dana Balter**        | Democrat        | **0.445**      | 0.473      | FALSE  |
+| 2018 | New York | 24       | Dana Balter        | Women's Equality| 0.00975    | 0.473      | FALSE  |
+| 2018 | New York | 24       | Dana Balter        | Working Families| 0.0184     | 0.473      | FALSE  |
+| 2018 | New York | 24       | John M Katko       | Conservative    | 0.0652     | 0.526      | TRUE   |
+| 2018 | New York | 24       | John M Katko       | Independent     | 0.0209     | 0.526      | TRUE   |
+| 2018 | New York | 24       | John M Katko       | Reform Party    | 0.00367    | 0.526      | TRUE   |
+| 2018 | New York | 24       | John M Katko       | Republican      | 0.436      | 0.526      | TRUE   |
+
+: Data for NY201824 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2018 | New York | 27       | Chris Collins      | Conservative    | 0.0826     | 0.491      | TRUE   |
+| 2018 | New York | 27       | Chris Collins      | Independent     | 0.00732    | 0.491      | TRUE   |
+| 2018 | New York | 27       | Chris Collins      | Republican      | 0.401      | 0.491      | TRUE   |
+| 2018 | New York | 27       | **Nathan D McMurray** | Democrat    | **0.449**  | 0.487      | FALSE  |
+| 2018 | New York | 27       | Nathan D McMurray  | Women's Equality| 0.00982    | 0.487      | FALSE  |
+| 2018 | New York | 27       | Nathan D McMurray  | Working Families| 0.0284     | 0.487      | FALSE  |
+
+: Data for NY201827 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2022 | New York | 4        | Anthony P D'Esposito | Republican    | 0.464      | 0.505      | TRUE   |
+| 2022 | New York | 4        | Anthony P D'Esposito | Conservative | 0.0405     | 0.505      | TRUE   |
+| 2022 | New York | 4        | **Laura A Gillen**  | Democrat       | **0.470**  | 0.470      | FALSE  |
+
+: Data for NY20224 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2022 | New York | 17       | Michael V Lawler   | Republican      | 0.432      | 0.493      | TRUE   |
+| 2022 | New York | 17       | Michael V Lawler   | Conservative    | 0.0611     | 0.493      | TRUE   |
+| 2022 | New York | 17       | **Sean Patrick Maloney** | Democrat  | **0.458**  | 0.487      | FALSE  |
+| 2022 | New York | 17       | Sean Patrick Maloney | Working Families | 0.0284 | 0.487      | FALSE  |
+
+: Data for NY202217 Race {.striped .hover}
+
+| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
+|------|----------|----------|--------------------|-----------------|------------|------------|--------|
+| 2022 | New York | 22       | Brandon M Williams | Republican      | 0.425      | 0.495      | TRUE   |
+| 2022 | New York | 22       | Brandon M Williams | Conservative    | 0.0694     | 0.495      | TRUE   |
+| 2022 | New York | 22       | **Francis Conole** | Democrat        | **0.485**  | 0.485      | FALSE  |
+
+: Data for NY202222 Race {.striped .hover}
+
+<details>
+<summary> \> show the code</summary>
+
+```r
+
+fusion_elections <- ELECTION_DATA_HOUSE |> 
+  filter(fusion_ticket == TRUE) |> 
+  mutate(percentage = candidatevotes / totalvotes, race_id = paste0(state_po, year, district))
+
+winner_percentage <- fusion_elections |>
+  group_by(race_id, candidate) |>
+  summarize(total_vote = sum(percentage)) |>
+  ungroup()
+
+winner_percentage <- winner_percentage |>
+  add_count(race_id, name = "race_count") |>  
+  filter(race_count > 1) |>  
+  select(-race_count)
+  
+winners_added <- winner_percentage |> 
+  group_by(race_id) |> 
+  mutate(winner = (total_vote == max(total_vote))) |>
+  ungroup()
+
+fusion_elections <- fusion_elections |> 
+  inner_join(winners_added, by=c("race_id", "candidate")) |>
+  select(year, state, state_po, district, candidate, party, percentage, race_id, total_vote, winner)
+
+
+fusion_election_IDs <- fusion_elections |> 
+  group_by(race_id) |> 
+  arrange(desc(percentage)) |> 
+  slice(1) |>
+  filter(winner == FALSE) |>
+  pull(race_id)
+
+final_data <- fusion_elections |> 
+  filter(race_id %in% fusion_election_IDs & !is.na(party)) 
+
+```
+
+
+</details>
+
+
+<details>
+<summary>\> show the code</summary>
+
+```r
+
+election_president_r_d <- ELECTION_DATA_PRESIDENT |> 
+  filter(party_detailed == "REPUBLICAN" | party_detailed == "DEMOCRAT" )
+  
+
+sum_president_votes_r_d <- election_president_r_d |>
+  group_by(year, state, state_po, party_detailed, candidate) |>
+  summarize(
+    candidate_votes = sum(candidatevotes, na.rm = TRUE),
+    total_votes = max(totalvotes, na.rm = TRUE)  # Assuming totalvotes is the same across rows for a state-year
+  ) |>
+  ungroup() |>
+  mutate(id = paste(year, state_po, party_detailed, sep = "_"), pres_percentage = candidate_votes / total_votes) |>
+  rename(
+        pres_candidate_votes = candidate_votes, 
+        pres_total_votes = total_votes
+        )
+
+head(sum_president_votes_r_d)
+
+PRESIDENTIAL_YEARS <- seq(1976, 2020, by = 4)
+
+total_votes_per_state <- ELECTION_DATA_HOUSE |>
+  filter(year %in% PRESIDENTIAL_YEARS & (party == "REPUBLICAN" | party == "DEMOCRAT")) |>
+  group_by(year, state, state_po) |>
+  summarize(total_votes = unique(totalvotes, na.rm = TRUE) |> sum()) |>
+  ungroup()
+
+sum_house_votes_r_d <- ELECTION_DATA_HOUSE |>
+  filter(party %in% c("DEMOCRAT", "REPUBLICAN") & year %in% PRESIDENTIAL_YEARS) |>
+  group_by(year, state, state_po, party) |>
+  summarize(candidate_votes = sum(candidatevotes, na.rm = TRUE)) |>
+  ungroup() |>
+  left_join(total_votes_per_state, by = c("year", "state", "state_po")) |>
+  mutate(
+    id = paste(year, state_po, party, sep = "_"), 
+    house_percentage = candidate_votes / total_votes
+  ) |>
+  rename(
+    house_candidate_votes = candidate_votes,
+    house_total_votes = total_votes
+  ) |>
+  select(id, house_candidate_votes, house_total_votes, house_percentage)
+
+
+
+state_vote_counts <- sum_president_votes_r_d |>
+  left_join(sum_house_votes_r_d, by = "id") |>
+  mutate(dif = house_percentage - pres_percentage)
+
+
+#vote diff between pres and house grouped by state
+state_vote_diff_state_score <- state_vote_counts |> 
+  group_by(state, party_detailed) |> 
+  summarize(state_dif = mean(dif, na.rm = TRUE))
+  
+
+View(state_vote_diff_state_score)
+
+#difference between parties for each election between house and president
+state_vote_diff_pres_house <- state_vote_counts |> 
+  group_by(year, party_detailed) |> 
+  summarize(avg_dif = mean(dif, na.rm = TRUE))
+
+View(state_vote_diff_pres_house)
+
+state_vote_diff_pres
+
+
+
+SD <- sd(state_vote_diff_pres_house$avg_dif)
+MEAN <- mean(state_vote_diff_pres_house$avg_dif)
+
+state_vote_diff_total_score <- state_vote_diff_pres_house |> 
+  mutate(score = (avg_dif - MEAN) / SD) |> 
+  arrange(desc(score))
+
+View(state_vote_diff_total_score)
+```
+
+</details>
+
+## DATA PREP READJUST 
+
+<details>
+<summary>\> show the code</summary>
+
+```
+#data download
+
+ELECTION_DATA_HOUSE <- read_csv("data/mp03/dataversefiles/1976-2022-house.csv")
+ELECTION_DATA_PRESIDENT <- read_csv("data/mp03/dataversefiles/1976-2020-president.csv")
+
+
+congress_shapefiles_ucla <- function(start = 95, end = 112) {
+  BASE_URL <- "https://cdmaps.polisci.ucla.edu/shp/districts"
+  
+  # Create directory if it doesn't exist
+  if (!dir.exists("data/mp03/congress_shapefiles")) {
+    dir.create("data/mp03/congress_shapefiles", recursive = TRUE)
+  }
+  
+  for (congress in start:end) {
+    # Format congress number with leading zeros
+    congress_str <- sprintf("%03d", congress)
+    
+    # Construct URL and destination path
+    file_url <- paste0(BASE_URL, congress_str, ".zip")
+    dest_file <- paste0("data/mp03/congress_shapefiles/congress_", congress_str, "_shapefile.zip")
+    
+    if (!file.exists(dest_file)) {
+      # Download file and check for success
+      tryCatch({
+        download.file(file_url, destfile = dest_file, mode = "wb")
+        message("Downloaded shapefile for Congress ", congress_str)
+      }, error = function(e) {
+        message("Failed to download for Congress ", congress_str, ": ", e)
+      })
+    } else {
+      message("File for Congress ", congress_str, " already exists. Skipping download.")
+    }
+  }
+}
+
+# Run function
+congress_shapefiles_ucla(95, 98)
+
+#####
+
+congress_shapefiles_census <- function(start_year = 2013, end_year = 2023) {
+  BASE_URL <- "https://www2.census.gov/geo/tiger/TIGER"
+  
+  # Create the download directory if it doesn’t exist
+  if (!dir.exists("data/mp03/census_congress_shapefiles")) {
+    dir.create("data/census_congress_shapefiles", recursive = TRUE)
+  }
+  
+  # Determine Congress numbers based on years
+  congress_numbers <- seq(113, 113 + (end_year - start_year) / 2, by = 1)
+  years <- seq(start_year, end_year, by = 2)  # Only even years
+
+  # Loop over the years and corresponding congress numbers
+  for (i in seq_along(years)) {
+    year <- years[i]
+    congress <- congress_numbers[i]
+    congress_str <- sprintf("cd%d", congress)  # Format as 'cd113', 'cd114', etc.
+    
+    # Construct URL and destination path
+    file_url <- paste0(BASE_URL, year, "/CD/tl_", year, "_us_", congress_str, ".zip")
+    dest_file <- paste0("data/mp03/census_congress_shapefiles/tl_", year, "_us_", congress_str, ".zip")
+    
+    # Check if file already exists to avoid re-downloading
+    if (!file.exists(dest_file)) {
+      # try catch for for successful downloading
+      tryCatch({
+        download.file(file_url, destfile = dest_file, mode = "wb")
+        print("Downloaded shapefile for ", congress_str, " (Year ", year, ")")
+      }, error = function(e) {
+        print("Failed to download for ", congress_str, " (Year ", year, "): ", e)
+      })
+    } else {
+      message("File for ", congress_str, " (Year ", year, ") already exists. Skipping download.")
+    }
+  }
+}
+
+#Run function
+congress_shapefiles_census(2013, 2023)
+```
+</details>
+
+
