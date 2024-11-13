@@ -1,11 +1,3 @@
-library(readr)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(sf)
-library(stringr)
-library(statebins)
-library(scales)
 
 <style>
 .flexbox-grid {
@@ -20,17 +12,45 @@ library(scales)
 }
 </style>
 
+# The Electoral College Dilemma: Tradition, Tension, and the Future of American Democracy
+
+*by Jason Amey*
+
+The Electoral College is one of the most misunderstood components of the American political system. Rooted in the Constitutional principle of federalism, the Electoral College is designed to balance power by ensuring that both individual states and the overall population have a voice in electing the nation’s leader. 
+
+This approach emphasizes the importance of state sovereignty, reflecting the framers’ intent to respect the rights and influence of each state within a diverse and expansive union. This system requires presidential candidates to seek support across a wide geographic range, ensuring that the voices of smaller or less populous states are not dominated by larger population centers.
+
+Recently the Electoral College has become an increasingly contentious, particularly as modern elections have seen candidates win the presidency without winning the popular vote. This disconnect in recent years has raised questions about the system's fairness and the extent to which it reflects the will of the people. 
+
+For many American voters, it remains unjust that a candidate who secures the majority of votes nationally can still lose the presidency. This reality has engendered disenfranchisement among voters who feel their voices are increasingly insignificant in choosing a President.
+
+A segment of this disenchantment stems from the difficulty in changing our constitutional system. Changing the Electoral College is an extraordinarily complex task, not only because it would require a constitutional amendment, but also because many constituencies currently benefit from this arrangement. States that hold a disproportionate influence under the Electoral College system are unlikely to support a departure from the Electoral College beacuse it would naturally reduce their electoral power and political significance. 
+
+Amending the Constitution demands broad consensus—a nearly impossible level of national agreement that is exceedingly rare in today’s polarized political climate. Thus, while many Americans express a desire to reform or eliminate the Electoral College, the practical and political barriers to doing so are aguably insurmountable.
+
+The ongoing use of the Electoral College, despite its oft-misalignment with the popular vote, presents a significant challenge to the perceived responsiveness of elected leaders to the public’s democratic wishes. When candidates who do not enjoy the majority’s support are elevated to the presidency, it can strain the public’s trust in our political system. This tension between majority rule and the structure of the Electoral College poses serious questions for the future of American democracy, as it risks diminishing the public’s faith in the electoral process and the legitimacy of its political leaders.
+
+---
+
+To explore the dynamics of the Electoral College, a data analysis was conducted using electoral data from the MIT Election Data and Science Lab, which provides detailed voting records across U.S. House elections from 1976 to 2022.^[MIT Election Data and Science Lab, 2017, "U.S. House 1976–2022", https://doi.org/10.7910/DVN/IG0UN2, Harvard Dataverse, V13, UNF:6
+/IVldA== [fileUNF]] This dataset offers insights into historical voting patterns and party performance at the district level, essential for understanding shifts in electoral influence over time. This data was with congressional shapefiles from UCLA’s PoliSci Mapping Center^[CD Maps, “The Database of Congressional Historical Shape Files,” https://cdmaps.polisci.ucla.edu/] and the U.S. Census Bureau’s TIGER/Line files.^[U.S. Census Bureau, "TIGER/Line Shapefiles," https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html] These resources enable a comprehensive analysis of the Electoral College system, highlighting shifts in population and the impact districting commands over electoral outcomes.
+
+This project uses packages `readr`, `dplyr`, `tidy`, `ggplot2`, `sf`, `stringr`, `statebins`, `scales`
 
 <details>
-<summary>\> show the code for data</summary>
+<summary>\> show the code for data preparation</summary>
 
+```r
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(sf)
+library(stringr)
+library(statebins)
+library(scales)
 
-
-
-
-```
-#data download
-
+# Sourced data
 ELECTION_DATA_HOUSE <- read_csv("data/mp03/dataversefiles/1976-2022-house.csv")
 ELECTION_DATA_HOUSE <- ELECTION_DATA_HOUSE |> 
   filter(!is.na(party))
@@ -39,22 +59,22 @@ ELECTION_DATA_PRESIDENT <- read_csv("data/mp03/dataversefiles/1976-2020-presiden
 ELECTION_DATA_PRESIDENT <- ELECTION_DATA_PRESIDENT |> 
   filter(!is.na(candidate) & !is.na(party_detailed))
 
-
+# Function to download shapefiles UCLA’s PoliSci Mapping Center, 95 | 112 represents relevant 
+# Congressional Sessions
 congress_shapefiles_ucla <- function(start = 95, end = 112) {
   BASE_URL <- "https://cdmaps.polisci.ucla.edu/shp/districts"
   
-  # Create directory if it doesn't exist
   if (!dir.exists("data/mp03/congress_shapefiles")) {
     dir.create("data/mp03/congress_shapefiles", recursive = TRUE)
   }
   
   for (congress in start:end) {
-    # Format congress number with leading zeros
+    # Requires leading zeros
     congress_str <- sprintf("%03d", congress)
     file_url <- paste0(BASE_URL, congress_str, ".zip")
     dest_file <- paste0("data/mp03/congress_shapefiles/congress_", congress_str, "_shapefile.zip")
     
-     #Avoid re-downloading
+     # Prevent re-downloading
     if (!file.exists(dest_file)) {
       tryCatch({
         download.file(file_url, destfile = dest_file, mode = "wb")
@@ -69,10 +89,10 @@ congress_shapefiles_ucla <- function(start = 95, end = 112) {
 }
 
 # Run function
-congress_shapefiles_ucla(95, 98)
+congress_shapefiles_ucla()
 
-#####
 
+# Function to download shapefiles from the U.S. Census Bureau’s TIGER/Line Shapefiles 
 congress_shapefiles_census <- function(start_year = 2013, end_year = 2023) {
   BASE_URL <- "https://www2.census.gov/geo/tiger/TIGER"
   
@@ -93,7 +113,7 @@ congress_shapefiles_census <- function(start_year = 2013, end_year = 2023) {
     file_url <- paste0(BASE_URL, year, "/CD/tl_", year, "_us_", congress_str, ".zip")
     dest_file <- paste0("data/mp03/census_congress_shapefiles/tl_", year, "_us_", congress_str, ".zip")
     
-    #Avoid re-downloading
+    #Prevent re-downloading
     if (!file.exists(dest_file)) {
       tryCatch({
         download.file(file_url, destfile = dest_file, mode = "wb")
@@ -108,15 +128,26 @@ congress_shapefiles_census <- function(start_year = 2013, end_year = 2023) {
 }
 
 #Run function
-congress_shapefiles_census(2013, 2023)
+congress_shapefiles_census()
 ```
 </details>
 
 
-This project uses packages `readr`, `dplyr`, `tidy`, `ggplot2`, `sf`
 
 
-What are the states to lose the most Electoral College votes since 1976? 
+
+## How has the Electoral College changed since 1976? 
+
+The past 40 years have seen dramatic demographic and economic shifts in the United States, with the "Sunbelt" region experiencing significant population growth. Factors such as warm climates, a lower cost of living, an influx of retirees and growing job opportunities have all contributed to this population transformation. Cities like Phoenix, Dallas, Houston, and Atlanta have expanded rapidly, becoming economic powerhouses that attract internal migration. This trend has boosted the political influence of the Sunbelt states, particularly in presidential elections, as their share of the Electoral College votes has grown in proportion to their population increases.
+
+In contrast, the Northeast and Rust Belt states have faced steady population declines or stagnation. The Rust Belt continues to grapple with the economic fallout from manufacturing declines and the corresponding reduction in job opportunities. The Northeast, once a densely populated region driving much of the nation's political power, has also seen a slower growth rate due to higher costs of living and a cooler climate. States like New York, Ohio, Pennsylvania, and Michigan have all lost congressional seats—and, by extension, Electoral College votes—in the face of a southward shift in national demographics.
+
+The impact on the Electoral College reflects these changes, as the Sunbelt’s increasing population has translated into greater political clout. Every ten years, the U.S. Census triggers a reapportionment of congressional seats, redistributing the 435 seats in the House of Representatives—and thus Electoral College votes—based on population changes.
+
+<br>
+
+
+**What are the states to lose the most Electoral College votes since 1976?**
 
 | State        | 1976 | 2022 | Change |
 |--------------|------|------|--------|
@@ -129,8 +160,9 @@ What are the states to lose the most Electoral College votes since 1976?
 : Electoral Vote Losses By State (1976 vs. 2022)
 {.striped .hover}
 
-
-What are the states to gain the most Electoral College votes since 1976?
+<br>
+<br>
+**What are the states to gain the most Electoral College votes since 1976?**
 
 
 | State      | 1976 | 2022 | Change |
@@ -144,12 +176,18 @@ What are the states to gain the most Electoral College votes since 1976?
 : Congressional District Growth By State (1976 vs. 2022)
 {.striped .hover}
 
+<br>
+Despite the Sunbelt's rising population and the corresponding increase in Electoral College votes, a paradox exists: many of these rapidly growing Sunbelt states lack the political clout associated with “swing states.” 
+
+In the Electoral College, political influence often hinges not only on a state’s population, but on its competitiveness in presidential elections. States like Texas and Florida, though gaining electoral votes, are often reliably partisan (both heavily Republican), which can diminish the attention they receive compared to smaller but more unpredictable states like Pennsylvania or Wisconsin. 
+
+This “swing state” phenomenon means that candidates prioritize states with narrower margins, where votes are likelier to tip the election, giving smaller, competitive states a unique power in the electoral process that even populous states in the Sunbelt do not always share.
 <details>
 <summary>\>show the code</summary>
 
 ``` r
 
-
+# Get data for 1976 and 2022
 electoral_votes_76_22 <- ELECTION_DATA_HOUSE |> 
   filter(year == 1976 | year == 2022 ) |>
   group_by(year, state) |>
@@ -157,19 +195,22 @@ electoral_votes_76_22 <- ELECTION_DATA_HOUSE |>
   pivot_wider(names_from = year, values_from = votes) |>
   mutate(change = `2022` - `1976`)
 
-
+# View states that have lost the most seats
 electoral_votes_76_22 |> 
   arrange(change)
 
+# View states that have gained the most seats
 electoral_votes_76_22 |> 
   arrange(desc(change))
-
-View(election_data)
 
 ```
 </details>
 
-## fun time for fusion
+## The Fusion Phenomenon
+
+Fusion voting, also known as cross-endorsement, is an electoral practice that allows a candidate to appear on the ballot under multiple party lines, thereby consolidating votes from different political bases. This approach enables third parties to endorse a major-party candidate, allowing voters to support a candidate's platform through the values or policies associated with a smaller, often more ideologically focused party. In practice, fusion voting can increase a candidate's visibility and support while empowering smaller parties to influence major-party agendas.
+
+In New York City, fusion voting began in the 1930s as a strategy to challenge Tammany Hall. Since then, many fusion-enabled parties have become important fixtures in New York area politics. For one, The Working Families Party has frequently endorsed progressive Democratic candidates while giving voters an alternative way to support candidates who align with specific labor and social equity issues. Likewise, The Conservative Party line gives voters a direct voice to amplify their commitment to limited government and social conservatism. All told, the fusion approach has been unique in New York City’s local elections, shaping policy conversations and reinforcing the presence of alternative political values within a largely two-party system.
 
 | Year | State    | District | Winner       | Party                                         | Loser       | Party                                 | Highest % |
 |------|----------|----------|-------------------------|-------------------------------------------------------|-------------------------|----------------------------------------------|----------------------------|
@@ -197,29 +238,35 @@ View(election_data)
 
 ```r
 
+# Filter House election data for fusion elections, calculate percentages and create unique ID
 fusion_elections <- ELECTION_DATA_HOUSE |> 
   filter(fusion_ticket == TRUE) |> 
   mutate(percentage = candidatevotes / totalvotes, race_id = paste0(state_po, year, district))
 
+# Calculate total winnine percentage
 winner_percentage <- fusion_elections |>
   group_by(race_id, candidate) |>
   summarize(total_vote = sum(percentage)) |>
   ungroup()
 
+# Count races for a given ID and filter out only competitve races
 winner_percentage <- winner_percentage |>
   add_count(race_id, name = "race_count") |>  
   filter(race_count > 1) |>  
   select(-race_count)
   
+# Create boolean for variable name `winner`  
 winners_added <- winner_percentage |> 
   group_by(race_id) |> 
   mutate(winner = (total_vote == max(total_vote))) |>
   ungroup()
 
+# Join datasets
 fusion_elections <- fusion_elections |> 
   inner_join(winners_added, by=c("race_id", "candidate")) |>
   select(year, state, state_po, district, candidate, party, percentage, race_id, total_vote, winner)
 
+# Identify individuals who recieved the highest single percentage, but lost race
 fusion_election_IDs <- fusion_elections |> 
   group_by(race_id) |> 
   arrange(desc(percentage)) |> 
@@ -227,9 +274,11 @@ fusion_election_IDs <- fusion_elections |>
   filter(winner == FALSE) |>
   pull(race_id)
 
+# Recreate dataset with just unique elections with fusion winners (losers)
 final_data <- fusion_elections |> 
   filter(race_id %in% fusion_election_IDs & !is.na(party)) 
 
+# Identify all the candidates and their parties in these unique fusion instances
 result <- final_data |>
   group_by(year, state, district) |>
   summarise(
@@ -241,38 +290,55 @@ result <- final_data |>
     .groups = 'drop'
   )
 
-result <- final_data |>
-  group_by(year, state, district) |>
-  summarise(
-    winning_candidate = unique(candidate[winner == TRUE]),
-    winning_party = paste(unique(party[winner == TRUE]), collapse = ", "),
-    losing_candidate = unique(candidate[winner == FALSE]),
-    losing_party = paste(unique(party[winner == FALSE]), collapse = ", "),
-    highest_losing_percentage = max(percentage[winner == FALSE], na.rm = TRUE),
-    .groups = 'drop'
-  )
-
-print(result)
+# Print output for table formatting
+print(result, n = 100)
 ```
 
 </details>
 
-## Do candidates out run presidents?
+## House vs. Presidential Candidate Support in Recent U.S
+
+
+![](images/mp-03/party-score.png)
+
+These scores represent the standardized differences in voter support between Democratic and Republican candidates in House versus Presidential elections for each election year. This examination represents whether in a given state and year a party's House candidates received a higher or lower percentage of votes than the party's Presidential candidate, indicating voter preferences that may diverge between congressional and national races. The standardized score highlights years with especially strong or weak alignment between House and Presidential support. Positive scores indicate years when House candidates outperformed Presidential candidates, while negative scores suggest the opposite.
+
+## High Positive Scores for Democrats (1984, 1980, 1992): ##
+
+The Democratic Party shows substantial positive discrepancies in years like 1984, 1980, and 1992, suggesting that Democratic House candidates outperformed the Democratic Presidential candidate by a notable margin in these years. 1980 and 1984 reflect the transformative political strength of Ronald Reagan, arguably one of the most consequential Presidential figures of the last 50 years.^[Smith, Robert C. "Ronald Reagan, Donald Trump, and the Future of the Republican Party and Conservatism in America." American Political Thought 10.2 (2021): 283-289.] In 1992, a strong third-party showing by Ross Perot may have influenced voting patterns, with many voters possibly splitting their votes between Perot and their local Democratic House Representatives.
+
+[^1]: Smith, Robert C. "Ronald Reagan, Donald Trump, and the future of the Republican party and conservatism in America." American Political Thought 10.2 (2021): 283-289.
+
+## High Negative Scores for Republicans (1988, 1984, 1976): ##
+
+In `1988`, `1984`, and `1976`, Republicans have significant negative scores, suggesting that in these years, Republican House candidates underperformed relative to the Presidential candidate. This might indicate that the Presidential candidate was particularly appealing, drawing votes that House candidates could not capture as effectively.
+
+This trend suggests that in certain election years, voters may have been inclined toward a Republican President but were more mixed in their support for Republicans in the House, as was the case in `1988` and `1984` years when the GOP ran strong candidates atop their tickets. The `1976` results are likely a reflection of broader voter disenchantment with the Republican Party post-Watergate in the ensuing years and the need to re-build their national stature among voters. 
+
+## Low Discrepancy Years (Near Zero Scores): ##
+
+Years like `2004` (Democrat), `2000` (Republican), and `2012` (Republican) have scores close to zero, indicating minimal discrepancies between the public’s preference for President and the House within those years.
+In such years, voter alignment between Presidential and House races was more consistent, reflecting lower levels of split-ticket voting or greater alignment in perceived candidate appeal and party policies across both levels. These years most likely signaled the rise of growing polarization of the American electorate as seen in recent elections. 
+
+## Recent Years (2008–2020): ##
+
+In recent years, such as 2008, 2016, and 2020, both parties show relatively low scores, suggesting less discrepancy in voter preferences between the House and Presidential candidates. This trend reflects growing political polarization, with fewer voters splitting their votes across parties. The increased partisan consistency among voters has led to a decline in split-ticket voting, a phenomenon that has been well-documented in studies on electoral polarization.^[Abramowitz, A. I. (2022). The Polarized American Electorate: The Rise of Partisan-Ideological Consistency and Its Consequences. Political Science Quarterly, 137(4), 645-674.]
 
 <details>
 <summary>\> show the code</summary>
 
 ```r
 
+# Remove 3rd party candidates from presidential data
 election_president_r_d <- ELECTION_DATA_PRESIDENT |> 
   filter(party_detailed == "REPUBLICAN" | party_detailed == "DEMOCRAT" )
   
-
+# Calculate total votes a presidential candidate received, total vote in race and create unique ID
 sum_president_votes_r_d <- election_president_r_d |>
   group_by(year, state, state_po, party_detailed, candidate) |>
   summarize(
     candidate_votes = sum(candidatevotes, na.rm = TRUE),
-    total_votes = max(totalvotes, na.rm = TRUE)  # Assuming totalvotes is the same across rows for a state-year
+    total_votes = max(totalvotes, na.rm = TRUE)  
   ) |>
   ungroup() |>
   mutate(id = paste(year, state_po, party_detailed, sep = "_"), pres_percentage = candidate_votes / total_votes) |>
@@ -281,16 +347,17 @@ sum_president_votes_r_d <- election_president_r_d |>
         pres_total_votes = total_votes
         )
 
-head(sum_president_votes_r_d)
-
+# Vector for presidential election years
 PRESIDENTIAL_YEARS <- seq(1976, 2020, by = 4)
 
+# Isolate house races that occured in presidential years and count votes for each state
 total_votes_per_state <- ELECTION_DATA_HOUSE |>
   filter(year %in% PRESIDENTIAL_YEARS & (party == "REPUBLICAN" | party == "DEMOCRAT")) |>
   group_by(year, state, state_po) |>
   summarize(total_votes = unique(totalvotes, na.rm = TRUE) |> sum()) |>
   ungroup()
 
+# Sum candidate votes, join total_votes_per_state and calculate percentage from total votes
 sum_house_votes_r_d <- ELECTION_DATA_HOUSE |>
   filter(party %in% c("DEMOCRAT", "REPUBLICAN") & year %in% PRESIDENTIAL_YEARS) |>
   group_by(year, state, state_po, party) |>
@@ -307,39 +374,56 @@ sum_house_votes_r_d <- ELECTION_DATA_HOUSE |>
   ) |>
   select(id, house_candidate_votes, house_total_votes, house_percentage)
 
-
+# Calculate differences from house races percentages and presidential races 
 state_vote_counts <- sum_president_votes_r_d |>
   left_join(sum_house_votes_r_d, by = "id") |>
   mutate(dif = house_percentage - pres_percentage)
 
-
-#vote diff between pres and house grouped by state
+# Group these differences by state
 state_vote_diff_state_score <- state_vote_counts |> 
   group_by(state, party_detailed) |> 
   summarize(state_dif = mean(dif, na.rm = TRUE))
-  
 
-View(state_vote_diff_state_score)
 
-#difference between parties for each election between house and president
+# Calculate differences by party
 state_vote_diff_pres_house <- state_vote_counts |> 
   group_by(year, party_detailed) |> 
   summarize(avg_dif = mean(dif, na.rm = TRUE))
 
-View(state_vote_diff_pres_house)
-
-state_vote_diff_pres
-
-
-
+# Generate standardize numbers for comparisons
 SD <- sd(state_vote_diff_pres_house$avg_dif)
 MEAN <- mean(state_vote_diff_pres_house$avg_dif)
 
+# Create a score metric
 state_vote_diff_total_score <- state_vote_diff_pres_house |> 
   mutate(score = (avg_dif - MEAN) / SD) |> 
   arrange(desc(score))
 
-View(state_vote_diff_total_score)
+
+# Prepare data for ggplot chart
+data <- data.frame(
+  Year = c(1984, 1980, 1992, 1988, 1996, 1992, 1976, 2008, 2016, 2020, 2016, 2012, 2004, 1996, 2000, 2000, 2020, 2004, 2012, 1980, 2008, 1976, 1988, 1984),
+  Party = c("Democrat", "Democrat", "Democrat", "Democrat", "Republican", "Republican", "Democrat", "Democrat", "Republican", "Republican", "Democrat", "Republican", "Democrat", "Democrat", "Republican", "Democrat", "Democrat", "Republican", "Democrat", "Republican", "Republican", "Republican", "Republican", "Republican"),
+  Score = c(3.12, 1.32, 1.08, 0.903, 0.794, 0.731, 0.606, 0.110, 0.0802, -0.121, -0.186, -0.203, -0.224, -0.262, -0.312, -0.374, -0.426, -0.492, -0.571, -0.661, -0.842, -1.05, -1.41, -1.60)
+)
+
+# Chart differences in House vote vs. Presidental vote from 1976 - 2020
+ggplot(data, aes(x = factor(Year), y = Score, fill = Party)) +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  scale_fill_manual(values = c("Democrat" = "blue", "Republican" = "red")) +
+  labs(
+    title = "Party Score by Year (1976 - 2020)",
+    x = "Year",
+    y = "Score",
+    fill = "Party"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "top"
+  )
+
+ 
 ```
 
 </details>
@@ -352,8 +436,10 @@ View(state_vote_diff_total_score)
 
 
 ```r
+# Identify main directory
 DIRECTORY <- paste(getwd(),"data", sep="/")
 
+# Create function for extracting files from .zip files
 shp_from_zip <- function(file_name, directory = DIRECTORY){
   dir <- paste(directory, file_name, sep="/")
   td <- tempdir(); 
@@ -363,12 +449,9 @@ shp_from_zip <- function(file_name, directory = DIRECTORY){
   return(read_sf(fname_shp))
 }
 
+# Test function
 file <- shp_from_zip("/mp03/congress_shapefiles/congress_095_shapefile.zip")
-
-
 ```
-
-
 
 </details>
 
@@ -382,6 +465,8 @@ Here is the map for the fateful 2000 Presidential Election. The election that in
 
 ```r
 
+#### CENTROGRAPH FOR 2000 ELECTION ####
+
 # Calculate winner for each state for 2000 election and create winning_party field
 pres_vote_2000 <- ELECTION_DATA_PRESIDENT |>
   filter(year == 2000) |>                             
@@ -392,6 +477,7 @@ pres_vote_2000 <- ELECTION_DATA_PRESIDENT |>
   mutate(winning_party = ifelse(candidate == "GORE, AL", "D", "R"))
 
 
+# Load shapefile from 106th Congress - relevant for 2000 election
 <!-- pres_shp_2000 <- shp_from_zip("/mp03/congress_shapefiles/congress_106_shapefile.zip") -->
 
 
@@ -488,26 +574,32 @@ ggplot() +
     panel.grid.minor = element_blank()     
   )
 
-### Create recent history of Electoral College maps
+#### FACETED HISTORY OF RECENT ELECTORAL COLLEGE COUNTS ####
 
+#### DOES NOT RENDER. IS NOT IN PROJECT :-( ####
+
+# Clean up all gemoetries
 cleaned_data <- pres_shp_2000 |>
   mutate(geometry = st_make_valid(geometry)) |>
   group_by(STATENAME) |>
   summarize(geometry = st_union(geometry), .groups = "drop")
 
+# Union geometries into states
 states_shapes_2000 <- cleaned_data |>
   select(STATENAME,geometry)|>
   group_by(STATENAME)|>
   summarize(geometry = st_union(geometry))|>
   filter(!is.na(geometry))
 
+# Cast geometries into a polygon
 us_states_sf <- states_shapes_2000 |>
   filter(!is.na(geometry)) |>
-  st_make_valid() |>  # Ensure geometries are valid
+  st_make_valid() |> 
   st_cast("MULTIPOLYGON") 
-  
+
+ 
 presidential_winners_by_state <- ELECTION_DATA_PRESIDENT |>
-  select(year,state,candidatevotes,candidate,party_simplified) |>
+  select(year, state, candidatevotes, candidate, party_simplified) |>
   group_by(year,state) |>
   slice_max(candidatevotes)
 
@@ -757,7 +849,6 @@ state_winner_take_all(state_winner_with_votes, 2000, ec_summary)
 
 #######District-Wide Winner-Take-All + State-Wide “At Large” Votes
 
-
 # Calculate district winners and add an at_large seat
 calculate_district_winners_with_at_large <- function(data) {
   # Calculate district-level winners
@@ -772,7 +863,7 @@ calculate_district_winners_with_at_large <- function(data) {
     mutate(district = as.character(district)) |>
     select(year, state, state_po, district, party)
   
-  # Calculate at_large seats based on the majority party in each state per year
+  # Calculate at-large seats (2 votes) based on majority party in each state per year
   at_large_winners <- district_winners |>
     group_by(year, state, state_po) |>
     count(party, name = "district_count") |>
@@ -783,9 +874,10 @@ calculate_district_winners_with_at_large <- function(data) {
     ) |>
     select(year, state, state_po, district, party)
 
-  # Combine district winners and at_large results
+  # Combine district winners and at-large results
   bind_rows(district_winners, at_large_winners)
 }
+
 
 
 # Sum all votes and percentages for each party for each year and each state
@@ -802,6 +894,7 @@ calculate_vote_totals_at_large <- function(data) {
     mutate(color = ifelse(party == "DEMOCRAT", alpha("blue", win_percent), alpha("red", win_percent)))
 }
 
+
 # First find winners for each district and the at large winner
 district_winners_with_at_large <- calculate_district_winners_with_at_large(ELECTION_DATA_HOUSE)
 ec_total_at_large <- calculate_vote_totals_at_large(district_winners_with_at_large) 
@@ -816,6 +909,12 @@ unique_winners_al <- state_winner_with_votes |>
 # Add proper names to EC totals
 ec_total_at_large <- ec_total_at_large |>
   left_join(unique_winners_al, by = c("year", "party")) 
+
+total_votes_check <- ec_total_at_large |>
+  filter(year == 2016) |> 
+  summarise(total_electoral_votes = sum(total_votes))
+print(total_votes_check)  # Should be 538
+
 
 
 plot_electoral_votes <- function(data, election_year) {
