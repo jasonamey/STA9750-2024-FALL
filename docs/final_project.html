@@ -109,6 +109,23 @@ ul.task-list li input[type="checkbox"] {
 <p>park_corner &lt;- finance_data_2010_residential |&gt; filter(BLOCK == 1068 &amp; LOT == 37)</p>
 <p>park_corner$FULLVAL</p>
 <p>glimpse(finance_data_2010_residential)</p>
+<p>file_path_sample &lt;- “data/final_project/fy24_sample.txt”</p>
+<p>text_lines &lt;- readLines(file_path_sample)</p>
+<p>records &lt;- strsplit(text_lines,“”)</p>
+<p>parsed_records &lt;- lapply(records, function(record) strsplit(record, “))</p>
+<p>file_path &lt;- “data/final_project/finance/fy24_tc234.txt”</p>
+<p>text_lines &lt;- readLines(file_path)</p>
+<p>records &lt;- strsplit(text_lines,“”)</p>
+<p>parsed_records &lt;- lapply(records, function(record) strsplit(record, “))</p>
+<p>filtered_records &lt;- lapply(parsed_records, function(record) { if (record[[1]][[2]] == “3”) { return(record) } else { return(NULL) # Return NULL to indicate exclusion } })</p>
+<p>filtered_records &lt;- filtered_records[!sapply(filtered_records, is.null)]</p>
+<!-- Block: 1068 -->
+<!-- Lot: 37 -->
+<p>cleaned_records &lt;- lapply(filtered_records, function(record) { sapply(record, trimws) })</p>
+<p>df &lt;- do.call(cbind, cleaned_records) df &lt;- as.data.frame(t(df))</p>
+<p>property &lt;- df |&gt; filter(V3 == “01068” &amp; V4 == “0037”)</p>
+<p>glimpse(property)</p>
+<p>write.csv(df,“data/final_project/sampled/fy24_tc234_sampled.csv”, row.names = FALSE)</p>
 <pre><code>
 ```r
 # Import real estate valuations from NYC Department of Finance 
@@ -155,6 +172,7 @@ write_csv(brooklyn_2010, "data/final_project/brooklyn_2010.csv")
 #Import Borough, Block, Lot info for PPW from The NYC Department of Planning
 BBL &lt;- read_csv("data/final_project/planning/lot_selector_PPW_PLUTO.csv")
 
+View(BBL)
 </code></pre>
 
 

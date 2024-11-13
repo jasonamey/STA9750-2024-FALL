@@ -37,3 +37,20 @@ summary:hover {
 .remove-top-margin {
   margin-top: 10px;
 }
+
+.table-small {
+  font-size: 10px;
+}
+
+
+.flexbox-grid {
+  display: inline-grid !important;
+  grid-template-columns: repeat(2, 1fr) !important; /* Two columns */
+  gap: 10px !important; /* Space between images */
+}
+
+.flexbox-grid img {
+  width: 50% !important;
+  max-width: 100% !important; /* Ensures each image takes up its cell fully */
+  border: 1px solid black;
+}
