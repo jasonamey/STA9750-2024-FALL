@@ -514,6 +514,7 @@ ggplot() +
 <details>
 <summary>\> show the code </summary>
 ```
+#####State-Wide Winner-Take-All
 
 # Create popular vote tabulations
 popular_vote_summary <- ELECTION_DATA_PRESIDENT |>
@@ -567,8 +568,7 @@ state_winner_take_all <- ELECTION_DATA_PRESIDENT |>  #
 state_winner_with_votes <- state_winner_take_all |>
   left_join(electoral_vote_counts, by = c("year", "state"))
 
-# Add abbreviations for state names using R state package. Handle
-# Washington DC 
+# Handle Washington DC 
 state_winner_with_votes <- state_winner_with_votes |>
   mutate(
     state_abbr = ifelse(
@@ -703,7 +703,8 @@ pop_summary <- calculate_popular_vote_totals(popular_vote_summary, 2000)
 state_winner_take_all(state_winner_with_votes, 2000, ec_summary)
 
 
-###########
+#######District-Wide Winner-Take-All + State-Wide “At Large” Votes
+
 
 # Calculate district winners and add an at_large seat
 calculate_district_winners_with_at_large <- function(data) {
@@ -815,7 +816,7 @@ plot_electoral_votes <- function(data, election_year) {
 
 plot_electoral_votes(ec_total_at_large, 2000)
 
-############################
+########State-Wide Proportional
 
 ELECTION_DATA_PRESIDENT <- ELECTION_DATA_PRESIDENT |> 
     mutate(party_detailed = if_else(party_detailed == "DEMOCRATIC-FARMER-LABOR", "DEMOCRAT", party_detailed)) |>
@@ -826,8 +827,6 @@ electoral_votes_by_state <- ELECTION_DATA_HOUSE |>
   group_by(year, state) |>
   summarize(votes = n_distinct(district) + 2)
   
-electoral_votes_by_state
-
 state_percentages <- ELECTION_DATA_PRESIDENT |>
   group_by(year, state, state_po, party_detailed) |>
   summarise(
@@ -841,7 +840,6 @@ state_percentages <- ELECTION_DATA_PRESIDENT |>
   group_by(year, state, state_po) |>
   mutate(winner = percentage == max(percentage)) |>
   ungroup()
-
 
 state_percentages_w_votes <- state_percentages |>
   left_join(electoral_votes_by_state, by = c("year", "state")) |>
@@ -868,35 +866,38 @@ state_electoral_votes <- state_electoral_votes |>
   left_join(unique_winners, by = c("year", "party_detailed")) 
   
 state_electoral_votes
-
+test <- state_electoral_votes |> 
+  filter(year == 2000)
 
 plot_electoral_votes <- function(data, election_year) {
   df_year_filtered <- data |>
     filter(year == election_year) 
   
-  summary <- df_year_filtered |> 
-    group_by(proper_name, party_detailed) |> 
-    summarise(total_electoral_votes = sum(electoral_votes_won))
+  summary <- df_year_filtered |>
+    group_by(party_detailed, proper_name) |>
+    summarise(total_electoral_votes_won = sum(electoral_votes_won, na.rm = TRUE)) |>
+    ungroup()
  
   total_votes_list <- split(summary, seq(nrow(summary)))
-
+  print(total_votes_list)
   proper_name1 <- total_votes_list[[1]]$proper_name
   winner_party1 <- total_votes_list[[1]]$party_detailed
-  total_votes1 <- total_votes_list[[1]]$total_electoral_votes
+  total_votes1 <- total_votes_list[[1]]$total_electoral_votes_won
   
   proper_name2 <- total_votes_list[[2]]$proper_name
   winner_party2 <- total_votes_list[[2]]$party_detailed
-  total_votes2 <- total_votes_list[[2]]$total_electoral_votes
+  total_votes2 <- total_votes_list[[2]]$total_electoral_votes_won
   
   # Format party abbreviations
   party1 <- ifelse(winner_party1 == "DEMOCRAT", "(D)", "(R)")
   party2 <- ifelse(winner_party2 == "DEMOCRAT", "(D)", "(R)")
   
   # Construct the formatted string using paste and the variables
-  output_string <- paste(
-    toupper(proper_name1), party1, "\nElectoral Votes:", total_votes1, "\n\n",
-    toupper(proper_name2), party2, "\nElectoral Votes:", total_votes2
-  )
+  output_string <- sprintf(
+  "%s %s\nElectoral Votes: %d\n%s %s\nElectoral Votes: %d",
+  toupper(proper_name1), party1, total_votes1,
+  toupper(proper_name2), party2, total_votes2
+)
   df_year_filtered <- df_year_filtered |> 
     filter(winner == TRUE)
   # Create the plot
@@ -904,8 +905,8 @@ plot_electoral_votes <- function(data, election_year) {
     statebins::geom_statebins(radius = grid::unit(0.1, "cm")) +
      scale_fill_identity() +
     labs(
-      title = paste("United States Electoral College Votes by State (", election_year, ")", sep = ""),
-      subtitle = paste("Color intensity represents share of Electoral College Votes\n", output_string, sep="\n")
+      title = paste("United States Electoral College Votes by State-Wide Proportion (", election_year, ")", sep = ""),
+      subtitle = paste("Color intensity represents share of Electoral College Votes\n\n", output_string, sep="\n")
     ) +
     theme_minimal() +
     theme(
@@ -919,7 +920,7 @@ plot_electoral_votes <- function(data, election_year) {
 }
 
 
-plot_electoral_votes(state_electoral_votes, 1988)
+plot_electoral_votes(state_electoral_votes, 1984)
 
 
 ```
