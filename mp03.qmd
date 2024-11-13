@@ -1,8 +1,105 @@
-<!-- library(readr) -->
-<!-- library(dplyr) -->
-<!-- library(tidyr) -->
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(sf)
+library(stringr)
+library(statebins)
+library(scales)
 
-This project uses packages `readr`, `dplyr`, `tidy`
+<details>
+<summary>\> show the code for data</summary>
+
+
+```
+#data download
+
+ELECTION_DATA_HOUSE <- read_csv("data/mp03/dataversefiles/1976-2022-house.csv")
+ELECTION_DATA_HOUSE <- ELECTION_DATA_HOUSE |> 
+  filter(!is.na(party))
+
+ELECTION_DATA_PRESIDENT <- read_csv("data/mp03/dataversefiles/1976-2020-president.csv")
+ELECTION_DATA_PRESIDENT <- ELECTION_DATA_PRESIDENT |> 
+  filter(!is.na(candidate) & !is.na(party_detailed))
+
+
+congress_shapefiles_ucla <- function(start = 95, end = 112) {
+  BASE_URL <- "https://cdmaps.polisci.ucla.edu/shp/districts"
+  
+  # Create directory if it doesn't exist
+  if (!dir.exists("data/mp03/congress_shapefiles")) {
+    dir.create("data/mp03/congress_shapefiles", recursive = TRUE)
+  }
+  
+  for (congress in start:end) {
+    # Format congress number with leading zeros
+    congress_str <- sprintf("%03d", congress)
+    file_url <- paste0(BASE_URL, congress_str, ".zip")
+    dest_file <- paste0("data/mp03/congress_shapefiles/congress_", congress_str, "_shapefile.zip")
+    
+     #Avoid re-downloading
+    if (!file.exists(dest_file)) {
+      tryCatch({
+        download.file(file_url, destfile = dest_file, mode = "wb")
+        message("Downloaded shapefile for Congress ", congress_str)
+      }, error = function(e) {
+        message("Failed to download for Congress ", congress_str, ": ", e)
+      })
+    } else {
+      message("File for Congress ", congress_str, " already exists. Skipping download.")
+    }
+  }
+}
+
+# Run function
+congress_shapefiles_ucla(95, 98)
+
+#####
+
+congress_shapefiles_census <- function(start_year = 2013, end_year = 2023) {
+  BASE_URL <- "https://www2.census.gov/geo/tiger/TIGER"
+  
+  # Create the download directory if it doesn’t exist
+  if (!dir.exists("data/mp03/census_congress_shapefiles")) {
+    dir.create("data/census_congress_shapefiles", recursive = TRUE)
+  }
+  
+  # Determine Congress numbers based on years
+  congress_numbers <- seq(113, 113 + (end_year - start_year) / 2, by = 1)
+  years <- seq(start_year, end_year, by = 2) 
+
+  for (i in seq_along(years)) {
+    year <- years[i]
+    congress <- congress_numbers[i]
+    # Format as 'cd113', 'cd114', etc.
+    congress_str <- sprintf("cd%d", congress)  
+    file_url <- paste0(BASE_URL, year, "/CD/tl_", year, "_us_", congress_str, ".zip")
+    dest_file <- paste0("data/mp03/census_congress_shapefiles/tl_", year, "_us_", congress_str, ".zip")
+    
+    #Avoid re-downloading
+    if (!file.exists(dest_file)) {
+      tryCatch({
+        download.file(file_url, destfile = dest_file, mode = "wb")
+        print("Downloaded shapefile for ", congress_str, " (Year ", year, ")")
+      }, error = function(e) {
+        print("Failed to download for ", congress_str, " (Year ", year, "): ", e)
+      })
+    } else {
+      message("File for ", congress_str, " (Year ", year, ") already exists. Skipping download.")
+    }
+  }
+}
+
+#Run function
+congress_shapefiles_census(2013, 2023)
+```
+</details>
+
+
+
+
+
+This project uses packages `readr`, `dplyr`, `tidy`, `ggplot2`, `sf`
 
 <!-- The MIT Election Data Science Lab collects votes from all biennial congressional races in all 50 states here. Download this data as a CSV file using your web browser. Note that you will need to provide your contact info and agree to cite this data set in your final report.4 Make sure to include this citation! -->
 
@@ -78,12 +175,13 @@ What are the states to gain the most Electoral College votes since 1976?
 ``` r
 
 
-electoral_votes_76_22 <- ELECTION_DATA |> 
+electoral_votes_76_22 <- ELECTION_DATA_HOUSE |> 
   filter(year == 1976 | year == 2022 ) |>
   group_by(year, state) |>
   summarize(votes = n_distinct(district) + 2) |> 
   pivot_wider(names_from = year, values_from = votes) |>
   mutate(change = `2022` - `1976`)
+
 
 electoral_votes_76_22 |> 
   arrange(change)
@@ -96,154 +194,28 @@ View(election_data)
 ```
 </details>
 
+## fun time for fusion
 
-| Year | State    | District | Candidate          | Party        | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|--------------|------------|------------|--------|
-| 1980 | New York | 3        | Gregory W Carman   | Conservative | 0.0745     | 0.501      | TRUE   |
-| 1980 | New York | 3        | Gregory W Carman   | Republican   | 0.426      | 0.501      | TRUE   |
-| 1980 | New York | 3        | **Jerome A Ambro Jr** | Democrat  | **0.429** | 0.475      | FALSE  |
-| 1980 | New York | 3        | Jerome A Ambro Jr  | Right to Life| 0.0455     | 0.475      | FALSE  |
+| Year | State    | District | Winner       | Party                                         | Loser       | Party                                 | Highest % |
+|------|----------|----------|-------------------------|-------------------------------------------------------|-------------------------|----------------------------------------------|----------------------------|
+| 1980 | NY | 3        | Gregory W Carman        | Conservative, Republican                              | Jerome A Ambro Jr      | Democrat, Right To Life                     | **0.429**                      |
+| 1980 | NY | 6        | John LeBoutillier       | Conservative, Republican, Right To Life               | Lester L Wolff         | Democrat, Liberal                           | **0.437**                      |
+| 1986 | NY | 27       | George C Wortley        | Conservative, Republican                              | Rosemary S Pooler      | Democrat, Effective Congress                | **0.483**                      |
+| 1994 | NY | 1        | Michael P Forbes        | Conservative, Republican, Right To Life               | George J Hochbrueckner | Democrat, Long Island First                 | **0.428**                      |
+| 1996 | NY | 1        | Michael P Forbes        | Conservative, Independence, Republican, Right To Life | Nora L Bredes          | Democrat, Save Medicare                     | **0.398**                      |
+| 1996 | NY | 30       | Jack Quinn              | Conservative, Freedom, Independence, Republican       | Francis J Pordum       | Democrat, Protect Seniors                   | **0.405**                      |
+| 2006 | NY | 25       | James T Walsh           | Conservative, Independence, Republican                | Dan Maffei             | Democrat, Working Families                  | **0.443**                      |
+| 2006 | NY | 29       | John R "Randy" Kuhl Jr  | Conservative, Independence, Republican                | Eric J Massa           | Democrat, Working Families                  | **0.436**                      |
+| 2012 | NY | 27       | Chris Collins           | Conservative, Republican                              | Kathleen C Hochul      | Democrat, Working Families                  | **0.425**                      |
+| 2018 | NY | 1        | Lee M Zeldin            | Conservative, Independence, Reform, Republican        | Perry Gershon          | Democrat, Working Families                  | **0.460**                      |
+| 2018 | NY | 24       | John M Katko            | Conservative, Independence, Reform, Republican        | Dana Balter            | Democrat, Women's Equality, Working Families | **0.445**                      |
+| 2018 | NY | 27       | Chris Collins           | Conservative, Independence, Republican                | Nathan D McMurray      | Democrat, Women's Equality, Working Families | **0.449**                      |
+| 2022 | NY | 4        | Anthony P D’Esposito    | Republican, Conservative                              | Laura A Gillen         | Democrat                                    | **0.470**                      |
+| 2022 | NY | 17       | Michael V Lawler        | Republican, Conservative                              | Sean Patrick Maloney   | Democrat, Working Families                  | **0.458**                      |
+| 2022 | NY | 22       | Brandon M Williams      | Republican, Conservative                              | Francis Conole         | Democrat                                    | **0.485**                      |
 
-: Data for NY19803 Race {.striped .hover}
+: Data for NY Elections, Title Case {.table-small .striped .hover}
 
-| Year | State    | District | Candidate          | Party        | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|--------------|------------|------------|--------|
-| 1980 | New York | 6        | John LeBoutillier  | Conservative | 0.0665     | 0.528      | TRUE   |
-| 1980 | New York | 6        | John LeBoutillier  | Republican   | 0.423      | 0.528      | TRUE   |
-| 1980 | New York | 6        | John LeBoutillier  | Right to Life| 0.0390     | 0.528      | TRUE   |
-| 1980 | New York | 6        | **Lester L Wolff** | Democrat     | **0.437**  | 0.472      | FALSE  |
-| 1980 | New York | 6        | Lester L Wolff     | Liberal      | 0.0347     | 0.472      | FALSE  |
-
-: Data for NY19806 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party        | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|--------------|------------|------------|--------|
-| 1986 | New York | 27       | George C Wortley   | Conservative | 0.0372     | 0.497      | TRUE   |
-| 1986 | New York | 27       | George C Wortley   | Republican   | 0.459      | 0.497      | TRUE   |
-| 1986 | New York | 27       | **Rosemary S Pooler** | Democrat | **0.483** | 0.491      | FALSE  |
-| 1986 | New York | 27       | Rosemary S Pooler  | Effective    | 0.00808    | 0.491      | FALSE  |
-
-: Data for NY198627 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party        | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|--------------|------------|------------|--------|
-| 1994 | New York | 1        | **George J Hochbrueckner** | Democrat | **0.428**      | 0.435      | FALSE  |
-| 1994 | New York | 1        | George J Hochbrueckner | Long Island First | 0.00790 | 0.435 | FALSE  |
-| 1994 | New York | 1        | Michael P Forbes | Conservative | 0.0551 | 0.492      | TRUE   |
-| 1994 | New York | 1        | Michael P Forbes   | Republican   | 0.391      | 0.492      | TRUE   |
-| 1994 | New York | 1        | Michael P Forbes   | Right to Life| 0.0451     | 0.492      | TRUE   |
-
-: Data for NY19941 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 1996 | New York | 1        | Michael P Forbes   | Conservative    | 0.0508     | 0.495      | TRUE   |
-| 1996 | New York | 1        | Michael P Forbes   | Independent     | 0.0280     | 0.495      | TRUE   |
-| 1996 | New York | 1        | Michael P Forbes   | Republican      | 0.382      | 0.495      | TRUE   |
-| 1996 | New York | 1        | Michael P Forbes   | Right to Life   | 0.0342     | 0.495      | TRUE   |
-| 1996 | New York | 1        | **Nora L Bredes**  | Democrat        | **0.398**  | 0.410      | FALSE  |
-| 1996 | New York | 1        | Nora L Bredes      | Save Our State  | 0.0114     | 0.410      | FALSE  |
-
-: Data for NY19961 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 1996 | New York | 30       | **Francis J Pordum**   | Democrat        | **0.405**      | 0.414      | FALSE  |
-| 1996 | New York | 30       | Francis J Pordum   | Protection Party| 0.00975    | 0.414      | FALSE  |
-| 1996 | New York | 30       | Jack Quinn         | Conservative    | 0.0510     | 0.503      | TRUE   |
-| 1996 | New York | 30       | Jack Quinn         | Freedom Party   | 0.00880    | 0.503      | TRUE   |
-| 1996 | New York | 30       | Jack Quinn         | Independent     | 0.0398     | 0.503      | TRUE   |
-| 1996 | New York | 30       | Jack Quinn         | Republican      | 0.403      | 0.503      | TRUE   |
-
-: Data for NY199630 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2006 | New York | 25       | **Dan Maffei**         | Democrat        | **0.443**      | 0.471      | FALSE  |
-| 2006 | New York | 25       | Dan Maffei         | Working Families| 0.0286     | 0.471      | FALSE  |
-| 2006 | New York | 25       | James T Walsh      | Conservative    | 0.0512     | 0.486      | TRUE   |
-| 2006 | New York | 25       | James T Walsh      | Independent     | 0.0339     | 0.486      | TRUE   |
-| 2006 | New York | 25       | James T Walsh      | Republican      | 0.401      | 0.486      | TRUE   |
-
-: Data for NY200625 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2006 | New York | 29       | **Eric J Massa**       | Democrat        | **0.436**      | 0.462      | FALSE  |
-| 2006 | New York | 29       | Eric J Massa       | Working Families| 0.0251     | 0.462      | FALSE  |
-| 2006 | New York | 29       | John R "Randy"     | Conservative    | 0.0435     | 0.489      | TRUE   |
-| 2006 | New York | 29       | John R "Randy"     | Independent     | 0.0243     | 0.489      | TRUE   |
-| 2006 | New York | 29       | John R "Randy"     | Republican      | 0.422      | 0.489      | TRUE   |
-
-: Data for NY200629 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2012 | New York | 27       | Chris Collins      | Conservative    | 0.0727     | 0.489      | TRUE   |
-| 2012 | New York | 27       | Chris Collins      | Republican      | 0.416      | 0.489      | TRUE   |
-| 2012 | New York | 27       | **Kathleen C Hochul** | Democrat    | **0.425**  | 0.474      | FALSE  |
-| 2012 | New York | 27       | Kathleen C Hochul  | Working Families| 0.0492     | 0.474      | FALSE  |
-
-: Data for NY201227 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2018 | New York | 1        | Lee M Zeldin       | Conservative    | 0.0529     | 0.515      | TRUE   |
-| 2018 | New York | 1        | Lee M Zeldin       | Independent     | 0.00997    | 0.515      | TRUE   |
-| 2018 | New York | 1        | Lee M Zeldin       | Reform Party    | 0.00181    | 0.515      | TRUE   |
-| 2018 | New York | 1        | Lee M Zeldin       | Republican      | 0.450      | 0.515      | TRUE   |
-| 2018 | New York | 1        | **Perry Gershon**  | Democrat        | **0.460**  | 0.474      | FALSE  |
-| 2018 | New York | 1        | Perry Gershon      | Working Families| 0.0140     | 0.474      | FALSE  |
-
-: Data for NY20181 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2018 | New York | 24       | **Dana Balter**        | Democrat        | **0.445**      | 0.473      | FALSE  |
-| 2018 | New York | 24       | Dana Balter        | Women's Equality| 0.00975    | 0.473      | FALSE  |
-| 2018 | New York | 24       | Dana Balter        | Working Families| 0.0184     | 0.473      | FALSE  |
-| 2018 | New York | 24       | John M Katko       | Conservative    | 0.0652     | 0.526      | TRUE   |
-| 2018 | New York | 24       | John M Katko       | Independent     | 0.0209     | 0.526      | TRUE   |
-| 2018 | New York | 24       | John M Katko       | Reform Party    | 0.00367    | 0.526      | TRUE   |
-| 2018 | New York | 24       | John M Katko       | Republican      | 0.436      | 0.526      | TRUE   |
-
-: Data for NY201824 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2018 | New York | 27       | Chris Collins      | Conservative    | 0.0826     | 0.491      | TRUE   |
-| 2018 | New York | 27       | Chris Collins      | Independent     | 0.00732    | 0.491      | TRUE   |
-| 2018 | New York | 27       | Chris Collins      | Republican      | 0.401      | 0.491      | TRUE   |
-| 2018 | New York | 27       | **Nathan D McMurray** | Democrat    | **0.449**  | 0.487      | FALSE  |
-| 2018 | New York | 27       | Nathan D McMurray  | Women's Equality| 0.00982    | 0.487      | FALSE  |
-| 2018 | New York | 27       | Nathan D McMurray  | Working Families| 0.0284     | 0.487      | FALSE  |
-
-: Data for NY201827 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2022 | New York | 4        | Anthony P D'Esposito | Republican    | 0.464      | 0.505      | TRUE   |
-| 2022 | New York | 4        | Anthony P D'Esposito | Conservative | 0.0405     | 0.505      | TRUE   |
-| 2022 | New York | 4        | **Laura A Gillen**  | Democrat       | **0.470**  | 0.470      | FALSE  |
-
-: Data for NY20224 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2022 | New York | 17       | Michael V Lawler   | Republican      | 0.432      | 0.493      | TRUE   |
-| 2022 | New York | 17       | Michael V Lawler   | Conservative    | 0.0611     | 0.493      | TRUE   |
-| 2022 | New York | 17       | **Sean Patrick Maloney** | Democrat  | **0.458**  | 0.487      | FALSE  |
-| 2022 | New York | 17       | Sean Patrick Maloney | Working Families | 0.0284 | 0.487      | FALSE  |
-
-: Data for NY202217 Race {.striped .hover}
-
-| Year | State    | District | Candidate          | Party           | Percentage | Total Vote | Winner |
-|------|----------|----------|--------------------|-----------------|------------|------------|--------|
-| 2022 | New York | 22       | Brandon M Williams | Republican      | 0.425      | 0.495      | TRUE   |
-| 2022 | New York | 22       | Brandon M Williams | Conservative    | 0.0694     | 0.495      | TRUE   |
-| 2022 | New York | 22       | **Francis Conole** | Democrat        | **0.485**  | 0.485      | FALSE  |
-
-: Data for NY202222 Race {.striped .hover}
 
 <details>
 <summary> \> show the code</summary>
@@ -273,7 +245,6 @@ fusion_elections <- fusion_elections |>
   inner_join(winners_added, by=c("race_id", "candidate")) |>
   select(year, state, state_po, district, candidate, party, percentage, race_id, total_vote, winner)
 
-
 fusion_election_IDs <- fusion_elections |> 
   group_by(race_id) |> 
   arrange(desc(percentage)) |> 
@@ -284,11 +255,34 @@ fusion_election_IDs <- fusion_elections |>
 final_data <- fusion_elections |> 
   filter(race_id %in% fusion_election_IDs & !is.na(party)) 
 
-```
+result <- final_data |>
+  group_by(year, state, district) |>
+  summarise(
+    winning_candidate = candidate[winner == TRUE],
+    winning_party = paste(unique(party[winner == TRUE]), collapse = ", "),
+    losing_candidate = candidate[which.max((!winner) * percentage)],
+    losing_party = paste(unique(party[winner == FALSE]), collapse = ", "),
+    highest_losing_percentage = max(percentage[winner == FALSE], na.rm = TRUE),
+    .groups = 'drop'
+  )
 
+result <- final_data |>
+  group_by(year, state, district) |>
+  summarise(
+    winning_candidate = unique(candidate[winner == TRUE]),
+    winning_party = paste(unique(party[winner == TRUE]), collapse = ", "),
+    losing_candidate = unique(candidate[winner == FALSE]),
+    losing_party = paste(unique(party[winner == FALSE]), collapse = ", "),
+    highest_losing_percentage = max(percentage[winner == FALSE], na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+print(result)
+```
 
 </details>
 
+## Do candidates out run presidents?
 
 <details>
 <summary>\> show the code</summary>
@@ -339,7 +333,6 @@ sum_house_votes_r_d <- ELECTION_DATA_HOUSE |>
   select(id, house_candidate_votes, house_total_votes, house_percentage)
 
 
-
 state_vote_counts <- sum_president_votes_r_d |>
   left_join(sum_house_votes_r_d, by = "id") |>
   mutate(dif = house_percentage - pres_percentage)
@@ -378,91 +371,587 @@ View(state_vote_diff_total_score)
 
 ## DATA PREP READJUST 
 
+
+<details>
+<summary> \> show code for .shp files</summary>
+
+
+```r
+DIRECTORY <- paste(getwd(),"data", sep="/")
+
+shp_from_zip <- function(file_name, directory = DIRECTORY){
+  dir <- paste(directory, file_name, sep="/")
+  td <- tempdir(); 
+  zip_contents <- unzip(dir, 
+                        exdir = td)
+  fname_shp <- zip_contents[grepl("shp$", zip_contents)]
+  return(read_sf(fname_shp))
+}
+
+file <- shp_from_zip("/mp03/congress_shapefiles/congress_095_shapefile.zip")
+
+
+```
+
+
+
+</details>
+
+## 2000 ELECTORAL MAP 
+
+
 <details>
 <summary>\> show the code</summary>
 
-```
-#data download
+```r
 
-ELECTION_DATA_HOUSE <- read_csv("data/mp03/dataversefiles/1976-2022-house.csv")
-ELECTION_DATA_PRESIDENT <- read_csv("data/mp03/dataversefiles/1976-2020-president.csv")
+# Calculate winner for each state for 2000 election and create winning_party field
+pres_vote_2000 <- ELECTION_DATA_PRESIDENT |>
+  filter(year == 2000) |>                             
+  group_by(state, candidate) |>                       
+  summarise(total_votes = sum(candidatevotes, na.rm = TRUE)) |>  
+  arrange(state, desc(total_votes)) |>                 
+  slice_max(total_votes, n = 1, with_ties = FALSE) |>
+  mutate(winning_party = ifelse(candidate == "GORE, AL", "D", "R"))
 
 
-congress_shapefiles_ucla <- function(start = 95, end = 112) {
-  BASE_URL <- "https://cdmaps.polisci.ucla.edu/shp/districts"
-  
-  # Create directory if it doesn't exist
-  if (!dir.exists("data/mp03/congress_shapefiles")) {
-    dir.create("data/mp03/congress_shapefiles", recursive = TRUE)
-  }
-  
-  for (congress in start:end) {
-    # Format congress number with leading zeros
-    congress_str <- sprintf("%03d", congress)
-    
-    # Construct URL and destination path
-    file_url <- paste0(BASE_URL, congress_str, ".zip")
-    dest_file <- paste0("data/mp03/congress_shapefiles/congress_", congress_str, "_shapefile.zip")
-    
-    if (!file.exists(dest_file)) {
-      # Download file and check for success
-      tryCatch({
-        download.file(file_url, destfile = dest_file, mode = "wb")
-        message("Downloaded shapefile for Congress ", congress_str)
-      }, error = function(e) {
-        message("Failed to download for Congress ", congress_str, ": ", e)
-      })
-    } else {
-      message("File for Congress ", congress_str, " already exists. Skipping download.")
-    }
-  }
+<!-- pres_shp_2000 <- shp_from_zip("/mp03/congress_shapefiles/congress_106_shapefile.zip") -->
+
+
+# Load .shp file for congressional districts for 2000 
+pres_shp_2000 <- read_sf("data/mp03/congress_shapefiles/districtShapes/districts105.shp")
+
+
+
+# Make sure STATENAME is clean and able to join
+pres_shp_2000 <- pres_shp_2000 |>
+  mutate(STATENAME = str_to_upper(str_trim(STATENAME)))
+
+# Make sure state is clean and able to join
+pres_vote_2000 <- pres_vote_2000 |>
+  mutate(state = str_to_upper(str_trim(state)))
+
+# Join data
+pres_map_vote_2000_data <- pres_shp_2000 |>
+  left_join(pres_vote_2000, by = c("STATENAME" = "state"))
+ 
+# Make geometries valid
+pres_map_vote_2000_data_g <- pres_map_vote_2000_data |>
+  mutate(geometry = st_make_valid(geometry))
+
+# Create state boundaries
+state_boundaries <- pres_map_vote_2000_data_g |>
+  group_by(STATENAME, winning_party) |>
+  summarise(
+    geometry = st_union(geometry),
+    total_votes = sum(total_votes, na.rm = TRUE)
+  ) |>
+  ungroup()
+
+
+# Find electoral college vote totals
+electoral_votes_00 <- ELECTION_DATA_HOUSE |> 
+  filter(year == 2000) |>
+  group_by(year, state) |>
+  summarize(votes = n_distinct(district) + 2) |> 
+  pivot_wider(names_from = year, values_from = votes)
+
+
+# Join electoral college votes
+state_boundaries  <-  state_boundaries |>
+  left_join(electoral_votes_00, by = c("STATENAME" = "state"))
+
+# Handle DC's NA
+state_boundaries$`2000`[state_boundaries$STATENAME == "DISTRICT OF COLUMBIA" & is.na(state_boundaries$`2000`)] <- 2
+
+# Remove NA values
+cleaned_data <- state_boundaries |>
+  filter(!is.na(geometry), !is.na(winning_party))
+
+# Define dc_location and assign geometry if needed
+dc_location <- state_boundaries |>
+  filter(STATENAME == "DISTRICT OF COLUMBIA") |>
+  st_centroid()
+
+if (st_is_empty(dc_location$geometry)) {
+  dc_location <- st_sf(STATENAME = "DISTRICT OF COLUMBIA",
+                       winning_party = "D", 
+                       geometry = st_sfc(st_point(c(-77.0369, 38.9072)), crs = st_crs(state_boundaries)))
 }
 
-# Run function
-congress_shapefiles_ucla(95, 98)
+# Calculate centroids using st_point_on_surface to ensure within geometry
+state_centroids <- state_boundaries |>
+  st_point_on_surface()
 
-#####
+# Ensure all layers have the same CRS
+state_boundaries <- st_transform(state_boundaries, crs = st_crs(pres_shp_2000))
+state_centroids <- st_transform(state_centroids, crs = st_crs(state_boundaries))
+dc_location <- st_transform(dc_location, crs = st_crs(state_boundaries))
 
-congress_shapefiles_census <- function(start_year = 2013, end_year = 2023) {
-  BASE_URL <- "https://www2.census.gov/geo/tiger/TIGER"
-  
-  # Create the download directory if it doesn’t exist
-  if (!dir.exists("data/mp03/census_congress_shapefiles")) {
-    dir.create("data/census_congress_shapefiles", recursive = TRUE)
-  }
-  
-  # Determine Congress numbers based on years
-  congress_numbers <- seq(113, 113 + (end_year - start_year) / 2, by = 1)
-  years <- seq(start_year, end_year, by = 2)  # Only even years
+# Plot the data
+ggplot() +
+  geom_sf(data = cleaned_data, aes(fill = winning_party), color = NA) +
+  geom_sf_text(data = state_centroids, aes(label = `2000`), size = 3, color = "black") +
+  geom_sf(data = dc_location, shape = 8, size = 5, color = "gold") +  # Overlay star for DC
+  scale_fill_manual(values = c("D" = "lightblue", "R" = "lightcoral")) + 
+  coord_sf(xlim = c(-130, -60), ylim = c(24, 50)) +
+  labs(fill = "Winning Party") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    panel.background = element_blank(),    # Remove panel background
+    axis.text = element_blank(),           # Remove axis text
+    axis.ticks = element_blank(),          # Remove axis ticks
+    panel.grid.major = element_blank(),    # Remove major gridlines
+    panel.grid.minor = element_blank()     # Remove minor gridlines
+  )
 
-  # Loop over the years and corresponding congress numbers
-  for (i in seq_along(years)) {
-    year <- years[i]
-    congress <- congress_numbers[i]
-    congress_str <- sprintf("cd%d", congress)  # Format as 'cd113', 'cd114', etc.
-    
-    # Construct URL and destination path
-    file_url <- paste0(BASE_URL, year, "/CD/tl_", year, "_us_", congress_str, ".zip")
-    dest_file <- paste0("data/mp03/census_congress_shapefiles/tl_", year, "_us_", congress_str, ".zip")
-    
-    # Check if file already exists to avoid re-downloading
-    if (!file.exists(dest_file)) {
-      # try catch for for successful downloading
-      tryCatch({
-        download.file(file_url, destfile = dest_file, mode = "wb")
-        print("Downloaded shapefile for ", congress_str, " (Year ", year, ")")
-      }, error = function(e) {
-        print("Failed to download for ", congress_str, " (Year ", year, "): ", e)
-      })
-    } else {
-      message("File for ", congress_str, " (Year ", year, ") already exists. Skipping download.")
-    }
-  }
-}
 
-#Run function
-congress_shapefiles_census(2013, 2023)
 ```
 </details>
 
+
+<details>
+<summary>\> show the code </summary>
+```
+
+# Create popular vote tabulations
+popular_vote_summary <- ELECTION_DATA_PRESIDENT |>
+  group_by(year, candidate) |>
+  summarise(
+    popular_vote_count = sum(candidatevotes, na.rm = TRUE),           
+    total_votes_year = sum(totalvotes, na.rm = TRUE)                 
+  ) |>
+  ungroup() |>
+  mutate(
+    popular_vote_percentage = (popular_vote_count / total_votes_year) * 100   
+  ) |>
+  select(year, candidate, popular_vote_count, popular_vote_percentage, total_votes_year) |>
+  filter(popular_vote_percentage > 4.9) |>
+  arrange(year, desc(popular_vote_count))
+
+# Create electoral vote counts for each state in each presidential election
+electoral_vote_counts <- ELECTION_DATA_HOUSE |>
+  filter(year %in% seq(1976, 2020, by = 4)) |> 
+  group_by(year, state) |>
+  summarize(votes = n_distinct(district) + 2, .groups = "drop") 
+
+# Create vector of years
+years <- unique(electoral_vote_counts$year)
+
+# Ensure Washington DC has 3 votes for each year
+electoral_vote_counts <- electoral_vote_counts |>
+  bind_rows(
+    tibble(
+      year = years[!years %in% electoral_votes$year[electoral_votes$state == "DISTRICT OF COLUMBIA"]],
+      state = "DISTRICT OF COLUMBIA",
+      votes = 3
+    )
+  ) |>
+
+# Washington DC always has 3 votes in case there are rows with different values
+  mutate(votes = ifelse(state == "DISTRICT OF COLUMBIA", 3, votes)) |>
+  arrange(year, state)
+
+state_winner_take_all <- ELECTION_DATA_PRESIDENT |>  # 
+  group_by(year, state) |>             
+  filter(!is.na(candidate)) |>        
+  summarise(
+    total_votes = sum(candidatevotes, na.rm = TRUE),
+    winner_candidate = candidate[which.max(candidatevotes)],
+    winner_party = party_detailed[which.max(candidatevotes)],
+    .groups = "drop"
+  )
+
+# Join the electoral vote counts to the state winner data
+state_winner_with_votes <- state_winner_take_all |>
+  left_join(electoral_vote_counts, by = c("year", "state"))
+
+# Add abbreviations for state names using R state package. Handle
+# Washington DC 
+state_winner_with_votes <- state_winner_with_votes |>
+  mutate(
+    state_abbr = ifelse(
+      state == "District Of Columbia", "DC",  
+      state.abb[match(state, state.name)]     
+    )
+  )
+
+# Function to Title Case and reformat names
+reformat_candidate_name <- function(winner_candidate) {
+  name_parts <- str_split(winner_candidate, ",\\s*")[[1]]
+  formatted_name <- str_to_title(paste(name_parts[2], name_parts[1]))
+  return(formatted_name)
+}
+
+# Reformat names
+state_winner_with_votes <- state_winner_with_votes |>
+  mutate(
+    proper_name = sapply(winner_candidate, reformat_candidate_name), 
+    winner_party = str_replace(winner_party, "DEMOCRATIC", "DEMOCRAT")
+    )
+
+ 
+# Summarize electoral vote totals
+calculate_ec_vote_totals <- function(electoral_college_data, election_year) {
+  # Filter for the specific election year to avoid aggregating across years
+  df_year_requested <- electoral_college_data |>
+    filter(year == election_year)
+
+  # Summarize total popular and electoral votes by candidate's proper name and party
+  vote_summary <- df_year_requested |>
+    group_by(proper_name, winner_party) |>
+    summarise(
+      ec_vote = sum(votes),
+      .groups = "drop"
+    )
+
+  # Arrange by ec_vote in descending order to get the winners first
+  vote_summary <- vote_summary |>
+    arrange(desc(ec_vote))
+
+  # Return the results as two named lists for first and second place candidates
+  list(
+    first_place = list(
+      candidate = vote_summary$proper_name[1],
+      party = vote_summary$winner_party[1],
+      ec_vote = vote_summary$ec_vote[1]
+    ),
+    second_place = list(
+      candidate = vote_summary$proper_name[2],
+      party = vote_summary$winner_party[2],
+      ec_vote = vote_summary$ec_vote[2]
+    )
+  )
+}
+
+# Summarize popular vote totals
+calculate_popular_vote_totals <- function(popular_vote_data, election_year) {
+  # Filter for the specified election year
+  df_year_requested <- popular_vote_data |>
+    filter(year == election_year)
+
+  # Summarize popular vote counts and percentages by candidate and party
+  vote_summary <- df_year_requested |>
+    group_by(candidate) |>
+    summarise(
+      popular_vote_count = sum(popular_vote_count, na.rm = TRUE),
+      popular_vote_percentage = mean(popular_vote_percentage, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    arrange(desc(popular_vote_count))
+
+  # Return the results as a list with each candidate's information
+  list(
+    first_place = list(
+      candidate = vote_summary$candidate[1],
+      popular_vote_count = vote_summary$popular_vote_count[1],
+      popular_vote_percentage = vote_summary$popular_vote_percentage[1]
+    ),
+    second_place = list(
+      candidate = vote_summary$candidate[2],
+      popular_vote_count = vote_summary$popular_vote_count[2],
+      popular_vote_percentage = vote_summary$popular_vote_percentage[2]
+    )
+  )
+}
+
+
+state_winner_take_all <- function(data_set, election_year, ec_summary_data) {
+  # Filter data for the requested election year
+  df_year_requested <- data_set |> 
+    filter(year == election_year)
+  
+  # Extract information from the ec_summary_data
+  proper_name1 <- ec_summary_data$first_place$candidate
+  party1 <- ec_summary_data$first_place$party
+  ec_vote1 <- ec_summary_data$first_place$ec_vote
+  
+  proper_name2 <- ec_summary_data$second_place$candidate
+  party2 <- ec_summary_data$second_place$party
+  ec_vote2 <- ec_summary_data$second_place$ec_vote
+  
+  # Create custom legend text with candidate names, parties, popular votes, and electoral votes
+  legend_text <- paste0(
+    toupper(proper_name1), " (", substr(party1, 1, 1), ")\n",
+    "Electoral Votes: ", ec_vote1, "\n\n",
+    toupper(proper_name2), " (", substr(party2, 1, 1), ")\n",
+    "Electoral Votes: ", ec_vote2
+  )
+  
+  # Create the plot
+  ggplot(df_year_requested, aes(state = state_abbr, fill = winner_party)) +
+    statebins::geom_statebins(radius = grid::unit(0.1, "cm")) +
+    scale_fill_manual(values = c("DEMOCRAT" = "blue", "REPUBLICAN" = "red"), name = "Winner") +
+    labs(
+      title = paste("United States Electoral College Votes by State (", election_year, ")", sep = ""),
+      subtitle = legend_text
+    ) +
+    theme_minimal() +
+    theme(
+      legend.position = "right",
+      panel.background = element_blank(),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank(),
+      plot.subtitle = element_text(color = "black")
+    )
+}
+
+ec_summary <- calculate_ec_vote_totals(state_winner_with_votes, 2000)
+pop_summary <- calculate_popular_vote_totals(popular_vote_summary, 2000)
+state_winner_take_all(state_winner_with_votes, 2000, ec_summary)
+
+
+###########
+
+# Calculate district winners and add an at_large seat
+calculate_district_winners_with_at_large <- function(data) {
+  # Calculate district-level winners
+  district_winners <- data |>
+    group_by(year, state, state_po, district) |>
+    filter(candidatevotes == max(candidatevotes)) |>
+    summarise(
+      party = first(party),
+      candidate = first(candidate),
+      .groups = "drop"
+    ) |>
+    mutate(district = as.character(district)) |>
+    select(year, state, state_po, district, party)
+  
+  # Calculate at_large seats based on the majority party in each state per year
+  at_large_winners <- district_winners |>
+    group_by(year, state, state_po) |>
+    count(party, name = "district_count") |>
+    slice_max(district_count, n = 1, with_ties = FALSE) |>
+    mutate(
+      district = "at_large",
+      party = party
+    ) |>
+    select(year, state, state_po, district, party)
+
+  # Combine district winners and at_large results
+  bind_rows(district_winners, at_large_winners)
+}
+
+
+# Sum all votes and percentages for each party for each year and each state
+calculate_vote_totals_at_large <- function(data) {
+  data |>
+    mutate(votes = if_else(district == "at_large", 2, 1)) |>
+    group_by(year, state, state_po, party) |>
+    summarise(total_votes = sum(votes), .groups = "drop") |>
+    group_by(year, state, state_po) |>
+    mutate(total_state_votes = sum(total_votes)) |>
+    mutate(win_percent = round((total_votes / total_state_votes), 4)) |>
+    select(-total_state_votes) |>
+    arrange(year, state, party) |> 
+    mutate(color = ifelse(party == "DEMOCRAT", alpha("blue", win_percent), alpha("red", win_percent)))
+}
+
+# First find winners for each district and the at large winner
+district_winners_with_at_large <- calculate_district_winners_with_at_large(ELECTION_DATA_HOUSE)
+ec_total_at_large <- calculate_vote_totals_at_large(district_winners_with_at_large) 
+
+# Identify all the unique presidential winners
+unique_winners <- state_winner_with_votes |>
+  distinct(year, winner_party, proper_name)
+
+# Add proper names to EC totals
+ec_total_at_large <- ec_total_at_large |>
+  left_join(unique_winners, by = c("year", "winner_party")) |>
+
+plot_electoral_votes <- function(data, election_year) {
+  df_year_filtered <- data |>
+    filter(year == election_year) |>
+    group_by(state, state_po) |>
+    slice_max(win_percent, with_ties = FALSE) |>
+    ungroup()
+  
+  total_votes_summary <- df_year_filtered |>
+    group_by(proper_name, winner_party) |>
+    summarise(total_votes = sum(total_votes), .groups = "drop") |>
+    arrange(desc(total_votes))
+    
+  total_votes_list <- split(total_votes_summary, seq(nrow(total_votes_summary)))
+  
+  # Manually referencing each element in total_votes_list
+  proper_name1 <- total_votes_list[[1]]$proper_name
+  winner_party1 <- total_votes_list[[1]]$winner_party
+  total_votes1 <- total_votes_list[[1]]$total_votes
+  
+  proper_name2 <- total_votes_list[[2]]$proper_name
+  winner_party2 <- total_votes_list[[2]]$winner_party
+  total_votes2 <- total_votes_list[[2]]$total_votes
+  
+  # Format party abbreviations
+  party1 <- ifelse(winner_party1 == "DEMOCRAT", "(D)", "(R)")
+  party2 <- ifelse(winner_party2 == "DEMOCRAT", "(D)", "(R)")
+  
+  # Construct the formatted string using paste and the variables
+  output_string <- paste(
+    toupper(proper_name1), party1, "\nElectoral Votes:", total_votes1, "\n\n",
+    toupper(proper_name2), party2, "\nElectoral Votes:", total_votes2
+  )
+    
+  # Create the plot
+  ggplot(df_year_filtered, aes(state = state_po, fill = color)) +
+    statebins::geom_statebins(radius = grid::unit(0.1, "cm")) +
+     scale_fill_identity() +
+    labs(
+      title = paste("United States Electoral College Votes by State (", election_year, ")", sep = ""),
+      subtitle = paste("Color intensity represents share of Electoral College Votes\n",output_string, sep="\n")
+    ) +
+    theme_minimal() +
+    theme(
+      legend.position = "right",
+      panel.background = element_blank(),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank(),
+      plot.subtitle = element_text(color = "black")
+    )
+}
+
+plot_electoral_votes(ec_total_at_large, 2000)
+
+############################
+
+ELECTION_DATA_PRESIDENT <- ELECTION_DATA_PRESIDENT |> 
+    mutate(party_detailed = if_else(party_detailed == "DEMOCRATIC-FARMER-LABOR", "DEMOCRAT", party_detailed)) |>
+    filter(party_detailed == "DEMOCRAT" | party_detailed == "REPUBLICAN")
+
+# Get electoral votes for each state for each year
+electoral_votes_by_state <- ELECTION_DATA_HOUSE |> 
+  group_by(year, state) |>
+  summarize(votes = n_distinct(district) + 2)
+  
+electoral_votes_by_state
+
+state_percentages <- ELECTION_DATA_PRESIDENT |>
+  group_by(year, state, state_po, party_detailed) |>
+  summarise(
+    candidate = first(candidate),
+    total_candidate_votes = sum(candidatevotes),
+    total_state_votes = first(totalvotes), 
+    percentage = total_candidate_votes / total_state_votes
+  ) |>
+  ungroup() |>
+  select(year, state, state_po, candidate, party_detailed, percentage) |>
+  group_by(year, state, state_po) |>
+  mutate(winner = percentage == max(percentage)) |>
+  ungroup()
+
+
+state_percentages_w_votes <- state_percentages |>
+  left_join(electoral_votes_by_state, by = c("year", "state")) |>
+  rename(electoral_votes = votes)
+  
+state_electoral_votes <- state_percentages_w_votes |>
+  group_by(year, state, state_po) |>
+  mutate(
+    # Calculate electoral votes won by the winner (round up)
+    electoral_votes_won = ifelse(
+      winner,
+      ceiling(percentage * electoral_votes),
+      electoral_votes - ceiling(percentage[winner == TRUE] * electoral_votes)
+    )
+  ) |>
+  mutate(percent_electoral_votes = round(electoral_votes_won / electoral_votes, 2)) |>
+  mutate(color = ifelse(party_detailed == "DEMOCRAT", alpha("blue", percent_electoral_votes), alpha("red",             percent_electoral_votes))) |>
+  ungroup()
+
+unique_winners <- unique_winners |> 
+  rename(party_detailed = winner_party)
+
+state_electoral_votes <- state_electoral_votes |>
+  left_join(unique_winners, by = c("year", "party_detailed")) 
+  
+state_electoral_votes
+
+
+plot_electoral_votes <- function(data, election_year) {
+  df_year_filtered <- data |>
+    filter(year == election_year) 
+  
+  summary <- df_year_filtered |> 
+    group_by(proper_name, party_detailed) |> 
+    summarise(total_electoral_votes = sum(electoral_votes_won))
+ 
+  total_votes_list <- split(summary, seq(nrow(summary)))
+
+  proper_name1 <- total_votes_list[[1]]$proper_name
+  winner_party1 <- total_votes_list[[1]]$party_detailed
+  total_votes1 <- total_votes_list[[1]]$total_electoral_votes
+  
+  proper_name2 <- total_votes_list[[2]]$proper_name
+  winner_party2 <- total_votes_list[[2]]$party_detailed
+  total_votes2 <- total_votes_list[[2]]$total_electoral_votes
+  
+  # Format party abbreviations
+  party1 <- ifelse(winner_party1 == "DEMOCRAT", "(D)", "(R)")
+  party2 <- ifelse(winner_party2 == "DEMOCRAT", "(D)", "(R)")
+  
+  # Construct the formatted string using paste and the variables
+  output_string <- paste(
+    toupper(proper_name1), party1, "\nElectoral Votes:", total_votes1, "\n\n",
+    toupper(proper_name2), party2, "\nElectoral Votes:", total_votes2
+  )
+  df_year_filtered <- df_year_filtered |> 
+    filter(winner == TRUE)
+  # Create the plot
+  ggplot(df_year_filtered, aes(state = state_po, fill = color)) +
+    statebins::geom_statebins(radius = grid::unit(0.1, "cm")) +
+     scale_fill_identity() +
+    labs(
+      title = paste("United States Electoral College Votes by State (", election_year, ")", sep = ""),
+      subtitle = paste("Color intensity represents share of Electoral College Votes\n", output_string, sep="\n")
+    ) +
+    theme_minimal() +
+    theme(
+      legend.position = "right",
+      panel.background = element_blank(),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank(),
+      plot.subtitle = element_text(color = "black")
+    )
+}
+
+
+plot_electoral_votes(state_electoral_votes, 1988)
+
+
+```
+
+</details>
+
+
+
+
+<!-- # Sample data for electoral votes by state for 2020 (replace with actual data) -->
+<!-- electoral_votes <- data.frame( -->
+<!--   state = c("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", -->
+<!--             "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", -->
+<!--             "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", -->
+<!--             "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", -->
+<!--             "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"), -->
+<!--   votes = c(9, 3, 11, 6, 55, 9, 7, 3, 3, 29, 16, 4, 4, 20, 11, 6, 6, 8, 8, 4, -->
+<!--             10, 11, 16, 10, 6, 10, 3, 5, 6, 4, 14, 5, 29, 15, 3, 18, 7, 7, 20, -->
+<!--             4, 9, 3, 11, 38, 6, 3, 13, 12, 5, 10, 3) -->
+<!-- ) -->
+
+
+<!-- ggplot(electoral_votes, aes(state = state, fill = votes)) + -->
+<!--   statebins::geom_statebins(radius = grid::unit(0.1, "cm")) + -->
+<!--   scale_fill_gradient(low = "red", high = "darkblue", name = "Electoral Votes") + -->
+<!--   labs(title = "United States Electoral College Votes by State") + -->
+<!--   theme_minimal() + -->
+<!--   theme( -->
+<!--     legend.position = "right", -->
+<!--     panel.background = element_blank(), -->
+<!--     axis.text = element_blank(), -->
+<!--     axis.ticks = element_blank(), -->
+<!--     panel.grid = element_blank() -->
+<!--   ) -->
 
