@@ -374,7 +374,9 @@ file <- shp_from_zip("/mp03/congress_shapefiles/congress_095_shapefile.zip")
 
 ## 2000 ELECTORAL MAP 
 
+Here is the map for the fateful 2000 Presidential Election. The election that inserted the Electoral College back into the national spotlight. 
 
+![](images/mp-03/2000-electoral-college-map.png)
 <details>
 <summary>\> show the code</summary>
 
@@ -409,7 +411,7 @@ pres_vote_2000 <- pres_vote_2000 |>
 # Join data
 pres_map_vote_2000_data <- pres_shp_2000 |>
   left_join(pres_vote_2000, by = c("STATENAME" = "state"))
- 
+
 # Make geometries valid
 pres_map_vote_2000_data_g <- pres_map_vote_2000_data |>
   mutate(geometry = st_make_valid(geometry))
@@ -423,7 +425,6 @@ state_boundaries <- pres_map_vote_2000_data_g |>
   ) |>
   ungroup()
 
-
 # Find electoral college vote totals
 electoral_votes_00 <- ELECTION_DATA_HOUSE |> 
   filter(year == 2000) |>
@@ -431,27 +432,32 @@ electoral_votes_00 <- ELECTION_DATA_HOUSE |>
   summarize(votes = n_distinct(district) + 2) |> 
   pivot_wider(names_from = year, values_from = votes)
 
-
 # Join electoral college votes
 state_boundaries  <-  state_boundaries |>
   left_join(electoral_votes_00, by = c("STATENAME" = "state"))
 
 # Handle DC's NA
 state_boundaries$`2000`[state_boundaries$STATENAME == "DISTRICT OF COLUMBIA" & is.na(state_boundaries$`2000`)] <- 2
-
+ 
 # Remove NA values
 cleaned_data <- state_boundaries |>
   filter(!is.na(geometry), !is.na(winning_party))
 
 # Define dc_location and assign geometry if needed
 dc_location <- state_boundaries |>
-  filter(STATENAME == "DISTRICT OF COLUMBIA") |>
-  st_centroid()
+  filter(STATENAME == "DISTRICT OF COLUMBIA")
 
-if (st_is_empty(dc_location$geometry)) {
-  dc_location <- st_sf(STATENAME = "DISTRICT OF COLUMBIA",
-                       winning_party = "D", 
-                       geometry = st_sfc(st_point(c(-77.0369, 38.9072)), crs = st_crs(state_boundaries)))
+# Check if geometry exists and is not empty
+if (nrow(dc_location) == 0 || st_is_empty(dc_location$geometry)) {
+  # Manually assign coordinates if geometry is missing or empty
+  dc_location <- st_sf(
+    STATENAME = "DISTRICT OF COLUMBIA",
+    winning_party = "D",
+    geometry = st_sfc(st_point(c(-77.0369, 38.9072)), crs = st_crs(state_boundaries))
+  )
+} else {
+  # Calculate centroid if geometry is available
+  dc_location <- st_centroid(dc_location)
 }
 
 # Calculate centroids using st_point_on_surface to ensure within geometry
@@ -468,19 +474,58 @@ ggplot() +
   geom_sf(data = cleaned_data, aes(fill = winning_party), color = NA) +
   geom_sf_text(data = state_centroids, aes(label = `2000`), size = 3, color = "black") +
   geom_sf(data = dc_location, shape = 8, size = 5, color = "gold") +  # Overlay star for DC
-  scale_fill_manual(values = c("D" = "lightblue", "R" = "lightcoral")) + 
+  scale_fill_manual(values = c("D" =  alpha("blue", .7), "R" =  alpha("red", .7))) + 
   coord_sf(xlim = c(-130, -60), ylim = c(24, 50)) +
   labs(fill = "Winning Party") +
   theme_minimal() +
   theme(
     legend.position = "bottom",
-    panel.background = element_blank(),    # Remove panel background
-    axis.text = element_blank(),           # Remove axis text
-    axis.ticks = element_blank(),          # Remove axis ticks
-    panel.grid.major = element_blank(),    # Remove major gridlines
-    panel.grid.minor = element_blank()     # Remove minor gridlines
+    panel.background = element_blank(),    
+    axis.text = element_blank(),           
+    axis.ticks = element_blank(),
+    axis.title = element_blank(), 
+    panel.grid.major = element_blank(),    
+    panel.grid.minor = element_blank()     
   )
 
+### Create recent history of Electoral College maps
+
+cleaned_data <- pres_shp_2000 |>
+  mutate(geometry = st_make_valid(geometry)) |>
+  group_by(STATENAME) |>
+  summarize(geometry = st_union(geometry), .groups = "drop")
+
+states_shapes_2000 <- cleaned_data |>
+  select(STATENAME,geometry)|>
+  group_by(STATENAME)|>
+  summarize(geometry = st_union(geometry))|>
+  filter(!is.na(geometry))
+
+us_states_sf <- states_shapes_2000 |>
+  filter(!is.na(geometry)) |>
+  st_make_valid() |>  # Ensure geometries are valid
+  st_cast("MULTIPOLYGON") 
+  
+presidential_winners_by_state <- ELECTION_DATA_PRESIDENT |>
+  select(year,state,candidatevotes,candidate,party_simplified) |>
+  group_by(year,state) |>
+  slice_max(candidatevotes)
+
+presidentials_winners_combined_sf <- presidential_winners_by_state |>
+  select(year,state,party_simplified) |>
+  left_join(us_states_sf|>select(STATENAME,geometry) |>
+  mutate(STATENAME=toupper(STATENAME)),by=c("state"="STATENAME"))
+
+ggplot(presidentials_winners_combined_sf) +
+  geom_sf(aes(geometry=geometry,fill = party_simplified), color = "white") +
+  scale_fill_manual(values = c("DEMOCRAT" = "blue", "REPUBLICAN" = "red")) +
+  coord_sf(xlim = c(-130, -60), ylim = c(24, 50))  +
+  labs(fill = "Winning Party") +
+  theme_minimal() +
+  theme(legend.position = "bottom")+
+  facet_wrap(~year)
+
+print("hello")
 
 ```
 </details>
