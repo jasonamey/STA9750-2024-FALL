@@ -1335,7 +1335,7 @@ ggplot(data, aes(x = system, y = percentage)) +
 ## Finndings
 
 
-**Electoral College** system inherently disadvantages densely concentrated urban populations due to geographic sorting, where large numbers of voters in cities are “wasted” under the current allocation methods. This effect is especially pronounced in the **State-Wide Winner-Take-All** and **District-Wide Winner-Take-All + At-Large** systems, where urban votes are overshadowed by more spread-out rural and suburban voters. Even with a **State-Wide Proportional** approach, the dispersed nature of electoral votes dilutes the power of high-population centers.^[Pearson-Merkowitz, S., & Lang, C. (2016). The geographic polarization of American voters. The Geography Teacher, 13(3), 112-117.]
+The **Electoral College** system inherently disadvantages densely concentrated urban populations due to geographic sorting, where large numbers of voters in cities are “wasted” under the current allocation methods. This effect is especially pronounced in the **State-Wide Winner-Take-All** and **District-Wide Winner-Take-All + At-Large** systems, where urban votes are overshadowed by more spread-out rural and suburban voters. Even with a **State-Wide Proportional** approach, the dispersed nature of electoral votes dilutes the power of high-population centers.^[Pearson-Merkowitz, S., & Lang, C. (2016). The geographic polarization of American voters. The Geography Teacher, 13(3), 112-117.]
 
 This dynamic reflects the original pastoral leanings of certain **Founding Fathers**, who were wary of urban centers and their concentrated political influence. Many founders idealized a nation of independent, rural landowners and saw the **Electoral College** as a mechanism to balance the interests of these pastoral areas against growing urban centers.^[Rodden, J. A. (2019). Why cities lose: The deep roots of the urban-rural political divide. Basic Books.] Consequently, modern calls for Electoral College reform often stem from this persistent tension between rural and urban representation.
 
@@ -1356,12 +1356,12 @@ There exists a deep disatisfaction with the **Electoral College** among the Amer
 
 As such, strong public support exists for centering **"one person, one vote"** into the **U.S. Political System** and its methods for selecting the **President**.
 
-If we summarize our findings, there's one system that consistly rewards the **Popular Vote Winner** the 50% electoral college vote threshold needed to win the presidency: 
+If we summarize our findings, there's one system that consistly rewards the **Popular Vote Winner** the `50%` electoral college vote threshold needed to win the presidency: 
 
 ![](images/mp-03/2000-electoral-systems.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
 
 ![](images/mp-03/2016-electoral-systems.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
-Given these findings, the it's the purple shading on the **National Proportional** maps above that best reflect the most equitable spirit of "one person, one vote," highlighting how popular will could be represented more faithfully. If the **Electoral College** must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence.
+Given these findings, the it's the purple shading on the **National Proportional** maps above that best reflect the most equitable spirit of **"one person, one vote,"** highlighting how popular will could be represented more faithfully. If the **Electoral College** must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence.
 
 As such, if were to keep the **Electoral College**, we should adopt the **National Proportion** method for allocating electoral votes and the delegates who chose our nation's chief executive, **The President of the United States**. 
 
