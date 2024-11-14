@@ -1356,9 +1356,9 @@ As such, strong public support exists for centering **"one person, one vote"** i
 
 If we summarize our findings, there's one system that consistly rewards the **Popular Vote Winner** the `50%` electoral college vote threshold needed to win the presidency: 
 
-![](images/mp-03/2000-electoral-systems.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
+![](images/mp-03/2000-electoral-systems.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
 
-![](images/mp-03/2016-electoral-systems.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
+![](images/mp-03/2016-electoral-systems.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
 Given these findings, it's the stark purple shading on the **National Proportional** maps above that best reflect the most equitable spirit of **"one person, one vote,"** and thus highlight how popular will could be represented more faithfully while maintaing our current system under the **U.S. Constitution**. If the **Electoral College** must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence.
 
 As such, if were to keep the **Electoral College**, we should adopt the **National Proportion** method for allocating electoral votes and the delegates who chose our nation's chief executive, **The President of the United States**. 
