@@ -507,7 +507,7 @@ pres_vote_2000 <- ELECTION_DATA_PRESIDENT |>
   slice_max(total_votes, n = 1, with_ties = FALSE) |>
   mutate(winning_party = ifelse(candidate == "GORE, AL", "D", "R"))
 
-# Load shapefile from 106th Congress - relevant for 2000 election
+# Load shapefile from 106th Congress relevant for 2000 election
 pres_shp_2000 <- shp_from_zip("/mp03/congress_shapefiles/congress_106_shapefile.zip")
 
 # Make sure STATENAME is clean and able to join
