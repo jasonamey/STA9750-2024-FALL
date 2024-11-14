@@ -1341,7 +1341,7 @@ Critics of the Electoral College, such as historian **George C. Edwards III**, a
 
 These findings are in line with the thoughts of [**Robert A. Dahl**](https://en.wikipedia.org/wiki/Robert_Dahl), widely regarded as one of the United States' preeminent authorities on democratic theory and the American Constitution.
 
-In *How Democratic Is the American Constitution?* **Dahl** critically examines the Electoral College and its democratic shortcomings. He too recounts the `2000` election, where a candidate with fewer popular votes won, and traces this anomaly to the original confusion and compromises of the Framers. They established the Electoral College out of desperation after rejecting other methods, prioritizing insulation from popular choice and concern over "cabal and corruption."^[Dahl, R. A. (2001). How democratic is the American Constitution? New Haven, Yale University Press.]
+In *How Democratic Is the American Constitution?*  **Dahl** critically examines the Electoral College and its democratic shortcomings. He too recounts the `2000` election, where a candidate with fewer popular votes won, and traces this anomaly to the original confusion and compromises of the Framers. They established the Electoral College out of desperation after rejecting other methods, prioritizing insulation from popular choice and concern over "cabal and corruption."^[Dahl, R. A. (2001). How democratic is the American Constitution? New Haven, Yale University Press.]
 
 As such, the **Electoral College** is deeply rooted in an anti-democratic framework. Built to balance regional influence rather than to represent the popular will, the **Electoral College** was again, crafted with significant limitations to prevent it from reflecting a true **"one person, one vote"** standard. Its mission makes it impossible to align with the democratic values most champion today.
 
@@ -1359,7 +1359,7 @@ If we summarize our findings, there's one system that consistly rewards the **Po
 ![](images/mp-03/2000-electoral-systems.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
 
 ![](images/mp-03/2016-electoral-systems.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
-Given these findings, the it's the purple shading on the **National Proportional** maps above that best reflect the most equitable spirit of **"one person, one vote,"** highlighting how popular will could be represented more faithfully. If the **Electoral College** must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence.
+Given these findings, it's the stark purple shading on the **National Proportional** maps above that best reflect the most equitable spirit of **"one person, one vote,"** and thus highlight how popular will could be represented more faithfully while maintaing our current system under the **U.S. Constitution**. If the **Electoral College** must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence.
 
 As such, if were to keep the **Electoral College**, we should adopt the **National Proportion** method for allocating electoral votes and the delegates who chose our nation's chief executive, **The President of the United States**. 
 
