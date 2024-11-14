@@ -145,7 +145,7 @@ In contrast, the **Northeast** and **Rust Belt** states have faced steady popula
 
 The impact on the **Electoral College** reflects these changes, as the **Sun Belt**’s increasing population has translated into greater political clout. Every ten years, the **U.S. Census** triggers a reapportionment of congressional seats, redistributing the `435` seats in the **House of Representatives**—and thus **Electoral College** votes—based on population changes.
 
-This dynamic remains relevant, as commentary last week, following **Donald Trump**’s decisive electoral win, prompted influential conservative commentator ***Ben Shapiro** to highlight the continued decline in influence of the **Rust Belt** and the **American Northeast**, historically strongholds of Democratic power.^[Shapiro, B. [@benshapiro]. (2024, 11, 6). "Hey Democrats, I have some more unfortunate news for you. Here's what the electoral map looks like.. " Tweet. X. https://x.com/benshapiro/status/1854210993645297694]: 
+This dynamic remains relevant, as commentary last week, following **Donald Trump**’s decisive electoral win, prompted influential conservative commentator **Ben Shapiro** to highlight the continued decline in influence of the **Rust Belt** and the **American Northeast**, historically strongholds of Democratic power.^[Shapiro, B. [@benshapiro]. (2024, 11, 6). "Hey Democrats, I have some more unfortunate news for you. Here's what the electoral map looks like.. " Tweet. X. https://x.com/benshapiro/status/1854210993645297694]: 
 
 ![](images/mp-03/ben-shapiro.png){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
