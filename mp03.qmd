@@ -172,7 +172,7 @@ The impact on the Electoral College reflects these changes, as the Sunbelt’s i
 | Arizona    | 6    | 11   | 5      |
 | Georgia    | 12   | 16   | 4      |
 
-: Congressional District Growth By State (1976 vs. 2022)
+: Electoral Vote Growth By State (1976 vs. 2022)
 {.striped .hover}
 
 <br>
@@ -229,7 +229,7 @@ In New York City, fusion voting began in the 1930s as a strategy to challenge Ta
 | 2022 | NY | 17       | Michael V Lawler        | Republican, Conservative                              | Sean Patrick Maloney   | Democrat, Working Families                  | **0.458**                      |
 | 2022 | NY | 22       | Brandon M Williams      | Republican, Conservative                              | Francis Conole         | Democrat                                    | **0.485**                      |
 
-: Data for NY Elections, Title Case {.table-small .striped .hover}
+: Fusion Findings for NY Elections {.table-small .striped .hover}
 
 
 <details>
@@ -425,8 +425,9 @@ ggplot(data, aes(x = factor(Year), y = Score, fill = Party)) +
 ```
 </details>
 
-## DATA PREP READJUST 
+## Adjusting Data in Anticipation for Maping our Findings
 
+What follows are the re-adjustment of our data and inclusion of shapefiles to map out conclusions about our electoral data.
 
 <details>
 <summary> \> show code for .shp files</summary>
