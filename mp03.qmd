@@ -687,7 +687,7 @@ The `2000` and `2016` elections offer compelling cases for examining competing m
 Analyzing these stess-testing elections arguably offers the best insight into how different allocation methods could impact future presidential races and the broader democratic process.
 
 ## Election of 2000: George W. Bush v. Al Gore
-The `2000` presidential election served as a stark reminder of the Electoral College's pivotal role in determining the presidency, a mechanism many Americans were unfamiliar with until then. The race between **George W. Bush** and **Al Gore** hinged on a razor-thin vote margin in **Florida**, leading to a weeks-long recount and intense media scrutiny of obscure ballot-counting procedures introducing the country to the infamous "hanging chad." 
+The `2000` presidential election served as a stark reminder of the **Electoral College**'s pivotal role in determining the presidency, a mechanism many Americans were unfamiliar with until then. The race between **George W. Bush** and **Al Gore** hinged on a razor-thin vote margin in **Florida**, leading to a weeks-long recount and intense media scrutiny of obscure ballot-counting procedures including introducing the country to the infamous "hanging chad." 
 
 Ultimately the **Supreme Court** intervened in the recount, issuing a decision in *Bush v. Gore* that halted the **Florida** recount and awarded the state’s electoral votes to **Bush**. In a break from traditional jurisprudence, the Court explicitly declared that its ruling was intended solely for this case and was not meant to set legal precedent. 
 
