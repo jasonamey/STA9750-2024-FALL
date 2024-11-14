@@ -682,18 +682,18 @@ Here, electoral votes are allocated based on the candidates' national popular vo
 
 The `2000` and `2016` elections offer compelling cases for examining competing methods of distributing electoral votes. In both instances, the **Electoral College** outcome diverged from the popular vote, with the presidential candidates who secured the majority of electoral votes not winning the national popular vote. These elections highlight the potential discrepancies within the **Electoral College** system and can shed light on whether alternative approaches might better align electoral outcomes with the popular will.
 
-Analyzing these elections arguably offers the best insight into how different allocation methods could impact future presidential races and the broader democratic process.
+Analyzing these stess-testing elections arguably offers the best insight into how different allocation methods could impact future presidential races and the broader democratic process.
 
 ## Election of 2000: George W. Bush v. Al Gore
 The `2000` presidential election served as a stark reminder of the Electoral College's pivotal role in determining the presidency, a mechanism many Americans were unfamiliar with until then. The race between **George W. Bush** and **Al Gore** hinged on a razor-thin vote margin in **Florida**, leading to a weeks-long recount and intense media scrutiny of obscure ballot-counting procedures introducing the country to the infamous "hanging chad." 
 
-Ultimately the **Supreme Court** intervened in the recount, issuing a decision in *Bush v. Gore* that halted the **Florida** recount and awarded the state’s electoral votes to **Bush**. In a break from jurisprudence tradition, the Court explicitly declared that its ruling was intended solely for this case and was not meant to set legal precedent. 
+Ultimately the **Supreme Court** intervened in the recount, issuing a decision in *Bush v. Gore* that halted the **Florida** recount and awarded the state’s electoral votes to **Bush**. In a break from traditional jurisprudence, the Court explicitly declared that its ruling was intended solely for this case and was not meant to set legal precedent. 
 
 While this contentious election spurred calls to reform or abolish the **Electoral College** no significant changes materialized, and the system remained unchanged.
 
 ::: {.flexbox-votes}
 <div>
-<h3>George Bush</h3>
+<h3>George W. Bush</h3>
 <p>Electoral Vote: <strong>271</strong></p>
 <p>Popular Vote: 50,456,002</p>
 <p>Percentage: 47.9%</p>
