@@ -181,8 +181,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>ELECTION_DATA_PRESIDENT <span class="ot">&lt;-</span> ELECTION_DATA_PRESIDENT <span class="sc">|&gt;</span> </span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(candidate) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(party_detailed))</span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to download shapefiles UCLA’s PoliSci Mapping Center, 95 | 112 represents relevant </span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Congressional Sessions</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to download shapefiles UCLA’s PoliSci Mapping Center, 95 to </span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 112 representsrelevant Congressional Sessions</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>congress_shapefiles_ucla <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">start =</span> <span class="dv">95</span>, <span class="at">end =</span> <span class="dv">112</span>) {</span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  BASE_URL <span class="ot">&lt;-</span> <span class="st">"https://cdmaps.polisci.ucla.edu/shp/districts"</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -213,44 +213,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Run function</span></span>
 <span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="fu">congress_shapefiles_ucla</span>()</span>
 <span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to download shapefiles from the U.S. Census Bureau’s TIGER/Line Shapefiles </span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>congress_shapefiles_census <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">start_year =</span> <span class="dv">2013</span>, <span class="at">end_year =</span> <span class="dv">2023</span>) {</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>  BASE_URL <span class="ot">&lt;-</span> <span class="st">"https://www2.census.gov/geo/tiger/TIGER"</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the download directory if it doesn’t exist</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">"data/mp03/census_congress_shapefiles"</span>)) {</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">"data/census_congress_shapefiles"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Determine Congress numbers based on years</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>  congress_numbers <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">113</span>, <span class="dv">113</span> <span class="sc">+</span> (end_year <span class="sc">-</span> start_year) <span class="sc">/</span> <span class="dv">2</span>, <span class="at">by =</span> <span class="dv">1</span>)</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>  years <span class="ot">&lt;-</span> <span class="fu">seq</span>(start_year, end_year, <span class="at">by =</span> <span class="dv">2</span>) </span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(years)) {</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    year <span class="ot">&lt;-</span> years[i]</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    congress <span class="ot">&lt;-</span> congress_numbers[i]</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format as 'cd113', 'cd114', etc.</span></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    congress_str <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"cd%d"</span>, congress)  </span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    file_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(BASE_URL, year, <span class="st">"/CD/tl_"</span>, year, <span class="st">"_us_"</span>, congress_str, <span class="st">".zip"</span>)</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    dest_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"data/mp03/census_congress_shapefiles/tl_"</span>, year, <span class="st">"_us_"</span>, congress_str, <span class="st">".zip"</span>)</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Prevent re-downloading</span></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(dest_file)) {</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tryCatch</span>({</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>        <span class="fu">download.file</span>(file_url, <span class="at">destfile =</span> dest_file, <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">"Downloaded shapefile for "</span>, congress_str, <span class="st">" (Year "</span>, year, <span class="st">")"</span>)</span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>      }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">"Failed to download for "</span>, congress_str, <span class="st">" (Year "</span>, year, <span class="st">"): "</span>, e)</span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>      })</span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>      <span class="fu">message</span>(<span class="st">"File for "</span>, congress_str, <span class="st">" (Year "</span>, year, <span class="st">") already exists. Skipping download."</span>)</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="co">#Run function</span></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="fu">congress_shapefiles_census</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to download shapefiles from the U.S. Census Bureau’s TIGER/Line Shapefiles </span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>congress_shapefiles_census <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">start_year =</span> <span class="dv">2013</span>, <span class="at">end_year =</span> <span class="dv">2023</span>) {</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  BASE_URL <span class="ot">&lt;-</span> <span class="st">"https://www2.census.gov/geo/tiger/TIGER"</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the download directory if it doesn’t exist</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="st">"data/mp03/census_congress_shapefiles"</span>)) {</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dir.create</span>(<span class="st">"data/census_congress_shapefiles"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Determine Congress numbers based on years</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>  congress_numbers <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">113</span>, <span class="dv">113</span> <span class="sc">+</span> (end_year <span class="sc">-</span> start_year) <span class="sc">/</span> <span class="dv">2</span>, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>  years <span class="ot">&lt;-</span> <span class="fu">seq</span>(start_year, end_year, <span class="at">by =</span> <span class="dv">2</span>) </span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(years)) {</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    year <span class="ot">&lt;-</span> years[i]</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    congress <span class="ot">&lt;-</span> congress_numbers[i]</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format as 'cd113', 'cd114', etc.</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    congress_str <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(<span class="st">"cd%d"</span>, congress)  </span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    file_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(BASE_URL, year, <span class="st">"/CD/tl_"</span>, year, <span class="st">"_us_"</span>, congress_str, <span class="st">".zip"</span>)</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    dest_file <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"data/mp03/census_congress_shapefiles/tl_"</span>, year, <span class="st">"_us_"</span>, congress_str, <span class="st">".zip"</span>)</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Prevent re-downloading</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(dest_file)) {</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tryCatch</span>({</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>        <span class="fu">download.file</span>(file_url, <span class="at">destfile =</span> dest_file, <span class="at">mode =</span> <span class="st">"wb"</span>)</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">"Downloaded shapefile for "</span>, congress_str, <span class="st">" (Year "</span>, year, <span class="st">")"</span>)</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>      }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(<span class="st">"Failed to download for "</span>, congress_str, <span class="st">" (Year "</span>, year, <span class="st">"): "</span>, e)</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>      <span class="fu">message</span>(<span class="st">"File for "</span>, congress_str, <span class="st">" (Year "</span>, year, <span class="st">") already exists. Skipping download."</span>)</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="co">#Run function</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="fu">congress_shapefiles_census</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <section id="how-has-the-electoral-college-changed-since-1976" class="level2">
 <h2 class="anchored" data-anchor-id="how-has-the-electoral-college-changed-since-1976">How has the Electoral College changed since 1976?</h2>
@@ -694,46 +693,45 @@ This “swing state” phenomenon means that candidates prioritize states with n
 <span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state, party_detailed) <span class="sc">|&gt;</span> </span>
 <span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">state_dif =</span> <span class="fu">mean</span>(dif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate differences by party</span></span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>state_vote_diff_pres_house <span class="ot">&lt;-</span> state_vote_counts <span class="sc">|&gt;</span> </span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, party_detailed) <span class="sc">|&gt;</span> </span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_dif =</span> <span class="fu">mean</span>(dif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate standardize numbers for comparisons</span></span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>SD <span class="ot">&lt;-</span> <span class="fu">sd</span>(state_vote_diff_pres_house<span class="sc">$</span>avg_dif)</span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>MEAN <span class="ot">&lt;-</span> <span class="fu">mean</span>(state_vote_diff_pres_house<span class="sc">$</span>avg_dif)</span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a score metric</span></span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>state_vote_diff_total_score <span class="ot">&lt;-</span> state_vote_diff_pres_house <span class="sc">|&gt;</span> </span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">score =</span> (avg_dif <span class="sc">-</span> MEAN) <span class="sc">/</span> SD) <span class="sc">|&gt;</span> </span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(score))</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate differences by party</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>state_vote_diff_pres_house <span class="ot">&lt;-</span> state_vote_counts <span class="sc">|&gt;</span> </span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, party_detailed) <span class="sc">|&gt;</span> </span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_dif =</span> <span class="fu">mean</span>(dif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate standardize numbers for comparisons</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>SD <span class="ot">&lt;-</span> <span class="fu">sd</span>(state_vote_diff_pres_house<span class="sc">$</span>avg_dif)</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>MEAN <span class="ot">&lt;-</span> <span class="fu">mean</span>(state_vote_diff_pres_house<span class="sc">$</span>avg_dif)</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a score metric</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>state_vote_diff_total_score <span class="ot">&lt;-</span> state_vote_diff_pres_house <span class="sc">|&gt;</span> </span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">score =</span> (avg_dif <span class="sc">-</span> MEAN) <span class="sc">/</span> SD) <span class="sc">|&gt;</span> </span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(score))</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for ggplot chart</span></span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">Year =</span> <span class="fu">c</span>(<span class="dv">1984</span>, <span class="dv">1980</span>, <span class="dv">1992</span>, <span class="dv">1988</span>, <span class="dv">1996</span>, <span class="dv">1992</span>, <span class="dv">1976</span>, <span class="dv">2008</span>, <span class="dv">2016</span>, <span class="dv">2020</span>, <span class="dv">2016</span>, <span class="dv">2012</span>, <span class="dv">2004</span>, <span class="dv">1996</span>, <span class="dv">2000</span>, <span class="dv">2000</span>, <span class="dv">2020</span>, <span class="dv">2004</span>, <span class="dv">2012</span>, <span class="dv">1980</span>, <span class="dv">2008</span>, <span class="dv">1976</span>, <span class="dv">1988</span>, <span class="dv">1984</span>),</span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">Party =</span> <span class="fu">c</span>(<span class="st">"Democrat"</span>, <span class="st">"Democrat"</span>, <span class="st">"Democrat"</span>, <span class="st">"Democrat"</span>, <span class="st">"Republican"</span>, <span class="st">"Republican"</span>, <span class="st">"Democrat"</span>, <span class="st">"Democrat"</span>, <span class="st">"Republican"</span>, <span class="st">"Republican"</span>, <span class="st">"Democrat"</span>, <span class="st">"Republican"</span>, <span class="st">"Democrat"</span>, <span class="st">"Democrat"</span>, <span class="st">"Republican"</span>, <span class="st">"Democrat"</span>, <span class="st">"Democrat"</span>, <span class="st">"Republican"</span>, <span class="st">"Democrat"</span>, <span class="st">"Republican"</span>, <span class="st">"Republican"</span>, <span class="st">"Republican"</span>, <span class="st">"Republican"</span>, <span class="st">"Republican"</span>),</span>
-<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>  <span class="at">Score =</span> <span class="fu">c</span>(<span class="fl">3.12</span>, <span class="fl">1.32</span>, <span class="fl">1.08</span>, <span class="fl">0.903</span>, <span class="fl">0.794</span>, <span class="fl">0.731</span>, <span class="fl">0.606</span>, <span class="fl">0.110</span>, <span class="fl">0.0802</span>, <span class="sc">-</span><span class="fl">0.121</span>, <span class="sc">-</span><span class="fl">0.186</span>, <span class="sc">-</span><span class="fl">0.203</span>, <span class="sc">-</span><span class="fl">0.224</span>, <span class="sc">-</span><span class="fl">0.262</span>, <span class="sc">-</span><span class="fl">0.312</span>, <span class="sc">-</span><span class="fl">0.374</span>, <span class="sc">-</span><span class="fl">0.426</span>, <span class="sc">-</span><span class="fl">0.492</span>, <span class="sc">-</span><span class="fl">0.571</span>, <span class="sc">-</span><span class="fl">0.661</span>, <span class="sc">-</span><span class="fl">0.842</span>, <span class="sc">-</span><span class="fl">1.05</span>, <span class="sc">-</span><span class="fl">1.41</span>, <span class="sc">-</span><span class="fl">1.60</span>)</span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Chart differences in House vote vs. Presidental vote from 1976 - 2020</span></span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Year), <span class="at">y =</span> Score, <span class="at">fill =</span> Party)) <span class="sc">+</span></span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Democrat"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"Republican"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span></span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Party Score by Year (1976 - 2020)"</span>,</span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Score"</span>,</span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Party"</span></span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"top"</span></span>
-<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for plot</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> state_vote_diff_total_score <span class="sc">|&gt;</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">Year =</span> year, <span class="at">Party =</span> party_detailed, <span class="at">Score =</span> score) <span class="sc">|&gt;</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">Party =</span> <span class="fu">ifelse</span>(Party <span class="sc">==</span> <span class="st">"DEMOCRAT"</span>, <span class="st">"Democrat"</span>, <span class="st">"Republican"</span>)</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Chart differences in House vote vs. Presidental vote from 1976 - 2020</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Year), <span class="at">y =</span> Score, <span class="at">fill =</span> Party)) <span class="sc">+</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Democrat"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"Republican"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Party Score by Year (1976 - 2020)"</span>,</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Score"</span>,</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Party"</span></span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"top"</span></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </section>
 <section id="data-prep-readjust" class="level2">
@@ -759,175 +757,232 @@ This “swing state” phenomenon means that candidates prioritize states with n
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">shp_from_zip</span>(<span class="st">"/mp03/congress_shapefiles/congress_095_shapefile.zip"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </section>
-<section id="electoral-map" class="level2">
-<h2 class="anchored" data-anchor-id="electoral-map">2000 ELECTORAL MAP</h2>
-<p>Here is the map for the fateful 2000 Presidential Election. The election that inserted the Electoral College back into the national spotlight.</p>
+<section id="electora-map-for-the-2000-election" class="level2">
+<h2 class="anchored" data-anchor-id="electora-map-for-the-2000-election">Electora Map for the 2000 Election</h2>
+<p>Here is the map for the fateful 2000 Presidential Election, the election that re-centered the Electoral College back into the national spotlight.</p>
 <img src="images/mp-03/2000-electoral-college-map.png" class="img-fluid">
 <details>
 <summary>
 &gt; show the code
 </summary>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">#### CENTROGRAPH FOR 2000 ELECTION ####</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate winner for each state for 2000 election and create winning_party field</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>pres_vote_2000 <span class="ot">&lt;-</span> ELECTION_DATA_PRESIDENT <span class="sc">|&gt;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2000</span>) <span class="sc">|&gt;</span>                             </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state, candidate) <span class="sc">|&gt;</span>                       </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_votes =</span> <span class="fu">sum</span>(candidatevotes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span>  </span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(state, <span class="fu">desc</span>(total_votes)) <span class="sc">|&gt;</span>                 </span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(total_votes, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">with_ties =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">winning_party =</span> <span class="fu">ifelse</span>(candidate <span class="sc">==</span> <span class="st">"GORE, AL"</span>, <span class="st">"D"</span>, <span class="st">"R"</span>))</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Load shapefile from 106th Congress - relevant for 2000 election</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;!--</span> pres_shp_2000 <span class="ot">&lt;-</span> <span class="fu">shp_from_zip</span>(<span class="st">"/mp03/congress_shapefiles/congress_106_shapefile.zip"</span>) <span class="sc">-</span><span class="ot">-&gt;</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Load .shp file for congressional districts for 2000 </span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>pres_shp_2000 <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">"data/mp03/congress_shapefiles/districtShapes/districts105.shp"</span>)</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">#### CHLOROPLETH FOR 2000 ELECTION ####</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate winner for each state for 2000 election and create winning_party field</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pres_vote_2000 <span class="ot">&lt;-</span> ELECTION_DATA_PRESIDENT <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2000</span>) <span class="sc">|&gt;</span>                             </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state, candidate) <span class="sc">|&gt;</span>                       </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_votes =</span> <span class="fu">sum</span>(candidatevotes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span>  </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(state, <span class="fu">desc</span>(total_votes)) <span class="sc">|&gt;</span>                 </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(total_votes, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">with_ties =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">winning_party =</span> <span class="fu">ifelse</span>(candidate <span class="sc">==</span> <span class="st">"GORE, AL"</span>, <span class="st">"D"</span>, <span class="st">"R"</span>))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Load shapefile from 106th Congress - relevant for 2000 election</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;!--</span> pres_shp_2000 <span class="ot">&lt;-</span> <span class="fu">shp_from_zip</span>(<span class="st">"/mp03/congress_shapefiles/congress_106_shapefile.zip"</span>) <span class="sc">-</span><span class="ot">-&gt;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Load .shp file for congressional districts for 2000 </span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>pres_shp_2000 <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">"data/mp03/congress_shapefiles/districtShapes/districts105.shp"</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure STATENAME is clean and able to join</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>pres_shp_2000 <span class="ot">&lt;-</span> pres_shp_2000 <span class="sc">|&gt;</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STATENAME =</span> <span class="fu">str_to_upper</span>(<span class="fu">str_trim</span>(STATENAME)))</span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure STATENAME is clean and able to join</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>pres_shp_2000 <span class="ot">&lt;-</span> pres_shp_2000 <span class="sc">|&gt;</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STATENAME =</span> <span class="fu">str_to_upper</span>(<span class="fu">str_trim</span>(STATENAME)))</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure state is clean and able to join</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>pres_vote_2000 <span class="ot">&lt;-</span> pres_vote_2000 <span class="sc">|&gt;</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">str_to_upper</span>(<span class="fu">str_trim</span>(state)))</span>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure state is clean and able to join</span></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>pres_vote_2000 <span class="ot">&lt;-</span> pres_vote_2000 <span class="sc">|&gt;</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">str_to_upper</span>(<span class="fu">str_trim</span>(state)))</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Join data</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>pres_map_vote_2000_data <span class="ot">&lt;-</span> pres_shp_2000 <span class="sc">|&gt;</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pres_vote_2000, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"STATENAME"</span> <span class="ot">=</span> <span class="st">"state"</span>))</span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Join data</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>pres_map_vote_2000_data <span class="ot">&lt;-</span> pres_shp_2000 <span class="sc">|&gt;</span></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pres_vote_2000, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"STATENAME"</span> <span class="ot">=</span> <span class="st">"state"</span>))</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Make geometries valid</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>pres_map_vote_2000_data_g <span class="ot">&lt;-</span> pres_map_vote_2000_data <span class="sc">|&gt;</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geometry =</span> <span class="fu">st_make_valid</span>(geometry))</span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Make geometries valid</span></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>pres_map_vote_2000_data_g <span class="ot">&lt;-</span> pres_map_vote_2000_data <span class="sc">|&gt;</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geometry =</span> <span class="fu">st_make_valid</span>(geometry))</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Create state boundaries</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>state_boundaries <span class="ot">&lt;-</span> pres_map_vote_2000_data_g <span class="sc">|&gt;</span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(STATENAME, winning_party) <span class="sc">|&gt;</span></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">geometry =</span> <span class="fu">st_union</span>(geometry),</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_votes =</span> <span class="fu">sum</span>(total_votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Find electoral college vote totals</span></span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>electoral_votes_00 <span class="ot">&lt;-</span> ELECTION_DATA_HOUSE <span class="sc">|&gt;</span> </span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2000</span>) <span class="sc">|&gt;</span></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, state) <span class="sc">|&gt;</span></span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">votes =</span> <span class="fu">n_distinct</span>(district) <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> year, <span class="at">values_from =</span> votes)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Create state boundaries</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>state_boundaries <span class="ot">&lt;-</span> pres_map_vote_2000_data_g <span class="sc">|&gt;</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(STATENAME, winning_party) <span class="sc">|&gt;</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">geometry =</span> <span class="fu">st_union</span>(geometry),</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_votes =</span> <span class="fu">sum</span>(total_votes, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Find electoral college vote totals</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>electoral_votes_00 <span class="ot">&lt;-</span> ELECTION_DATA_HOUSE <span class="sc">|&gt;</span> </span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, state) <span class="sc">|&gt;</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">votes =</span> <span class="fu">n_distinct</span>(district) <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> year, <span class="at">values_from =</span> votes)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Join electoral college votes</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>state_boundaries  <span class="ot">&lt;-</span>  state_boundaries <span class="sc">|&gt;</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(electoral_votes_00, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"STATENAME"</span> <span class="ot">=</span> <span class="st">"state"</span>))</span>
 <span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Join electoral college votes</span></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>state_boundaries  <span class="ot">&lt;-</span>  state_boundaries <span class="sc">|&gt;</span></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(electoral_votes_00, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"STATENAME"</span> <span class="ot">=</span> <span class="st">"state"</span>))</span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle DC's NA</span></span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>state_boundaries<span class="sc">$</span><span class="st">`</span><span class="at">2000</span><span class="st">`</span>[state_boundaries<span class="sc">$</span>STATENAME <span class="sc">==</span> <span class="st">"DISTRICT OF COLUMBIA"</span> <span class="sc">&amp;</span> <span class="fu">is.na</span>(state_boundaries<span class="sc">$</span><span class="st">`</span><span class="at">2000</span><span class="st">`</span>)] <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NA values</span></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> state_boundaries <span class="sc">|&gt;</span></span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(geometry), <span class="sc">!</span><span class="fu">is.na</span>(winning_party))</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Handle DC's NA</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>state_boundaries<span class="sc">$</span><span class="st">`</span><span class="at">2000</span><span class="st">`</span>[state_boundaries<span class="sc">$</span>STATENAME <span class="sc">==</span> <span class="st">"DISTRICT OF COLUMBIA"</span> <span class="sc">&amp;</span> <span class="fu">is.na</span>(state_boundaries<span class="sc">$</span><span class="st">`</span><span class="at">2000</span><span class="st">`</span>)] <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove NA values</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> state_boundaries <span class="sc">|&gt;</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(geometry), <span class="sc">!</span><span class="fu">is.na</span>(winning_party))</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Define dc_location and assign geometry if needed</span></span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>dc_location <span class="ot">&lt;-</span> state_boundaries <span class="sc">|&gt;</span></span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(STATENAME <span class="sc">==</span> <span class="st">"DISTRICT OF COLUMBIA"</span>)</span>
 <span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Define dc_location and assign geometry if needed</span></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>dc_location <span class="ot">&lt;-</span> state_boundaries <span class="sc">|&gt;</span></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(STATENAME <span class="sc">==</span> <span class="st">"DISTRICT OF COLUMBIA"</span>)</span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if geometry exists and is not empty</span></span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nrow</span>(dc_location) <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> <span class="fu">st_is_empty</span>(dc_location<span class="sc">$</span>geometry)) {</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Manually assign coordinates if geometry is missing or empty</span></span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  dc_location <span class="ot">&lt;-</span> <span class="fu">st_sf</span>(</span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">STATENAME =</span> <span class="st">"DISTRICT OF COLUMBIA"</span>,</span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">winning_party =</span> <span class="st">"D"</span>,</span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">geometry =</span> <span class="fu">st_sfc</span>(<span class="fu">st_point</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">77.0369</span>, <span class="fl">38.9072</span>)), <span class="at">crs =</span> <span class="fu">st_crs</span>(state_boundaries))</span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate centroid if geometry is available</span></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>  dc_location <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dc_location)</span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if geometry exists and is not empty</span></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nrow</span>(dc_location) <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> <span class="fu">st_is_empty</span>(dc_location<span class="sc">$</span>geometry)) {</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Manually assign coordinates if geometry is missing or empty</span></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>  dc_location <span class="ot">&lt;-</span> <span class="fu">st_sf</span>(</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">STATENAME =</span> <span class="st">"DISTRICT OF COLUMBIA"</span>,</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">winning_party =</span> <span class="st">"D"</span>,</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">geometry =</span> <span class="fu">st_sfc</span>(<span class="fu">st_point</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">77.0369</span>, <span class="fl">38.9072</span>)), <span class="at">crs =</span> <span class="fu">st_crs</span>(state_boundaries))</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate centroid if geometry is available</span></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>  dc_location <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dc_location)</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate centroids using st_point_on_surface to ensure within geometry</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>state_centroids <span class="ot">&lt;-</span> state_boundaries <span class="sc">|&gt;</span></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_point_on_surface</span>()</span>
 <span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate centroids using st_point_on_surface to ensure within geometry</span></span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>state_centroids <span class="ot">&lt;-</span> state_boundaries <span class="sc">|&gt;</span></span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_point_on_surface</span>()</span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure all layers have the same CRS</span></span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>state_boundaries <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(state_boundaries, <span class="at">crs =</span> <span class="fu">st_crs</span>(pres_shp_2000))</span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>state_centroids <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(state_centroids, <span class="at">crs =</span> <span class="fu">st_crs</span>(state_boundaries))</span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>dc_location <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(dc_location, <span class="at">crs =</span> <span class="fu">st_crs</span>(state_boundaries))</span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the data</span></span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cleaned_data, <span class="fu">aes</span>(<span class="at">fill =</span> winning_party), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(<span class="at">data =</span> state_centroids, <span class="fu">aes</span>(<span class="at">label =</span> <span class="st">`</span><span class="at">2000</span><span class="st">`</span>), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> dc_location, <span class="at">shape =</span> <span class="dv">8</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">color =</span> <span class="st">"gold"</span>) <span class="sc">+</span>  <span class="co"># Overlay star for DC</span></span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"D"</span> <span class="ot">=</span>  <span class="fu">alpha</span>(<span class="st">"blue"</span>, .<span class="dv">7</span>), <span class="st">"R"</span> <span class="ot">=</span>  <span class="fu">alpha</span>(<span class="st">"red"</span>, .<span class="dv">7</span>))) <span class="sc">+</span> </span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">130</span>, <span class="sc">-</span><span class="dv">60</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Winning Party"</span>) <span class="sc">+</span></span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),    </span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),           </span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(), </span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),    </span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>()     </span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure all layers have the same CRS</span></span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>state_boundaries <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(state_boundaries, <span class="at">crs =</span> <span class="fu">st_crs</span>(pres_shp_2000))</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>state_centroids <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(state_centroids, <span class="at">crs =</span> <span class="fu">st_crs</span>(state_boundaries))</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>dc_location <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(dc_location, <span class="at">crs =</span> <span class="fu">st_crs</span>(state_boundaries))</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the data</span></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cleaned_data, <span class="fu">aes</span>(<span class="at">fill =</span> winning_party), <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(<span class="at">data =</span> state_centroids, <span class="fu">aes</span>(<span class="at">label =</span> <span class="st">`</span><span class="at">2000</span><span class="st">`</span>), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> dc_location, <span class="at">shape =</span> <span class="dv">8</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">color =</span> <span class="st">"gold"</span>) <span class="sc">+</span>  <span class="co"># Overlay star for DC</span></span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"D"</span> <span class="ot">=</span>  <span class="fu">alpha</span>(<span class="st">"blue"</span>, .<span class="dv">7</span>), <span class="st">"R"</span> <span class="ot">=</span>  <span class="fu">alpha</span>(<span class="st">"red"</span>, .<span class="dv">7</span>))) <span class="sc">+</span> </span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">130</span>, <span class="sc">-</span><span class="dv">60</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Winning Party"</span>) <span class="sc">+</span></span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),    </span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),           </span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),    </span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>()     </span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a><span class="do">#### FACETED HISTORY OF RECENT ELECTORAL COLLEGE COUNTS ####</span></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a><span class="do">#### DOES NOT RENDER. CRASHES COMPUTER. ITS NOT IN PROJECT :-( ####</span></span>
 <span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="do">#### FACETED HISTORY OF RECENT ELECTORAL COLLEGE COUNTS ####</span></span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="do">#### DOES NOT RENDER. IS NOT IN PROJECT :-( ####</span></span>
-<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up all gemoetries</span></span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> pres_shp_2000 <span class="sc">|&gt;</span></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geometry =</span> <span class="fu">st_make_valid</span>(geometry)) <span class="sc">|&gt;</span></span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(STATENAME) <span class="sc">|&gt;</span></span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="co"># Union geometries into states</span></span>
-<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>states_shapes_2000 <span class="ot">&lt;-</span> cleaned_data <span class="sc">|&gt;</span></span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(STATENAME,geometry)<span class="sc">|&gt;</span></span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(STATENAME)<span class="sc">|&gt;</span></span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry))<span class="sc">|&gt;</span></span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(geometry))</span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="co"># Cast geometries into a polygon</span></span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>us_states_sf <span class="ot">&lt;-</span> states_shapes_2000 <span class="sc">|&gt;</span></span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(geometry)) <span class="sc">|&gt;</span></span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_cast</span>(<span class="st">"MULTIPOLYGON"</span>) </span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>presidential_winners_by_state <span class="ot">&lt;-</span> ELECTION_DATA_PRESIDENT <span class="sc">|&gt;</span></span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, state, candidatevotes, candidate, party_simplified) <span class="sc">|&gt;</span></span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year,state) <span class="sc">|&gt;</span></span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(candidatevotes)</span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>presidentials_winners_combined_sf <span class="ot">&lt;-</span> presidential_winners_by_state <span class="sc">|&gt;</span></span>
-<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year,state,party_simplified) <span class="sc">|&gt;</span></span>
-<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(us_states_sf<span class="sc">|&gt;</span><span class="fu">select</span>(STATENAME,geometry) <span class="sc">|&gt;</span></span>
-<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STATENAME=</span><span class="fu">toupper</span>(STATENAME)),<span class="at">by=</span><span class="fu">c</span>(<span class="st">"state"</span><span class="ot">=</span><span class="st">"STATENAME"</span>))</span>
-<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(presidentials_winners_combined_sf) <span class="sc">+</span></span>
-<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">geometry=</span>geometry,<span class="at">fill =</span> party_simplified), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"DEMOCRAT"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"REPUBLICAN"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span></span>
-<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">130</span>, <span class="sc">-</span><span class="dv">60</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">50</span>))  <span class="sc">+</span></span>
-<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Winning Party"</span>) <span class="sc">+</span></span>
-<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)<span class="sc">+</span></span>
-<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>year)</span>
-<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"hello"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up all gemoetries</span></span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> pres_shp_2000 <span class="sc">|&gt;</span></span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geometry =</span> <span class="fu">st_make_valid</span>(geometry)) <span class="sc">|&gt;</span></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(STATENAME) <span class="sc">|&gt;</span></span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a><span class="co"># Union geometries into states</span></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>states_shapes_2000 <span class="ot">&lt;-</span> cleaned_data <span class="sc">|&gt;</span></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(STATENAME,geometry)<span class="sc">|&gt;</span></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(STATENAME)<span class="sc">|&gt;</span></span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry))<span class="sc">|&gt;</span></span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(geometry))</span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="co"># Cast geometries into a polygon</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>us_states_sf <span class="ot">&lt;-</span> states_shapes_2000 <span class="sc">|&gt;</span></span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(geometry)) <span class="sc">|&gt;</span></span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_valid</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_cast</span>(<span class="st">"MULTIPOLYGON"</span>) </span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="co"># Group by year and state and identify entry with most votes</span></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a>presidential_winners_by_state <span class="ot">&lt;-</span> ELECTION_DATA_PRESIDENT <span class="sc">|&gt;</span></span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, state, candidatevotes, candidate, party_simplified) <span class="sc">|&gt;</span></span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, state) <span class="sc">|&gt;</span></span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(candidatevotes)</span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a><span class="co"># Join data</span></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>presidentials_winners_combined_sf <span class="ot">&lt;-</span> presidential_winners_by_state <span class="sc">|&gt;</span></span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, state, party_simplified) <span class="sc">|&gt;</span></span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(us_states_sf<span class="sc">|&gt;</span></span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(STATENAME, geometry) <span class="sc">|&gt;</span></span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">STATENAME=</span><span class="fu">toupper</span>(STATENAME)),<span class="at">by=</span><span class="fu">c</span>(<span class="st">"state"</span><span class="ot">=</span><span class="st">"STATENAME"</span>))</span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a><span class="co"># Reduced Geometries</span></span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a>presidentials_winners_combined_sf_t <span class="ot">&lt;-</span> presidentials_winners_combined_sf <span class="sc">%&gt;%</span></span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">geometry =</span> <span class="fu">st_simplify</span>(geometry, <span class="at">dTolerance =</span> <span class="fl">0.05</span>))</span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="co"># Try without DC </span></span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a>presidentials_winners_combined_sf_t <span class="ot">&lt;-</span> presidentials_winners_combined_sf_t <span class="sc">|&gt;</span></span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">!=</span> <span class="st">"DISTRICT OF COLUMBIA"</span>)</span>
+<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot Data (doesn't work)</span></span>
+<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(presidentials_winners_combined_sf_t <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1976</span>, <span class="dv">1980</span>))) <span class="sc">+</span></span>
+<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">geometry =</span> geometry, <span class="at">fill =</span> party_simplified), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"DEMOCRAT"</span> <span class="ot">=</span> <span class="st">"blue"</span>, <span class="st">"REPUBLICAN"</span> <span class="ot">=</span> <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">130</span>, <span class="sc">-</span><span class="dv">60</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">24</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Winning Party"</span>) <span class="sc">+</span></span>
+<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>year)</span>
+<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"ending"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </section>
-<section id="electoral-college-schemes" class="level2">
-<h2 class="anchored" data-anchor-id="electoral-college-schemes">Electoral College Schemes</h2>
+<section id="differing-means-of-allocating-electoral-college-votes" class="level2">
+<h2 class="anchored" data-anchor-id="differing-means-of-allocating-electoral-college-votes">Differing Means of Allocating Electoral College Votes</h2>
+<p>The Electoral College has long been debated for its undemocratic nature as it can allow a candidate to win the presidency without securing the popular vote. In doing so, the Electoral College effectively amplifies the influence of smaller or swing states over larger, non-competitive states. This occurs due to the State-Wide Winner-Take-All method, where the candidate who wins the majority of votes in a state receives all of that state’s electoral votes, making individual votes in less competitive states less influential.</p>
+<p>But states are not compelled to use the State-Wide Winner-Take-All method as the United States Constitution allows states to decide for themselves how they allocate their electoral votes.</p>
+<p>What follows is a brief overview of the different electoral vote allocation strategies and their political implications…</p>
+<p><strong>State-Wide Winner-Take-All:</strong></p>
+<p>Currently used by most states, this approach awards all electoral votes to the candidate with the most votes in a state. While it simplifies outcomes, it can marginalize voters in states where one party has a strong majority, as votes for the minority party have no impact on the Electoral College outcome. This strategy focuses campaign efforts on swing states, leaving “safe” states largely ignored.</p>
+<p><strong>District-Wide Winner-Take-All + State-Wide “At Large” Votes:</strong></p>
+<p>This approach allocates one electoral vote per congressional district, awarded to the candidate who wins the district, with two additional votes (representing the Senate seats) awarded to the statewide winner. Adopted by Maine and Nebraska, it reflects more local preferences but may amplify the impact of gerrymandered districts, which can skew results within a state.</p>
+<p><strong>State-Wide Proportional:</strong></p>
+<p>In this model, electoral votes are allocated proportionally based on the statewide vote. This approach provides a more representative outcome for each state, as candidates receive electoral votes in line with their actual support.</p>
+<p><strong>National Proportional:</strong></p>
+<p>Here, electoral votes are allocated based on the candidates’ national popular vote percentages. This model best reflects the popular vote while maintaining the structure of the Electoral College.</p>
 </section>
-<section id="election-of-2000" class="level2">
-<h2 class="anchored" data-anchor-id="election-of-2000">Election of 2000</h2>
+<section id="the-presidential-elections-of-2000-and-2016" class="level2">
+<h2 class="anchored" data-anchor-id="the-presidential-elections-of-2000-and-2016">The Presidential Elections of 2000 and 2016</h2>
+<p>The 2000 and 2016 elections offer compelling cases for examining competing methods of distributing electoral votes. In both instances, the Electoral College outcome diverged from the popular vote, with the presidential candidates who secured the majority of electoral votes not winning the national popular vote. These elections highlight the potential discrepancies within the Electoral College system and can shed light on whether alternative approaches might better align electoral outcomes with the popular will.</p>
+<p>Analyzing these elections arguably offers the best insight into how different allocation methods could impact future presidential races and the broader democratic process.</p>
+</section>
+<section id="election-of-2000-george-w.-bush-v.-al-gore" class="level2">
+<h2 class="anchored" data-anchor-id="election-of-2000-george-w.-bush-v.-al-gore">Election of 2000: George W. Bush v. Al Gore</h2>
+<p>The 2000 presidential election served as a stark reminder of the Electoral College’s pivotal role in determining the presidency, a mechanism many Americans were unfamiliar with until then. The race between George W. Bush and Al Gore hinged on a razor-thin vote margin in Florida, leading to a weeks-long recount and intense media scrutiny of obscure ballot-counting procedures introducing the country to the famed “hanging chad.”</p>
+<p>Ultimately the Supreme Court intervened in the recount, issuing a decision in <em>Bush v. Gore</em> that halted the Florida recount and awarded the state’s electoral votes to Bush. Notably, the Court declared that its ruling was intended solely for this specific case and was not meant to set legal precedent.</p>
+<p>While this contentious election spurred some calls to reform or abolish the Electoral College, no significant changes materialized, and the system remains unchanged.</p>
+<div class="flexbox-votes">
+<div>
+<h3 class="anchored">
+George Bush
+</h3>
+<p>
+electoral vote: <strong>271</strong>
+</p>
+<p>
+popular vote: 50,456,002
+</p>
+<p>
+percentage: 47.9%
+</p>
+</div>
+<div>
+<h3 class="anchored">
+Al Gore
+</h3>
+<p>
+electoral vote: 266
+</p>
+<p>
+popular vote: <strong>50,999,897</strong>
+</p>
+<p>
+percentage: <strong>48.4%</strong>
+</p>
+</div>
+</div>
+<p><br> <strong>How would the election of 2000 played out under differing strategies of allocating electoral votes?</strong> <br></p>
 <div class="flexbox-grid">
 <div>
 <img src="images/mp-03/1-state-winner-take-all-2000.png" alt="Image 1">
@@ -943,8 +998,43 @@ This “swing state” phenomenon means that candidates prioritize states with n
 </div>
 </div>
 </section>
-<section id="election-of-2016" class="level2">
-<h2 class="anchored" data-anchor-id="election-of-2016">Election of 2016</h2>
+<section id="the-election-of-2016-donald-j.-trump-v.-hillary-clinton" class="level2">
+<h2 class="anchored" data-anchor-id="the-election-of-2016-donald-j.-trump-v.-hillary-clinton">The Election of 2016: Donald J. Trump v. Hillary Clinton</h2>
+<p>The 2016 election is regarded as one of the most consequential in recent memory, with its impact on American politics and society still felt today. Widely expected to end in an easy victory for Hillary Clinton, the election shocked the nation and the world when Donald Trump defied predictions and won.</p>
+<p>Trump’s unconventional, “gonzo” approach to politics upended traditional campaign norms and is seen by many as ushering in a new brand of conservatism—one that marked a significant departure from the policies and style of traditional Republican politics. This shift has shaped the direction of the Republican Party and redefined the political landscape, solidifying the 2016 election as an undeniably transformative moment in U.S. history.</p>
+<p>Donald Trump’s confrontational and unorthodox style as president intensified public scrutiny of the Electoral College as he had won in 2016 despite losing the popular vote. His administration brought renewed and amplified calls for reform or even abolition of the Electoral College.</p>
+<p>However, despite this heightened debate, there was no meaningful progress toward changing the Electoral College. Consequently, the Electoral College remains unchanged even as public criticism reached new heights during Trump’s presidency.</p>
+<div class="flexbox-votes">
+<div>
+<h3 class="anchored">
+Donald J. Trump
+</h3>
+<p>
+electoral vote: <strong>304</strong>
+</p>
+<p>
+popular vote: 62,984,828
+</p>
+<p>
+percentage: 46.1%
+</p>
+</div>
+<div>
+<h3 class="anchored">
+Hillary Clinton
+</h3>
+<p>
+electoral vote: 227
+</p>
+<p>
+popular vote: <strong>65,853,514</strong>
+</p>
+<p>
+percentage: <strong>48.2%</strong>
+</p>
+</div>
+</div>
+<p><br> <strong>How would the election of 2016 played out under differing strategies of allocating electoral votes?</strong> <br></p>
 <div class="flexbox-grid">
 <div>
 <img src="images/mp-03/1-state-winner-take-all-2016.png" alt="Image 1">
@@ -963,7 +1053,7 @@ This “swing state” phenomenon means that candidates prioritize states with n
 <summary>
 &gt; show the code
 </summary>
-<pre><code>#####State-Wide Winner-Take-All
+<pre><code>#### STATE WIDE WINNER TAKE ALL ####
 
 # Create popular vote tabulations
 popular_vote_summary &lt;- ELECTION_DATA_PRESIDENT |&gt;
@@ -993,16 +1083,15 @@ years &lt;- unique(electoral_vote_counts$year)
 electoral_vote_counts &lt;- electoral_vote_counts |&gt;
   bind_rows(
     tibble(
-      year = years[!years %in% electoral_votes$year[electoral_votes$state == "DISTRICT OF COLUMBIA"]],
+      year = years[!years %in% electoral_vote_counts$year[electoral_vote_counts$state == "DISTRICT OF COLUMBIA"]],
       state = "DISTRICT OF COLUMBIA",
       votes = 3
     )
   ) |&gt;
-
-# Washington DC always has 3 votes in case there are rows with different values
   mutate(votes = ifelse(state == "DISTRICT OF COLUMBIA", 3, votes)) |&gt;
   arrange(year, state)
 
+# Identify total votes, winning candidate and winning party
 state_winner_take_all &lt;- ELECTION_DATA_PRESIDENT |&gt;  # 
   group_by(year, state) |&gt;             
   filter(!is.na(candidate)) |&gt;        
@@ -1040,8 +1129,7 @@ state_winner_with_votes &lt;- state_winner_with_votes |&gt;
     winner_party = str_replace(winner_party, "DEMOCRATIC", "DEMOCRAT")
     )
 
-
-
+# Re-do state abbreviations
 state_winner_with_votes &lt;- state_winner_with_votes |&gt;
   mutate(
     state_cleaned = str_trim(str_to_title(state)), 
@@ -1059,17 +1147,17 @@ calculate_ec_vote_totals &lt;- function(electoral_college_data, election_year) {
   df_year_requested &lt;- electoral_college_data |&gt;
     filter(year == election_year)
 
-  # Summarize total popular and electoral votes by candidate's proper name and party
-  vote_summary &lt;- df_year_requested |&gt;
-    group_by(proper_name, winner_party) |&gt;
-    summarise(
+# Summarize total popular and electoral votes by candidate's proper name and party
+vote_summary &lt;- df_year_requested |&gt;
+  group_by(proper_name, winner_party) |&gt;
+  summarise(
       ec_vote = sum(votes),
       .groups = "drop"
     )
 
-  # Arrange by ec_vote in descending order to get the winners first
-  vote_summary &lt;- vote_summary |&gt;
-    arrange(desc(ec_vote))
+# Arrange by ec_vote in descending order to get the winners first
+vote_summary &lt;- vote_summary |&gt;
+  arrange(desc(ec_vote))
 
   # Return the results as two named lists for first and second place candidates
   list(
@@ -1117,7 +1205,7 @@ calculate_popular_vote_totals &lt;- function(popular_vote_data, election_year) {
   )
 }
 
-
+# Function for winner take all report
 state_winner_take_all &lt;- function(data_set, election_year, ec_summary_data) {
   # Filter data for the requested election year
   df_year_requested &lt;- data_set |&gt; 
@@ -1159,12 +1247,17 @@ state_winner_take_all &lt;- function(data_set, election_year, ec_summary_data) {
     )
 }
 
+# Call functions for plotting
+ec_summary &lt;- calculate_ec_vote_totals(state_winner_with_votes, 2000)
+pop_summary &lt;- calculate_popular_vote_totals(popular_vote_summary, 2000)
+state_winner_take_all(state_winner_with_votes, 2000, ec_summary)
+
 ec_summary &lt;- calculate_ec_vote_totals(state_winner_with_votes, 2000)
 pop_summary &lt;- calculate_popular_vote_totals(popular_vote_summary, 2000)
 state_winner_take_all(state_winner_with_votes, 2000, ec_summary)
 
 
-#######District-Wide Winner-Take-All + State-Wide “At Large” Votes
+#### DISTRICT WIDE WINNTER TAKE ALL &amp; STATE WIDE AT LARGE VOTES ####
 
 # Calculate district winners and add an at_large seat
 calculate_district_winners_with_at_large &lt;- function(data) {
@@ -1195,8 +1288,6 @@ calculate_district_winners_with_at_large &lt;- function(data) {
   bind_rows(district_winners, at_large_winners)
 }
 
-
-
 # Sum all votes and percentages for each party for each year and each state
 calculate_vote_totals_at_large &lt;- function(data) {
   data |&gt;
@@ -1221,8 +1312,6 @@ unique_winners_al &lt;- state_winner_with_votes |&gt;
   distinct(year, winner_party, proper_name) |&gt;
   rename("party" = "winner_party")
 
-
-
 # Add proper names to EC totals
 ec_total_at_large &lt;- ec_total_at_large |&gt;
   left_join(unique_winners_al, by = c("year", "party")) 
@@ -1230,22 +1319,19 @@ ec_total_at_large &lt;- ec_total_at_large |&gt;
 total_votes_check &lt;- ec_total_at_large |&gt;
   filter(year == 2016) |&gt; 
   summarise(total_electoral_votes = sum(total_votes))
-print(total_votes_check)  # Should be 538
-
 
 
 plot_electoral_votes &lt;- function(data, election_year) {
   df_year_filtered &lt;- data |&gt;
     filter(year == election_year) |&gt;
     group_by(state, state_po) |&gt;
-    slice_max(win_percent, with_ties = FALSE) |&gt;
     ungroup()
   
   total_votes_summary &lt;- df_year_filtered |&gt;
     group_by(proper_name, party) |&gt;
     summarise(total_votes = sum(total_votes), .groups = "drop") |&gt;
     arrange(desc(total_votes))
-    
+  print(total_votes_summary)
   total_votes_list &lt;- split(total_votes_summary, seq(nrow(total_votes_summary)))
   
   # Manually referencing each element in total_votes_list
@@ -1255,7 +1341,7 @@ plot_electoral_votes &lt;- function(data, election_year) {
   
   proper_name2 &lt;- total_votes_list[[2]]$proper_name
   winner_party2 &lt;- total_votes_list[[2]]$party
-  total_votes2 &lt;- total_votes_list[[2]]$total_votes
+  total_votes2 &lt;- total_votes_list[[2]]$total_votes + 3
   
   # Format party abbreviations
   party1 &lt;- ifelse(winner_party1 == "DEMOCRAT", "(D)", "(R)")
@@ -1291,9 +1377,10 @@ plot_electoral_votes &lt;- function(data, election_year) {
     )
 }
 
-plot_electoral_votes(ec_total_at_large, 2016)
+# Run plot
+plot_electoral_votes(ec_total_at_large, 2000)
 
-########State-Wide Proportional
+#### STATE WIDE PROPORTIONAL ####
 
 electon_data_president_p &lt;- ELECTION_DATA_PRESIDENT |&gt; 
     mutate(party_detailed = if_else(party_detailed == "DEMOCRATIC-FARMER-LABOR", "DEMOCRAT", party_detailed)) |&gt;
@@ -1304,8 +1391,7 @@ electoral_votes_by_state_p &lt;- ELECTION_DATA_HOUSE |&gt;
   group_by(year, state, state_po) |&gt;
   summarize(votes = n_distinct(district) + 2)
 
-  
-
+# Calculate percentages 
 state_percentages_p &lt;- electon_data_president_p |&gt;
   group_by(year, state, state_po, party_detailed) |&gt;
   summarise(
@@ -1320,11 +1406,12 @@ state_percentages_p &lt;- electon_data_president_p |&gt;
   mutate(winner = percentage == max(percentage)) |&gt;
   ungroup()
 
+# Join percentages with votes
 state_percentages_w_votes_p &lt;- state_percentages_p |&gt;
-  right_join(electoral_votes_by_state, by = c("year", "state", "state_po")) |&gt;
+  right_join(electoral_votes_by_state_p, by = c("year", "state", "state_po")) |&gt;
   rename(electoral_votes = votes)
  
-  
+# Break up electoral votes won by percentages  
 state_electoral_votes_p &lt;- state_percentages_w_votes_p |&gt;
   group_by(year, state, state_po) |&gt;
   mutate(
@@ -1339,8 +1426,9 @@ state_electoral_votes_p &lt;- state_percentages_w_votes_p |&gt;
   mutate(color = ifelse(party_detailed == "DEMOCRAT", alpha("blue", percent_electoral_votes), alpha("red",             percent_electoral_votes))) |&gt;
   ungroup()
 
+# Join proper names
 state_electoral_votes_p &lt;- state_electoral_votes_p |&gt;
-  left_join(unique_winners, by = c("year", "party_detailed")) 
+  left_join(unique_winners_n, by = c("year", "party_detailed")) 
   
 plot_electoral_votes &lt;- function(data, election_year) {
   df_year_filtered &lt;- data |&gt;
@@ -1355,7 +1443,7 @@ plot_electoral_votes &lt;- function(data, election_year) {
   print(total_votes_list)
   proper_name1 &lt;- total_votes_list[[1]]$proper_name
   winner_party1 &lt;- total_votes_list[[1]]$party_detailed
-  total_votes1 &lt;- total_votes_list[[1]]$total_electoral_votes_won
+  total_votes1 &lt;- total_votes_list[[1]]$total_electoral_votes_won + 3
   
   proper_name2 &lt;- total_votes_list[[2]]$proper_name
   winner_party2 &lt;- total_votes_list[[2]]$party_detailed
@@ -1393,9 +1481,10 @@ plot_electoral_votes &lt;- function(data, election_year) {
 }
 
 
-plot_electoral_votes(state_electoral_votes_p, 2016)
+plot_electoral_votes(state_electoral_votes_p, 2000)
 
-######################national vote
+#### NATIONAL VOTE PROPORTION ####
+
 election_data_president_n &lt;- ELECTION_DATA_PRESIDENT |&gt; 
     mutate(party_detailed = if_else(party_detailed == "DEMOCRATIC-FARMER-LABOR", "DEMOCRAT", party_detailed)) |&gt;
     filter(party_detailed == "DEMOCRAT" | party_detailed == "REPUBLICAN")
@@ -1426,7 +1515,7 @@ state_percentages_n &lt;- state_percentages_n |&gt;
 
 expanded_data_n &lt;- state_percentages_n |&gt;
   inner_join(
-    electoral_votes_by_state,
+    electoral_votes_by_state_n,
     by = "year",
     relationship = "many-to-many"
   ) 
@@ -1449,7 +1538,7 @@ unique_winners_n &lt;- state_winner_with_votes |&gt;
   rename(party_detailed = winner_party)
 
 # Add proper names
-state_electoral_votes_n &lt;- state_electoral_votes |&gt;
+state_electoral_votes_n &lt;- state_electoral_votes_n |&gt;
   left_join(unique_winners_n, by = c("year", "party_detailed")) 
 
 # Add colors
@@ -1463,18 +1552,18 @@ plot_national_proportion &lt;- function(data, election_year) {
   print(df_year_filtered)
   # Get summary for EC vote counts  
   summary &lt;- df_year_filtered |&gt;
-    group_by(party_detailed, proper_name.y) |&gt;
+    group_by(party_detailed, proper_name) |&gt;
     summarise(total_electoral_votes_won = sum(electoral_votes_won, na.rm = TRUE)) |&gt;
     ungroup()
 
   # Break out into list for display
   total_votes_list &lt;- split(summary, seq(nrow(summary)))
 
-  proper_name1 &lt;- total_votes_list[[1]]$proper_name.y
+  proper_name1 &lt;- total_votes_list[[1]]$proper_name
   winner_party1 &lt;- total_votes_list[[1]]$party_detailed
-  total_votes1 &lt;- total_votes_list[[1]]$total_electoral_votes_won
+  total_votes1 &lt;- total_votes_list[[1]]$total_electoral_votes_won + 3
   
-  proper_name2 &lt;- total_votes_list[[2]]$proper_name.y
+  proper_name2 &lt;- total_votes_list[[2]]$proper_name
   winner_party2 &lt;- total_votes_list[[2]]$party_detailed
   total_votes2 &lt;- total_votes_list[[2]]$total_electoral_votes_won
   
@@ -1509,10 +1598,23 @@ plot_national_proportion &lt;- function(data, election_year) {
 }
 
 # Usage
-plot_national_proportion(state_electoral_votes_n, 2016)
+plot_national_proportion(state_electoral_votes_n, 2000)
 
 </code></pre>
 </details>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<p>The Electoral College system inherently disadvantages densely concentrated urban populations due to geographic sorting, where large numbers of voters in cities are “wasted” under the current allocation methods. This effect is especially pronounced in the State-Wide Winner-Take-All and District-Wide Winner-Take-All + At-Large systems, where urban votes are overshadowed by more spread-out rural and suburban voters. Even with a State-Wide Proportional approach, the dispersed nature of electoral votes dilutes the power of high-population centers.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>This dynamic reflects the original pastoral leanings of certain Founding Fathers, who were wary of urban centers and their concentrated political influence. Many founders idealized a nation of independent, rural landowners and saw the Electoral College as a mechanism to balance the interests of these pastoral areas against growing urban centers.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> Consequently, modern calls for Electoral College reform often stem from this persistent tension between rural and urban representation.</p>
+<p>Critics of the Electoral College, such as historian George C. Edwards III, argue that the system introduces a significant “democratic deficit” by allowing a candidate to win the presidency without securing the popular vote. Edwards suggests that this mechanism distorts democratic representation, disproportionately empowering certain states and demographic groups at the expense of others, and thus subverting the principle of equal representation.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<p>These findings are in line with the thoughts of <a href="https://en.wikipedia.org/wiki/Robert_Dahl">Robert A. Dahl</a>, widely regarded as one of the United States’ preeminent authoritie on democratic theory and the American Constitution.</p>
+<p>In <em>How Democratic Is the American Constitution?</em> Dahl critically examines the Electoral College and its democratic shortcomings. He too recounts the 2000 election, where a candidate with fewer popular votes won, and traces this anomaly to the original confusion and compromises of the Framers. They established the Electoral College out of desperation after rejecting other methods, prioritizing insulation from popular choice and concern over “cabal and corruption.”<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<p>The Electoral College is deeply rooted in an anti-democratic framework. Built to balance regional influence rather than to represent the popular will, the Electoral College was crafted with significant limitations to prevent it from reflecting a true “one person, one vote” standard. Its structural barriers maken it impossible to align with the democratic values most champion today.</p>
+<p>In contrast, modern American political culture is firmly grounded in the principle of equal representation, where each vote should carry equal weight. Most Americans believe strongly in <strong>“one person, one vote”</strong> and would find it jarring, even offensive, for any politician to openly assert that some votes should count more than others.</p>
+<p>Yet by supporting the Electoral College, we tacitly accept this inequality, promoting the illusion that it’s anything other than an outdated system that distorts minority political power.</p>
+<p>Given this context, the purple shading on the national proportion maps above best reflect the most equitable spirit of “one person, one vote,” highlighting how popular will could be represented more faithfully. If the Electoral College must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence across the country.</p>
+<p>As such, if were to keep the Electoral College, we should adopt the <strong>National Proportion</strong> method for allocating electoral votes and the delegates who chose our nation’s chief executive.</p>
 
 
 </section>
@@ -1522,11 +1624,15 @@ plot_national_proportion(state_electoral_votes_n, 2016)
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>MIT Election Data and Science Lab, 2017, “U.S. House 1976–2022”, https://doi.org/10.7910/DVN/IG0UN2, Harvard Dataverse, V13, UNF:6 /IVldA== [fileUNF]<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>MIT Election Data and Science Lab, 2017, “U.S. House 1976–2022”, https://doi.org/10.7910/DVN/IG0UN2, <em>Harvard Dataverse</em>, V13, UNF:6 /IVldA== [fileUNF]<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>CD Maps, “The Database of Congressional Historical Shape Files,” https://cdmaps.polisci.ucla.edu/<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>U.S. Census Bureau, “TIGER/Line Shapefiles,” https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Smith, Robert C. “Ronald Reagan, Donald Trump, and the Future of the Republican Party and Conservatism in America.” American Political Thought 10.2 (2021): 283-289.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>Abramowitz, A. I. (2022). The Polarized American Electorate: The Rise of Partisan-Ideological Consistency and Its Consequences. Political Science Quarterly, 137(4), 645-674.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Pearson-Merkowitz, S., &amp; Lang, C. (2016). The geographic polarization of American voters. The Geography Teacher, 13(3), 112-117.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Rodden, J. A. (2019). Why cities lose: The deep roots of the urban-rural political divide. Basic Books.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Edwards, G. C. (2004). Why the electoral college is bad for America. Yale University Press.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Dahl, R. A. (2001). How democratic is the American Constitution? New Haven, Yale University Press.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

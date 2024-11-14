@@ -32,7 +32,7 @@ The ongoing use of the Electoral College, despite its oft-misalignment with the 
 
 ---
 
-To explore the dynamics of the Electoral College, a data analysis was conducted using electoral data from the MIT Election Data and Science Lab, which provides detailed voting records across U.S. House elections from 1976 to 2022.^[MIT Election Data and Science Lab, 2017, "U.S. House 1976–2022", https://doi.org/10.7910/DVN/IG0UN2, Harvard Dataverse, V13, UNF:6
+To explore the dynamics of the Electoral College, a data analysis was conducted using electoral data from the MIT Election Data and Science Lab, which provides detailed voting records across U.S. House elections from 1976 to 2022.^[MIT Election Data and Science Lab, 2017, "U.S. House 1976–2022", https://doi.org/10.7910/DVN/IG0UN2, *Harvard Dataverse*, V13, UNF:6
 /IVldA== [fileUNF]] This dataset offers insights into historical voting patterns and party performance at the district level, essential for understanding shifts in electoral influence over time. This data was with congressional shapefiles from UCLA’s PoliSci Mapping Center^[CD Maps, “The Database of Congressional Historical Shape Files,” https://cdmaps.polisci.ucla.edu/] and the U.S. Census Bureau’s TIGER/Line files.^[U.S. Census Bureau, "TIGER/Line Shapefiles," https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html] These resources enable a comprehensive analysis of the Electoral College system, highlighting shifts in population and the impact districting commands over electoral outcomes.
 
 This project uses packages `readr`, `dplyr`, `tidy`, `ggplot2`, `sf`, `stringr`, `statebins`, `scales`
@@ -59,8 +59,8 @@ ELECTION_DATA_PRESIDENT <- read_csv("data/mp03/dataversefiles/1976-2020-presiden
 ELECTION_DATA_PRESIDENT <- ELECTION_DATA_PRESIDENT |> 
   filter(!is.na(candidate) & !is.na(party_detailed))
 
-# Function to download shapefiles UCLA’s PoliSci Mapping Center, 95 | 112 represents relevant 
-# Congressional Sessions
+# Function to download shapefiles UCLA’s PoliSci Mapping Center, 95 to 
+# 112 representsrelevant Congressional Sessions
 congress_shapefiles_ucla <- function(start = 95, end = 112) {
   BASE_URL <- "https://cdmaps.polisci.ucla.edu/shp/districts"
   
@@ -90,7 +90,6 @@ congress_shapefiles_ucla <- function(start = 95, end = 112) {
 
 # Run function
 congress_shapefiles_ucla()
-
 
 # Function to download shapefiles from the U.S. Census Bureau’s TIGER/Line Shapefiles 
 congress_shapefiles_census <- function(start_year = 2013, end_year = 2023) {
@@ -384,7 +383,6 @@ state_vote_diff_state_score <- state_vote_counts |>
   group_by(state, party_detailed) |> 
   summarize(state_dif = mean(dif, na.rm = TRUE))
 
-
 # Calculate differences by party
 state_vote_diff_pres_house <- state_vote_counts |> 
   group_by(year, party_detailed) |> 
@@ -400,12 +398,12 @@ state_vote_diff_total_score <- state_vote_diff_pres_house |>
   arrange(desc(score))
 
 
-# Prepare data for ggplot chart
-data <- data.frame(
-  Year = c(1984, 1980, 1992, 1988, 1996, 1992, 1976, 2008, 2016, 2020, 2016, 2012, 2004, 1996, 2000, 2000, 2020, 2004, 2012, 1980, 2008, 1976, 1988, 1984),
-  Party = c("Democrat", "Democrat", "Democrat", "Democrat", "Republican", "Republican", "Democrat", "Democrat", "Republican", "Republican", "Democrat", "Republican", "Democrat", "Democrat", "Republican", "Democrat", "Democrat", "Republican", "Democrat", "Republican", "Republican", "Republican", "Republican", "Republican"),
-  Score = c(3.12, 1.32, 1.08, 0.903, 0.794, 0.731, 0.606, 0.110, 0.0802, -0.121, -0.186, -0.203, -0.224, -0.262, -0.312, -0.374, -0.426, -0.492, -0.571, -0.661, -0.842, -1.05, -1.41, -1.60)
-)
+# Prepare data for plot
+data <- state_vote_diff_total_score |>
+  select(Year = year, Party = party_detailed, Score = score) |>
+  mutate(
+    Party = ifelse(Party == "DEMOCRAT", "Democrat", "Republican")
+  )
 
 # Chart differences in House vote vs. Presidental vote from 1976 - 2020
 ggplot(data, aes(x = factor(Year), y = Score, fill = Party)) +
@@ -425,7 +423,6 @@ ggplot(data, aes(x = factor(Year), y = Score, fill = Party)) +
 
  
 ```
-
 </details>
 
 ## DATA PREP READJUST 
@@ -455,17 +452,16 @@ file <- shp_from_zip("/mp03/congress_shapefiles/congress_095_shapefile.zip")
 
 </details>
 
-## 2000 ELECTORAL MAP 
+## Electora Map for the 2000 Election 
 
-Here is the map for the fateful 2000 Presidential Election. The election that inserted the Electoral College back into the national spotlight. 
+Here is the map for the fateful 2000 Presidential Election, the election that re-centered the Electoral College back into the national spotlight. 
 
 ![](images/mp-03/2000-electoral-college-map.png)
 <details>
 <summary>\> show the code</summary>
 
 ```r
-
-#### CENTROGRAPH FOR 2000 ELECTION ####
+#### CHLOROPLETH FOR 2000 ELECTION ####
 
 # Calculate winner for each state for 2000 election and create winning_party field
 pres_vote_2000 <- ELECTION_DATA_PRESIDENT |>
@@ -476,15 +472,12 @@ pres_vote_2000 <- ELECTION_DATA_PRESIDENT |>
   slice_max(total_votes, n = 1, with_ties = FALSE) |>
   mutate(winning_party = ifelse(candidate == "GORE, AL", "D", "R"))
 
-
 # Load shapefile from 106th Congress - relevant for 2000 election
 <!-- pres_shp_2000 <- shp_from_zip("/mp03/congress_shapefiles/congress_106_shapefile.zip") -->
 
 
 # Load .shp file for congressional districts for 2000 
 pres_shp_2000 <- read_sf("data/mp03/congress_shapefiles/districtShapes/districts105.shp")
-
-
 
 # Make sure STATENAME is clean and able to join
 pres_shp_2000 <- pres_shp_2000 |>
@@ -576,13 +569,14 @@ ggplot() +
 
 #### FACETED HISTORY OF RECENT ELECTORAL COLLEGE COUNTS ####
 
-#### DOES NOT RENDER. IS NOT IN PROJECT :-( ####
+#### DOES NOT RENDER. CRASHES COMPUTER. ITS NOT IN PROJECT :-( ####
 
 # Clean up all gemoetries
 cleaned_data <- pres_shp_2000 |>
   mutate(geometry = st_make_valid(geometry)) |>
   group_by(STATENAME) |>
   summarize(geometry = st_union(geometry), .groups = "drop")
+
 
 # Union geometries into states
 states_shapes_2000 <- cleaned_data |>
@@ -597,34 +591,96 @@ us_states_sf <- states_shapes_2000 |>
   st_make_valid() |> 
   st_cast("MULTIPOLYGON") 
 
- 
+# Group by year and state and identify entry with most votes
 presidential_winners_by_state <- ELECTION_DATA_PRESIDENT |>
   select(year, state, candidatevotes, candidate, party_simplified) |>
-  group_by(year,state) |>
+  group_by(year, state) |>
   slice_max(candidatevotes)
 
+# Join data
 presidentials_winners_combined_sf <- presidential_winners_by_state |>
-  select(year,state,party_simplified) |>
-  left_join(us_states_sf|>select(STATENAME,geometry) |>
+  select(year, state, party_simplified) |>
+  left_join(us_states_sf|>
+  select(STATENAME, geometry) |>
   mutate(STATENAME=toupper(STATENAME)),by=c("state"="STATENAME"))
 
-ggplot(presidentials_winners_combined_sf) +
-  geom_sf(aes(geometry=geometry,fill = party_simplified), color = "white") +
+# Reduced Geometries
+presidentials_winners_combined_sf_t <- presidentials_winners_combined_sf %>%
+  mutate(geometry = st_simplify(geometry, dTolerance = 0.05))
+
+# Try without DC 
+presidentials_winners_combined_sf_t <- presidentials_winners_combined_sf_t |>
+  filter(state != "DISTRICT OF COLUMBIA")
+
+# Plot Data (doesn't work)
+ggplot(presidentials_winners_combined_sf_t |> filter(year %in% c(1976, 1980))) +
+  geom_sf(aes(geometry = geometry, fill = party_simplified), color = "white") +
   scale_fill_manual(values = c("DEMOCRAT" = "blue", "REPUBLICAN" = "red")) +
-  coord_sf(xlim = c(-130, -60), ylim = c(24, 50))  +
+  coord_sf(xlim = c(-130, -60), ylim = c(24, 50)) +
   labs(fill = "Winning Party") +
   theme_minimal() +
-  theme(legend.position = "bottom")+
+  theme(legend.position = "bottom") +
   facet_wrap(~year)
-
-print("hello")
+print("ending")
 
 ```
 </details>
 
-## Electoral College Schemes 
+## Differing Means of Allocating Electoral College Votes
 
-## Election of 2000
+The Electoral College has long been debated for its undemocratic nature as it can allow a candidate to win the presidency without securing the popular vote. In doing so, the Electoral College effectively amplifies the influence of smaller or swing states over larger, non-competitive states. This occurs due to the State-Wide Winner-Take-All method, where the candidate who wins the majority of votes in a state receives all of that state’s electoral votes, making individual votes in less competitive states less influential.
+
+But states are not compelled to use the State-Wide Winner-Take-All method as the United States Constitution allows states to decide for themselves how they allocate their electoral votes. 
+
+What follows is a brief overview of the different electoral vote allocation strategies and their political implications...
+
+**State-Wide Winner-Take-All:**
+
+Currently used by most states, this approach awards all electoral votes to the candidate with the most votes in a state. While it simplifies outcomes, it can marginalize voters in states where one party has a strong majority, as votes for the minority party have no impact on the Electoral College outcome. This strategy focuses campaign efforts on swing states, leaving “safe” states largely ignored.
+
+**District-Wide Winner-Take-All + State-Wide “At Large” Votes:**
+
+This approach allocates one electoral vote per congressional district, awarded to the candidate who wins the district, with two additional votes (representing the Senate seats) awarded to the statewide winner. Adopted by Maine and Nebraska, it reflects more local preferences but may amplify the impact of gerrymandered districts, which can skew results within a state.
+
+**State-Wide Proportional:**
+
+In this model, electoral votes are allocated proportionally based on the statewide vote. This approach provides a more representative outcome for each state, as candidates receive electoral votes in line with their actual support. 
+
+**National Proportional:**
+
+Here, electoral votes are allocated based on the candidates' national popular vote percentages. This model best reflects the popular vote while maintaining the structure of the Electoral College.
+
+## The Presidential Elections of 2000 and 2016
+
+The 2000 and 2016 elections offer compelling cases for examining competing methods of distributing electoral votes. In both instances, the Electoral College outcome diverged from the popular vote, with the presidential candidates who secured the majority of electoral votes not winning the national popular vote. These elections highlight the potential discrepancies within the Electoral College system and can shed light on whether alternative approaches might better align electoral outcomes with the popular will.
+
+Analyzing these elections arguably offers the best insight into how different allocation methods could impact future presidential races and the broader democratic process.
+
+## Election of 2000: George W. Bush v. Al Gore
+The 2000 presidential election served as a stark reminder of the Electoral College's pivotal role in determining the presidency, a mechanism many Americans were unfamiliar with until then. The race between George W. Bush and Al Gore hinged on a razor-thin vote margin in Florida, leading to a weeks-long recount and intense media scrutiny of obscure ballot-counting procedures introducing the country to the famed "hanging chad." 
+
+Ultimately the Supreme Court intervened in the recount, issuing a decision in *Bush v. Gore* that halted the Florida recount and awarded the state’s electoral votes to Bush. Notably, the Court declared that its ruling was intended solely for this specific case and was not meant to set legal precedent. 
+
+While this contentious election spurred some calls to reform or abolish the Electoral College, no significant changes materialized, and the system remains unchanged.
+
+::: {.flexbox-votes}
+<div>
+<h3>George Bush</h3>
+<p>electoral vote: <strong>271</strong></p>
+<p>popular vote: 50,456,002</p>
+<p>percentage: 47.9%</p>
+</div>
+<div>
+<h3>Al Gore</h3>
+<p>electoral vote: 266</p>
+<p>popular vote: <strong>50,999,897</strong></p>
+<p>percentage: <strong>48.4%</strong></p>
+</div>
+:::
+
+<br>
+**How would the election of 2000 played out under differing strategies of allocating electoral votes?**
+<br>
 
 ::: {.flexbox-grid}
 <div><img src="images/mp-03/1-state-winner-take-all-2000.png" alt="Image 1"></div>
@@ -633,7 +689,34 @@ print("hello")
 <div><img src="images/mp-03/4-national-proportion-2000.png" alt="Image 4"></div>
 :::
 
-## Election of 2016
+## The Election of 2016: Donald J. Trump v. Hillary Clinton
+
+The 2016 election is regarded as one of the most consequential in recent memory, with its impact on American politics and society still felt today. Widely expected to end in an easy victory for Hillary Clinton, the election shocked the nation and the world when Donald Trump defied predictions and won. 
+
+Trump's unconventional, "gonzo" approach to politics upended traditional campaign norms and is seen by many as ushering in a new brand of conservatism—one that marked a significant departure from the policies and style of traditional Republican politics. This shift has shaped the direction of the Republican Party and redefined the political landscape, solidifying the 2016 election as an undeniably transformative moment in U.S. history.
+
+Donald Trump's confrontational and unorthodox style as president intensified public scrutiny of the Electoral College as he had won in 2016 despite losing the popular vote. His administration brought renewed and amplified calls for reform or even abolition of the Electoral College. 
+
+However, despite this heightened debate, there was no meaningful progress toward changing the Electoral College. Consequently, the Electoral College remains unchanged even as public criticism reached new heights during Trump’s presidency.
+
+::: {.flexbox-votes}
+<div>
+<h3>Donald J. Trump</h3>
+<p>electoral vote: <strong>304</strong></p>
+<p>popular vote: 62,984,828</p>
+<p>percentage: 46.1%</p>
+</div>
+<div>
+<h3>Hillary Clinton</h3>
+<p>electoral vote: 227</p>
+<p>popular vote: <strong>65,853,514</strong></p>
+<p>percentage: <strong>48.2%</strong></p>
+</div>
+:::
+
+<br>
+**How would the election of 2016 played out under differing strategies of allocating electoral votes?**
+<br>
 
 ::: {.flexbox-grid}
 <div><img src="images/mp-03/1-state-winner-take-all-2016.png" alt="Image 1"></div>
@@ -642,11 +725,10 @@ print("hello")
 <div><img src="images/mp-03/4-national-proportion-2016.png" alt="Image 4"></div>
 :::
 
-
 <details>
 <summary>\> show the code </summary>
 ```
-#####State-Wide Winner-Take-All
+#### STATE WIDE WINNER TAKE ALL ####
 
 # Create popular vote tabulations
 popular_vote_summary <- ELECTION_DATA_PRESIDENT |>
@@ -676,16 +758,15 @@ years <- unique(electoral_vote_counts$year)
 electoral_vote_counts <- electoral_vote_counts |>
   bind_rows(
     tibble(
-      year = years[!years %in% electoral_votes$year[electoral_votes$state == "DISTRICT OF COLUMBIA"]],
+      year = years[!years %in% electoral_vote_counts$year[electoral_vote_counts$state == "DISTRICT OF COLUMBIA"]],
       state = "DISTRICT OF COLUMBIA",
       votes = 3
     )
   ) |>
-
-# Washington DC always has 3 votes in case there are rows with different values
   mutate(votes = ifelse(state == "DISTRICT OF COLUMBIA", 3, votes)) |>
   arrange(year, state)
 
+# Identify total votes, winning candidate and winning party
 state_winner_take_all <- ELECTION_DATA_PRESIDENT |>  # 
   group_by(year, state) |>             
   filter(!is.na(candidate)) |>        
@@ -723,8 +804,7 @@ state_winner_with_votes <- state_winner_with_votes |>
     winner_party = str_replace(winner_party, "DEMOCRATIC", "DEMOCRAT")
     )
 
-
-
+# Re-do state abbreviations
 state_winner_with_votes <- state_winner_with_votes |>
   mutate(
     state_cleaned = str_trim(str_to_title(state)), 
@@ -742,17 +822,17 @@ calculate_ec_vote_totals <- function(electoral_college_data, election_year) {
   df_year_requested <- electoral_college_data |>
     filter(year == election_year)
 
-  # Summarize total popular and electoral votes by candidate's proper name and party
-  vote_summary <- df_year_requested |>
-    group_by(proper_name, winner_party) |>
-    summarise(
+# Summarize total popular and electoral votes by candidate's proper name and party
+vote_summary <- df_year_requested |>
+  group_by(proper_name, winner_party) |>
+  summarise(
       ec_vote = sum(votes),
       .groups = "drop"
     )
 
-  # Arrange by ec_vote in descending order to get the winners first
-  vote_summary <- vote_summary |>
-    arrange(desc(ec_vote))
+# Arrange by ec_vote in descending order to get the winners first
+vote_summary <- vote_summary |>
+  arrange(desc(ec_vote))
 
   # Return the results as two named lists for first and second place candidates
   list(
@@ -800,7 +880,7 @@ calculate_popular_vote_totals <- function(popular_vote_data, election_year) {
   )
 }
 
-
+# Function for winner take all report
 state_winner_take_all <- function(data_set, election_year, ec_summary_data) {
   # Filter data for the requested election year
   df_year_requested <- data_set |> 
@@ -842,12 +922,17 @@ state_winner_take_all <- function(data_set, election_year, ec_summary_data) {
     )
 }
 
+# Call functions for plotting
+ec_summary <- calculate_ec_vote_totals(state_winner_with_votes, 2000)
+pop_summary <- calculate_popular_vote_totals(popular_vote_summary, 2000)
+state_winner_take_all(state_winner_with_votes, 2000, ec_summary)
+
 ec_summary <- calculate_ec_vote_totals(state_winner_with_votes, 2000)
 pop_summary <- calculate_popular_vote_totals(popular_vote_summary, 2000)
 state_winner_take_all(state_winner_with_votes, 2000, ec_summary)
 
 
-#######District-Wide Winner-Take-All + State-Wide “At Large” Votes
+#### DISTRICT WIDE WINNTER TAKE ALL & STATE WIDE AT LARGE VOTES ####
 
 # Calculate district winners and add an at_large seat
 calculate_district_winners_with_at_large <- function(data) {
@@ -878,8 +963,6 @@ calculate_district_winners_with_at_large <- function(data) {
   bind_rows(district_winners, at_large_winners)
 }
 
-
-
 # Sum all votes and percentages for each party for each year and each state
 calculate_vote_totals_at_large <- function(data) {
   data |>
@@ -904,8 +987,6 @@ unique_winners_al <- state_winner_with_votes |>
   distinct(year, winner_party, proper_name) |>
   rename("party" = "winner_party")
 
-
-
 # Add proper names to EC totals
 ec_total_at_large <- ec_total_at_large |>
   left_join(unique_winners_al, by = c("year", "party")) 
@@ -913,22 +994,19 @@ ec_total_at_large <- ec_total_at_large |>
 total_votes_check <- ec_total_at_large |>
   filter(year == 2016) |> 
   summarise(total_electoral_votes = sum(total_votes))
-print(total_votes_check)  # Should be 538
-
 
 
 plot_electoral_votes <- function(data, election_year) {
   df_year_filtered <- data |>
     filter(year == election_year) |>
     group_by(state, state_po) |>
-    slice_max(win_percent, with_ties = FALSE) |>
     ungroup()
   
   total_votes_summary <- df_year_filtered |>
     group_by(proper_name, party) |>
     summarise(total_votes = sum(total_votes), .groups = "drop") |>
     arrange(desc(total_votes))
-    
+  print(total_votes_summary)
   total_votes_list <- split(total_votes_summary, seq(nrow(total_votes_summary)))
   
   # Manually referencing each element in total_votes_list
@@ -938,7 +1016,7 @@ plot_electoral_votes <- function(data, election_year) {
   
   proper_name2 <- total_votes_list[[2]]$proper_name
   winner_party2 <- total_votes_list[[2]]$party
-  total_votes2 <- total_votes_list[[2]]$total_votes
+  total_votes2 <- total_votes_list[[2]]$total_votes + 3
   
   # Format party abbreviations
   party1 <- ifelse(winner_party1 == "DEMOCRAT", "(D)", "(R)")
@@ -974,9 +1052,10 @@ plot_electoral_votes <- function(data, election_year) {
     )
 }
 
-plot_electoral_votes(ec_total_at_large, 2016)
+# Run plot
+plot_electoral_votes(ec_total_at_large, 2000)
 
-########State-Wide Proportional
+#### STATE WIDE PROPORTIONAL ####
 
 electon_data_president_p <- ELECTION_DATA_PRESIDENT |> 
     mutate(party_detailed = if_else(party_detailed == "DEMOCRATIC-FARMER-LABOR", "DEMOCRAT", party_detailed)) |>
@@ -987,8 +1066,7 @@ electoral_votes_by_state_p <- ELECTION_DATA_HOUSE |>
   group_by(year, state, state_po) |>
   summarize(votes = n_distinct(district) + 2)
 
-  
-
+# Calculate percentages 
 state_percentages_p <- electon_data_president_p |>
   group_by(year, state, state_po, party_detailed) |>
   summarise(
@@ -1003,11 +1081,12 @@ state_percentages_p <- electon_data_president_p |>
   mutate(winner = percentage == max(percentage)) |>
   ungroup()
 
+# Join percentages with votes
 state_percentages_w_votes_p <- state_percentages_p |>
-  right_join(electoral_votes_by_state, by = c("year", "state", "state_po")) |>
+  right_join(electoral_votes_by_state_p, by = c("year", "state", "state_po")) |>
   rename(electoral_votes = votes)
  
-  
+# Break up electoral votes won by percentages  
 state_electoral_votes_p <- state_percentages_w_votes_p |>
   group_by(year, state, state_po) |>
   mutate(
@@ -1022,8 +1101,9 @@ state_electoral_votes_p <- state_percentages_w_votes_p |>
   mutate(color = ifelse(party_detailed == "DEMOCRAT", alpha("blue", percent_electoral_votes), alpha("red",             percent_electoral_votes))) |>
   ungroup()
 
+# Join proper names
 state_electoral_votes_p <- state_electoral_votes_p |>
-  left_join(unique_winners, by = c("year", "party_detailed")) 
+  left_join(unique_winners_n, by = c("year", "party_detailed")) 
   
 plot_electoral_votes <- function(data, election_year) {
   df_year_filtered <- data |>
@@ -1038,7 +1118,7 @@ plot_electoral_votes <- function(data, election_year) {
   print(total_votes_list)
   proper_name1 <- total_votes_list[[1]]$proper_name
   winner_party1 <- total_votes_list[[1]]$party_detailed
-  total_votes1 <- total_votes_list[[1]]$total_electoral_votes_won
+  total_votes1 <- total_votes_list[[1]]$total_electoral_votes_won + 3
   
   proper_name2 <- total_votes_list[[2]]$proper_name
   winner_party2 <- total_votes_list[[2]]$party_detailed
@@ -1076,9 +1156,10 @@ plot_electoral_votes <- function(data, election_year) {
 }
 
 
-plot_electoral_votes(state_electoral_votes_p, 2016)
+plot_electoral_votes(state_electoral_votes_p, 2000)
 
-######################national vote
+#### NATIONAL VOTE PROPORTION ####
+
 election_data_president_n <- ELECTION_DATA_PRESIDENT |> 
     mutate(party_detailed = if_else(party_detailed == "DEMOCRATIC-FARMER-LABOR", "DEMOCRAT", party_detailed)) |>
     filter(party_detailed == "DEMOCRAT" | party_detailed == "REPUBLICAN")
@@ -1109,7 +1190,7 @@ state_percentages_n <- state_percentages_n |>
 
 expanded_data_n <- state_percentages_n |>
   inner_join(
-    electoral_votes_by_state,
+    electoral_votes_by_state_n,
     by = "year",
     relationship = "many-to-many"
   ) 
@@ -1132,7 +1213,7 @@ unique_winners_n <- state_winner_with_votes |>
   rename(party_detailed = winner_party)
 
 # Add proper names
-state_electoral_votes_n <- state_electoral_votes |>
+state_electoral_votes_n <- state_electoral_votes_n |>
   left_join(unique_winners_n, by = c("year", "party_detailed")) 
 
 # Add colors
@@ -1146,18 +1227,18 @@ plot_national_proportion <- function(data, election_year) {
   print(df_year_filtered)
   # Get summary for EC vote counts  
   summary <- df_year_filtered |>
-    group_by(party_detailed, proper_name.y) |>
+    group_by(party_detailed, proper_name) |>
     summarise(total_electoral_votes_won = sum(electoral_votes_won, na.rm = TRUE)) |>
     ungroup()
 
   # Break out into list for display
   total_votes_list <- split(summary, seq(nrow(summary)))
 
-  proper_name1 <- total_votes_list[[1]]$proper_name.y
+  proper_name1 <- total_votes_list[[1]]$proper_name
   winner_party1 <- total_votes_list[[1]]$party_detailed
-  total_votes1 <- total_votes_list[[1]]$total_electoral_votes_won
+  total_votes1 <- total_votes_list[[1]]$total_electoral_votes_won + 3
   
-  proper_name2 <- total_votes_list[[2]]$proper_name.y
+  proper_name2 <- total_votes_list[[2]]$proper_name
   winner_party2 <- total_votes_list[[2]]$party_detailed
   total_votes2 <- total_votes_list[[2]]$total_electoral_votes_won
   
@@ -1192,13 +1273,35 @@ plot_national_proportion <- function(data, election_year) {
 }
 
 # Usage
-plot_national_proportion(state_electoral_votes_n, 2016)
+plot_national_proportion(state_electoral_votes_n, 2000)
 
 
 ```
 
 </details>
 
+
+## Conclusions 
+
+The Electoral College system inherently disadvantages densely concentrated urban populations due to geographic sorting, where large numbers of voters in cities are “wasted” under the current allocation methods. This effect is especially pronounced in the State-Wide Winner-Take-All and District-Wide Winner-Take-All + At-Large systems, where urban votes are overshadowed by more spread-out rural and suburban voters. Even with a State-Wide Proportional approach, the dispersed nature of electoral votes dilutes the power of high-population centers.^[Pearson-Merkowitz, S., & Lang, C. (2016). The geographic polarization of American voters. The Geography Teacher, 13(3), 112-117.]
+
+This dynamic reflects the original pastoral leanings of certain Founding Fathers, who were wary of urban centers and their concentrated political influence. Many founders idealized a nation of independent, rural landowners and saw the Electoral College as a mechanism to balance the interests of these pastoral areas against growing urban centers.^[Rodden, J. A. (2019). Why cities lose: The deep roots of the urban-rural political divide. Basic Books.] Consequently, modern calls for Electoral College reform often stem from this persistent tension between rural and urban representation.
+
+Critics of the Electoral College, such as historian George C. Edwards III, argue that the system introduces a significant "democratic deficit" by allowing a candidate to win the presidency without securing the popular vote. Edwards suggests that this mechanism distorts democratic representation, disproportionately empowering certain states and demographic groups at the expense of others, and thus subverting the principle of equal representation.^[Edwards, G. C. (2004). Why the electoral college is bad for America. Yale University Press.]
+
+These findings are in line with the thoughts of [Robert A. Dahl](https://en.wikipedia.org/wiki/Robert_Dahl), widely regarded as one of the United States' preeminent authoritie on democratic theory and the American Constitution.
+
+In *How Democratic Is the American Constitution?* Dahl critically examines the Electoral College and its democratic shortcomings. He too recounts the 2000 election, where a candidate with fewer popular votes won, and traces this anomaly to the original confusion and compromises of the Framers. They established the Electoral College out of desperation after rejecting other methods, prioritizing insulation from popular choice and concern over "cabal and corruption."^[Dahl, R. A. (2001). How democratic is the American Constitution? New Haven, Yale University Press.]
+
+The Electoral College is deeply rooted in an anti-democratic framework. Built to balance regional influence rather than to represent the popular will, the Electoral College was crafted with significant limitations to prevent it from reflecting a true "one person, one vote" standard. Its structural barriers maken it impossible to align with the democratic values most champion today.
+
+In contrast, modern American political culture is firmly grounded in the principle of equal representation, where each vote should carry equal weight. Most Americans believe strongly in **"one person, one vote"** and would find it jarring, even offensive, for any politician to openly assert that some votes should count more than others. 
+
+Yet by supporting the Electoral College, we tacitly accept this inequality, promoting the illusion that it’s anything other than an outdated system that distorts minority political power.
+
+Given this context, the purple shading on the national proportion maps above best reflect the most equitable spirit of "one person, one vote," highlighting how popular will could be represented more faithfully. If the Electoral College must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence across the country.
+
+As such, if were to keep the Electoral College, we should adopt the **National Proportion** method for allocating electoral votes and the delegates who chose our nation's chief executive. 
 
 
 

@@ -54,3 +54,13 @@ summary:hover {
   max-width: 100% !important; /* Ensures each image takes up its cell fully */
   border: 1px solid black;
 }
+
+.flexbox-votes {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.flexbox-votes p {
+  margin: 0;
+}
