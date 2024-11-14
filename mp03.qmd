@@ -1334,7 +1334,7 @@ ggplot(data, aes(x = system, y = percentage)) +
 </details>
 
 
-## Finndings
+## Findings
 
 
 The **Electoral College** system inherently disadvantages densely concentrated urban populations due to geographic sorting, where large numbers of voters in cities are “wasted” under the current allocation methods. This effect is especially pronounced in the **State-Wide Winner-Take-All** and **District-Wide Winner-Take-All + At-Large** systems, where urban votes are overshadowed by more spread-out rural and suburban voters. Even with a **State-Wide Proportional** approach, the dispersed nature of electoral votes dilutes the power of high-population centers.^[Pearson-Merkowitz, S., & Lang, C. (2016). The geographic polarization of American voters. The Geography Teacher, 13(3), 112-117.]
