@@ -687,7 +687,7 @@ The `2000` and `2016` elections offer compelling cases for examining competing m
 Analyzing these stess-testing elections arguably offers the best insight into how different allocation methods could impact future presidential races and the broader democratic process.
 
 ## Election of 2000: George W. Bush v. Al Gore
-The `2000` presidential election served as a stark reminder of the **Electoral College**'s pivotal role in determining the presidency, a mechanism many Americans were unfamiliar with until then. The race between **George W. Bush** and **Al Gore** hinged on a razor-thin vote margin in **Florida**, leading to a weeks-long recount and intense media scrutiny of obscure ballot-counting procedures including introducing the country to the infamous "hanging chad." 
+The `2000` presidential election served as a stark reminder of the **Electoral College**'s pivotal role in determining the presidency, a mechanism many Americans were unfamiliar with until then. The race between **George W. Bush** and **Al Gore** hinged on a razor-thin vote margin in **Florida**, leading to a weeks-long recount and intense media scrutiny of obscure ballot-counting procedures including introducing the country to the infamous "**hanging chad**." 
 
 Ultimately the **Supreme Court** intervened in the recount, issuing a decision in *Bush v. Gore* that halted the **Florida** recount and awarded the state’s electoral votes to **Bush**. In a break from traditional jurisprudence, the Court explicitly declared that its ruling was intended solely for this case and was not meant to set legal precedent. 
 
@@ -1305,7 +1305,7 @@ plot_national_proportion(state_electoral_votes_n, 2000)
 
 data <- data.frame(
   system = c("State Winner Take All", "District Winner + At Large", "State Wide Proportional", "National Proportional"),
-  percentage = c(0.4962, 0.4665, 0.4869, 0.52)
+  percentage = c(0.4330, 0.433, 0.4962, 0.5167)
 )
 
 # Plot
@@ -1314,7 +1314,7 @@ ggplot(data, aes(x = system, y = percentage)) +
   geom_hline(yintercept = 0.5, linetype = "dashed", color = "red") +
   scale_y_continuous(limits = c(0.42, 0.53), breaks = seq(0.42, 0.55, by = 0.01)) +
   labs(
-    title = "Do any Electoral Systems Exceed 50% for the 2000 Election?",
+    title = " For the 2016 Election, would any Electoral System have rewarded Hillary Clinton 50% of all Electoral Votes?",
     x = "Electoral System",
     y = "Percentage",
     size = "Distance from 50%"
@@ -1339,7 +1339,7 @@ This dynamic reflects the original pastoral leanings of certain **Founding Fathe
 
 Critics of the Electoral College, such as historian **George C. Edwards III**, argue that this system inevitably introduces a significant "**democratic deficit**" by allowing a candidate to win the presidency without securing the popular vote. **Edwards** suggests that this mechanism distorts democratic representation, disproportionately empowering certain states and demographic groups at the expense of others, and thus subverting the principle of equal representation.^[Edwards, G. C. (2004). Why the electoral college is bad for America. Yale University Press.]
 
-These findings are in line with the thoughts of [**Robert A. Dahl**](https://en.wikipedia.org/wiki/Robert_Dahl), widely regarded as one of the United States' preeminent authoritie on democratic theory and the American Constitution.
+These findings are in line with the thoughts of [**Robert A. Dahl**](https://en.wikipedia.org/wiki/Robert_Dahl), widely regarded as one of the United States' preeminent authorities on democratic theory and the American Constitution.
 
 In *How Democratic Is the American Constitution?* **Dahl** critically examines the Electoral College and its democratic shortcomings. He too recounts the `2000` election, where a candidate with fewer popular votes won, and traces this anomaly to the original confusion and compromises of the Framers. They established the Electoral College out of desperation after rejecting other methods, prioritizing insulation from popular choice and concern over "cabal and corruption."^[Dahl, R. A. (2001). How democratic is the American Constitution? New Haven, Yale University Press.]
 
