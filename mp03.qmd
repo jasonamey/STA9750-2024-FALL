@@ -31,6 +31,8 @@ Amending the Constitution demands broad consensus—a nearly impossible level of
 
 The ongoing use of the **Electoral College**, despite its oft-misalignment with the popular vote, presents a significant challenge to the perceived responsiveness of elected leaders to the public’s democratic wishes. When candidates who do not enjoy the majority’s support are elevated to the presidency, it can strain the public’s trust in our political system. This tension between majority rule and the structure of the **Electoral College** poses serious questions for the future of American democracy, as it risks diminishing the public’s faith in the electoral process and the legitimacy of its political leaders.
 
+However, states retain the flexibility to allocate their electoral votes as they choose, with a variety of strategies available for how these votes are distributed. This analysis ultimately explores these different methods and considers whether a more democratic approach, aligned with the nation’s democratic principles, is possible.
+
 ---
 
 To explore the dynamics of the Electoral College, a data analysis was conducted using electoral data from the **MIT Election Data and Science Lab**, which provides detailed voting records across **U.S. House** elections from `1976` to `2022`.^[MIT Election Data and Science Lab, 2017, "U.S. House 1976–2022", https://doi.org/10.7910/DVN/IG0UN2, *Harvard Dataverse*, V13, UNF:6
