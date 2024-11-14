@@ -327,7 +327,7 @@ print(result, n = 100)
 
 </details>
 
-## House vs. Presidential Candidate Support in Recent U.S
+## House vs. Presidential Candidate Support in Recent U.S Elections
 
 
 ![](images/mp-03/party-score.png)
@@ -485,7 +485,7 @@ file <- shp_from_zip("/mp03/congress_shapefiles/congress_095_shapefile.zip")
 
 </details>
 
-## Electora Map for the 2000 Election 
+## Electoral Map for the 2000 Election 
 
 Here is the map for the fateful `2000` Presidential Election, the election that re-centered the **Electoral College** back into the national spotlight. 
 
