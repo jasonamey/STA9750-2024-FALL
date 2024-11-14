@@ -1,8 +1,9 @@
 
+
 <style>
 .flexbox-grid {
   display: grid !important;
-  grid-template-columns: repeat(2, 1fr) !important; /* Two columns for a 2x2 grid */
+  grid-template-columns: repeat(1, 1fr) !important; /* Two columns for a 2x2 grid */
   gap: 10px !important; /* Space between images */
 }
 
@@ -35,7 +36,7 @@ The ongoing use of the **Electoral College**, despite its oft-misalignment with 
 To explore the dynamics of the Electoral College, a data analysis was conducted using electoral data from the **MIT Election Data and Science Lab**, which provides detailed voting records across **U.S. House** elections from `1976` to `2022`.^[MIT Election Data and Science Lab, 2017, "U.S. House 1976–2022", https://doi.org/10.7910/DVN/IG0UN2, *Harvard Dataverse*, V13, UNF:6
 /IVldA== [fileUNF]] This dataset offers insights into historical voting patterns and party performance at the district level, essential for understanding shifts in electoral influence over time. This data was with congressional shapefiles from **UCLA’s PoliSci Mapping Center**^[CD Maps, “The Database of Congressional Historical Shape Files,” https://cdmaps.polisci.ucla.edu/] and the **U.S. Census Bureau**’s **TIGER/Line** files.^[U.S. Census Bureau, "TIGER/Line Shapefiles," https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html] These resources enable a comprehensive analysis of the **Electoral** College system, highlighting shifts in population and the impact districting commands over electoral outcomes.
 
-This project uses packages `readr`, `dplyr`, `tidy`, `ggplot2`, `sf`, `stringr`, `statebins`, `scales`
+This project uses packages `readr`, `dplyr`, `tidy`, `ggplot2`, `sf`, `stringr`, `statebins`, `scales`,`maps`
 
 <details>
 <summary>\> show the code for data preparation</summary>
@@ -49,6 +50,7 @@ library(sf)
 library(stringr)
 library(statebins)
 library(scales)
+library(maps)
 
 # Sourced data
 ELECTION_DATA_HOUSE <- read_csv("data/mp03/dataversefiles/1976-2022-house.csv")
@@ -137,11 +139,15 @@ congress_shapefiles_census()
 
 ## How has the Electoral College changed since 1976? 
 
-The past `40` years have seen dramatic demographic and economic shifts in the **United States**, with the "**Sunbelt**" region experiencing significant population growth. Factors such as warm climates, a lower cost of living and growing job opportunities have all contributed to this population transformation. Cities like **Phoenix**, **Dallas**, **Houston**, and **Atlanta** have expanded rapidly, becoming economic powerhouses that attract internal migration. This trend has boosted the political influence of the **Sunbelt** states, particularly in presidential elections, as their share of the **Electoral College** votes has grown in proportion to their population increases.
+The past `40` years have seen dramatic demographic and economic shifts in the **United States**, with the "**Sunbelt**" region experiencing significant population growth. Factors such as warm climates, a lower cost of living and growing job opportunities have all contributed to this population transformation. Cities like **Phoenix**, **Dallas**, **Houston**, and **Atlanta** have expanded rapidly, becoming economic powerhouses that attract internal migration.^[Glaeser, E. L., & Tobio, K. (2008). The rise of the sunbelt. Southern Economic Journal, 74(3), 609-643.] This trend has boosted the political influence of the **Sunbelt** states, particularly in presidential elections, as their share of the **Electoral College** votes has grown in proportion to their population increases.
 
-In contrast, the **Northeast** and **Rust Belt** states have faced steady population declines. The **Rust Belt** continues to grapple with the economic fallout from the decline in manufacturing. The **Northeast**, once a densely populated region driving much of the nation's political power, has also seen a slower growth rate due to higher costs of living and an unwelcome, cooler climate. States like **New York**, **Ohio**, **Pennsylvania**, and **Michigan** have all lost congressional seats—and, by extension, **Electoral College** votes—in the face of a southward shift in national demographics.
+In contrast, the **Northeast** and **Rust Belt** states have faced steady population declines. The **Rust Belt** continues to grapple with the economic fallout from the decline in manufacturing^[Nelson, P. B. (2005). Migration and the regional redistribution of nonearnings income in the United States: Metropolitan and nonmetropolitan perspectives from 1975 to 2000. Environment and Planning A, 37(9), 1613-1636.]. The **Northeast**, once a densely populated region driving much of the nation's political power, has also seen a slower growth rate due to higher costs of living and an unwelcome, cooler climate. States like **New York**, **Ohio**, **Pennsylvania**, and **Michigan** have all lost congressional seats^[Mooney, A. (n.d.). How states losing House seats decide which districts are cut. Mooney.house.gov. Retrieved November 13, 2024, from https://mooney.house.gov/how-states-losing-house-seats-decide-which-districts-are-cut/]—and, by extension, **Electoral College** votes—in the face of a southward shift in national demographics.
 
 The impact on the **Electoral College** reflects these changes, as the Sunbelt’s increasing population has translated into greater political clout. Every ten years, the **U.S. Census** triggers a reapportionment of congressional seats, redistributing the `435` seats in the **House of Representatives**—and thus **Electoral College** votes—based on population changes.
+
+This dynamic remains topical as commentary last-week immediately following **Donald Trump**'s significant electoral victory led a popular Conservative commentator to remark on the conintued diminished influence of both the **Rust Belt** and the American **North East**, and its traditional bases of power among the **Democratic Party**^[Shapiro, B. [@benshapiro]. (2024, 11, 6). "Hey Democrats, I have some more unfortunate news for you. Here's what the electoral map looks like.. " Tweet. X. https://x.com/benshapiro/status/1854210993645297694]: 
+
+![](images/mp-03/ben-shapiro.png){style="width:50%; box-shadow: -2px 3px 3px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 <br>
 
@@ -175,8 +181,9 @@ The impact on the **Electoral College** reflects these changes, as the Sunbelt�
 : Electoral Vote Growth By State (1976 vs. 2022)
 {.striped .hover}
 
+![](images/mp-03/heatmap.png){style="width:100%; display: block; margin: auto;"}
 <br>
-Despite the **Sunbelt**'s rising population and the corresponding increase in **Electoral College** votes, a paradox exists: many of these rapidly growing Sunbelt states lack the political clout associated with “**swing states**.” 
+Despite the **Sunbelt**'s rising population and the corresponding increase in **Electoral College** votes, a paradox exists: many of these rapidly growing Sunbelt states lack the political clout associated with “**swing states**.”^[Harvard Kennedy School Ash Center for Democratic Governance and Innovation. (n.d.). The Electoral College and our broken presidential election system. Harvard Kennedy School. Retrieved November 13, 2024, from https://ash.harvard.edu/articles/the-electoral-college-and-our-broken-presidential-election-system/] 
 
 In the **Electoral College**, political influence often hinges not only on a state’s population, but on its competitiveness in presidential elections. States like **Texas** and **Florida**, though gaining in electoral votes, are often reliably partisan (both are heavily **Republican**), which can diminish the attention they receive compared to smaller yet more unpredictable states like **Pennsylvania** or **Wisconsin**. 
 
@@ -195,21 +202,46 @@ electoral_votes_76_22 <- ELECTION_DATA_HOUSE |>
   mutate(change = `2022` - `1976`)
 
 # View states that have lost the most seats
-electoral_votes_76_22 |> 
+vote_data <- electoral_votes_76_22 |> 
   arrange(change)
-
+  
 # View states that have gained the most seats
 electoral_votes_76_22 |> 
   arrange(desc(change))
+  
+# Prepare map data and convert state names to match your data
+us_states <- map_data("state") |>
+  mutate(region = toupper(region))
+
+# Join map data with your data on state names
+map_data_combined <- us_states |>
+  left_join(vote_data, by = c("region" = "state"))
+
+# Plot the heatmap
+ggplot(map_data_combined, aes(long, lat, group = group, fill = change)) +
+  geom_polygon(color = "white") + 
+  scale_fill_gradient2(low = "blue", mid = "gray", high = "red", midpoint = 0, 
+                       name = "Change in Seats") +
+  coord_fixed(1.3) +
+  labs(title = "Change in Congressional Seats (1976 to 2022)", 
+       subtitle = "Positive values indicate gain in seats; negative values indicate loss") +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),   
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    panel.background = element_blank()
+  )
 
 ```
 </details>
 
 ## The Fusion Phenomenon
 
-**Fusion voting**, also known as cross-endorsement, is an electoral practice that allows a candidate to appear on the ballot under multiple party lines, thereby consolidating votes from different political bases. This approach enables third parties to endorse a major-party candidate, allowing voters to support a candidate's platform through the values or policies associated with a smaller, often more ideologically-focused party. In practice, fusion voting can increase a candidate's visibility while empowering smaller parties to influence major-party agendas.
+**Fusion voting**, also known as cross-endorsement, is an electoral practice that allows a candidate to appear on the ballot under multiple party lines, thereby consolidating votes from different political bases. This approach enables third parties to endorse a major-party candidate, allowing voters to support a candidate's platform through the values or policies associated with a smaller, often more ideologically-focused party. In practice, fusion voting can increase a candidate's visibility while empowering smaller parties to influence major-party agendas.^[Protect Democracy. (n.d.). Fusion voting explained. Protect Democracy. Retrieved November 12, 2024, from https://protectdemocracy.org/work/fusion-voting-explained/]
 
-In **New York City**, fusion voting originally began in the `1930`s as a strategy to challenge **Tammany Hall**. Since then, many fusion-enabled parties have become important fixtures in **New York** area politics. For one, **The Working Families Party** has frequently endorsed progressive Democratic candidates while giving voters an alternative way to support candidates who align with specific labor and social equity issues. Likewise, **The Conservative Party** line gives voters a direct voice to amplify their commitment to limited government and social conservatism. All told, the fusion approach has been unique in **New York City**’s local elections, shaping policy conversations and reinforcing the presence of alternative political values within a largely two-party system.
+In **New York City**, fusion voting originally began in the `1930`'s as a strategy to challenge **Tammany Hall**. Since then, many fusion-enabled parties have become important fixtures in **New York** area politics. For one, **The Working Families Party** has frequently endorsed progressive Democratic candidates while giving voters an alternative way to support candidates who align with specific labor and social equity issues. Likewise, **The Conservative Party** line gives voters a direct voice to amplify their commitment to limited government and social conservatism. All told, the fusion approach has been unique in **New York City**’s local elections, shaping policy conversations and reinforcing the presence of alternative political values within a largely two-party system.^[Electoral fusion in the United States. (n.d.). In Wikipedia. Retrieved November 11, 2024, from https://en.wikipedia.org/wiki/Electoral_fusion_in_the_United_States]
 
 | Year | State    | District | Winner       | Party                                         | Loser       | Party                                 | Highest % |
 |------|----------|----------|-------------------------|-------------------------------------------------------|-------------------------|----------------------------------------------|----------------------------|
@@ -682,12 +714,12 @@ While this contentious election spurred calls to reform or abolish the **Elector
 **How would the election of 2000 played out under differing strategies of allocating electoral votes?**
 <br>
 
-::: {.flexbox-grid}
-<div><img src="images/mp-03/1-state-winner-take-all-2000.png" alt="Image 1"></div>
-<div><img src="images/mp-03/2-district-winner-take-all-2000.png" alt="Image 2"></div>
-<div><img src="images/mp-03/3-state-wide-proportion-2000.png" alt="Image 3"></div>
-<div><img src="images/mp-03/4-national-proportion-2000.png" alt="Image 4"></div>
-:::
+
+![](images/mp-03/1-state-winner-take-all-2000.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
+
+![](images/mp-03/2-district-winner-take-all-2000.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
+![](images/mp-03/3-state-wide-proportion-2000.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
+![](images/mp-03/4-national-proportion-2000.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
 
 ## The Election of 2016: Donald J. Trump v. Hillary Clinton
 
@@ -718,13 +750,10 @@ However, despite this heightened debate surrounding the **Trump Presidency**, th
 **How would the election of 2016 played out under differing strategies of allocating electoral votes?**
 <br>
 
-::: {.flexbox-grid}
-<div><img src="images/mp-03/1-state-winner-take-all-2016.png" alt="Image 1"></div>
-<div><img src="images/mp-03/2-district-winner-take-all-2016.png" alt="Image 2"></div>
-<div><img src="images/mp-03/3-state-wide-proportion-2016.png" alt="Image 3"></div>
-<div><img src="images/mp-03/4-national-proportion-2016.png" alt="Image 4"></div>
-:::
-
+![](images/mp-03/1-state-winner-take-all-2016.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
+![](images/mp-03/2-district-winner-take-all-2016.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
+![](images/mp-03/3-state-wide-proportion-2016.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
+![](images/mp-03/4-national-proportion-2016.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
 <details>
 <summary>\> show the code </summary>
 ```
@@ -1276,6 +1305,28 @@ plot_national_proportion <- function(data, election_year) {
 plot_national_proportion(state_electoral_votes_n, 2000)
 
 
+data <- data.frame(
+  system = c("State Winner Take All", "District Winner + At Large", "State Wide Proportional", "National Proportional"),
+  percentage = c(0.4962, 0.4665, 0.4869, 0.52)
+)
+
+# Plot
+ggplot(data, aes(x = system, y = percentage)) +
+  geom_point(shape = 21, color = "black", fill = "dodgerblue", size=8) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "red") +
+  scale_y_continuous(limits = c(0.42, 0.53), breaks = seq(0.42, 0.55, by = 0.01)) +
+  labs(
+    title = "Do any Electoral Systems Exceed 50% for the 2000 Election?",
+    x = "Electoral System",
+    y = "Percentage",
+    size = "Distance from 50%"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+
 ```
 
 </details>
@@ -1283,7 +1334,8 @@ plot_national_proportion(state_electoral_votes_n, 2000)
 
 ## Finndings
 
-The **Electoral College** system inherently disadvantages densely concentrated urban populations due to geographic sorting, where large numbers of voters in cities are “wasted” under the current allocation methods. This effect is especially pronounced in the **State-Wide Winner-Take-All** and **District-Wide Winner-Take-All + At-Large** systems, where urban votes are overshadowed by more spread-out rural and suburban voters. Even with a **State-Wide Proportional** approach, the dispersed nature of electoral votes dilutes the power of high-population centers.^[Pearson-Merkowitz, S., & Lang, C. (2016). The geographic polarization of American voters. The Geography Teacher, 13(3), 112-117.]
+
+**Electoral College** system inherently disadvantages densely concentrated urban populations due to geographic sorting, where large numbers of voters in cities are “wasted” under the current allocation methods. This effect is especially pronounced in the **State-Wide Winner-Take-All** and **District-Wide Winner-Take-All + At-Large** systems, where urban votes are overshadowed by more spread-out rural and suburban voters. Even with a **State-Wide Proportional** approach, the dispersed nature of electoral votes dilutes the power of high-population centers.^[Pearson-Merkowitz, S., & Lang, C. (2016). The geographic polarization of American voters. The Geography Teacher, 13(3), 112-117.]
 
 This dynamic reflects the original pastoral leanings of certain **Founding Fathers**, who were wary of urban centers and their concentrated political influence. Many founders idealized a nation of independent, rural landowners and saw the **Electoral College** as a mechanism to balance the interests of these pastoral areas against growing urban centers.^[Rodden, J. A. (2019). Why cities lose: The deep roots of the urban-rural political divide. Basic Books.] Consequently, modern calls for Electoral College reform often stem from this persistent tension between rural and urban representation.
 
@@ -1299,9 +1351,19 @@ In contrast, modern American political culture is firmly grounded in the princip
 
 Yet by supporting the **Electoral College**, we tacitly accept this inequality, promoting the illusion that it’s anything other than an outdated system that distorts minority political power.
 
-Given this context, the purple shading on the national proportion maps above best reflect the most equitable spirit of "one person, one vote," highlighting how popular will could be represented more faithfully. If the **Electoral College** must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence.
+There exists a deep disatisfaction with the **Electoral College** among the American public^[Pew Research Center. (2024, September 25). Majority of Americans continue to favor moving away from Electoral College. Pew Research Center. Retrieved November 12, 2024, from https://www.pewresearch.org/short-reads/2024/09/25/majority-of-americans-continue-to-favor-moving-away-from-electoral-college/]: 
+![](images/mp-03/pew-research.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
 
-As such, if were to keep the **Electoral College**, we should adopt the **National Proportion** method for allocating electoral votes and the delegates who chose our nation's chief executive, the **United States President**. 
+As such, strong public support exists for centering **"one person, one vote"** into the **U.S. Political System** and its methods for selecting the **President**.
+
+If we summarize our findings, there's one system that consistly rewards the **Popular Vote Winner** the 50% electoral college vote threshold needed to win the presidency: 
+
+![](images/mp-03/2000-electoral-systems.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
+
+![](images/mp-03/2016-electoral-systems.png){style="width:60%; border: 1px solid black; display: block; margin: 10px auto;"}
+Given these findings, the it's the purple shading on the **National Proportional** maps above that best reflect the most equitable spirit of "one person, one vote," highlighting how popular will could be represented more faithfully. If the **Electoral College** must be preserved, such a proportional approach would align more closely with our democratic values and national political culture, offering a way forward that respects the ideal of equal voter influence.
+
+As such, if were to keep the **Electoral College**, we should adopt the **National Proportion** method for allocating electoral votes and the delegates who chose our nation's chief executive, **The President of the United States**. 
 
 
 
