@@ -756,7 +756,7 @@ However, despite this heightened debate surrounding the **Trump Presidency**, th
 ![](images/mp-03/4-national-proportion-2016.png){style="width:80%; border: 1px solid black; display: block; margin: 10px auto;"}
 <details>
 <summary>\> show the code </summary>
-```
+```r
 #### STATE WIDE WINNER TAKE ALL ####
 
 # Create popular vote tabulations
