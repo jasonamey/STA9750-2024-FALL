@@ -1,0 +1,15 @@
+RETIREMENT <- data.frame(
+    r = rnorm(24, mean=0.5) / 100, # Monthly returns
+    C = rep(100, 24),            # Monthly savings: 100 per month
+    period = 1:24                # Period ID (# of months)
+)
+
+RETIREMENT |> 
+    mutate(net_total_return = order_by(desc(period), 
+                                       cumprod(1 + lead(r, default=0)))) |>
+    summarize(future_value = sum(C * net_total_return))
+    
+  
+readRenviron("/Users/jasonamey/Desktop/BARUCH-CLASSES/1-STATS/STA9750-2024-FALL-SITE-FILES/.Renviron")
+
+print(Sys.getenv("VONAGE_API_KEY"))
