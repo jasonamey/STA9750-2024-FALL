@@ -1,15 +1,158 @@
-RETIREMENT <- data.frame(
-    r = rnorm(24, mean=0.5) / 100, # Monthly returns
-    C = rep(100, 24),            # Monthly savings: 100 per month
-    period = 1:24                # Period ID (# of months)
-)
+install.packages(c("httr", "jsonlite"))
+install.packages("httr2")
+library(httr2)
+library(jsonlite)
+library(dplyr)
 
-RETIREMENT |> 
-    mutate(net_total_return = order_by(desc(period), 
-                                       cumprod(1 + lead(r, default=0)))) |>
-    summarize(future_value = sum(C * net_total_return))
-    
-  
 readRenviron("/Users/jasonamey/Desktop/BARUCH-CLASSES/1-STATS/STA9750-2024-FALL-SITE-FILES/.Renviron")
 
-print(Sys.getenv("VONAGE_API_KEY"))
+FRED_API_KEY <- Sys.getenv("FRED_API_KEY")
+
+The following keys were used for FRED data : 
+
+`CES0500000003` **Wage Growth** : Wage indices, average hourly earnings 
+`TB3MS` **Short-Term Debt Returns** : Treasury Yields 
+`SP500` **US Equity Market Total Returns** Historical S&P 500 Data
+`CPIAUCSL` **Inflation** : Consumer Price Index 
+`CUURA101SA0` **Inflation NYC**: Tracks NYC-area inflation 
+
+The following ticker symbols were queried for Vontage Alpha data : 
+
+`SPY`  **US Equity Market Total Returns:** an ETF that tracks the S&P 500 
+`AGG` **Bond Market Total Returns:** the iShares Core US Aggregate Bond ETF is a proxy for bond market returns.
+`ACWI` **International Equity Market total returns** 
+
+<details>
+<summary> \> show the code</summary>
+
+```r
+# FRED data
+FRED_BASE <- "https://api.stlouisfed.org/fred/series/observations"
+FRED_API_KEY <- Sys.getenv("FRED_API_KEY")
+
+# Function for building requests with base URL and query parameters
+build_request <- function(base_url, ...) {
+  request(base_url) |>
+    req_url_query(...)
+}
+
+# Function for sending GET requests to a REST API with response parsed as JSON
+send_request <- function(req) {
+  response <- req |>
+    req_perform() 
+  if (resp_status(response) == 200) {  
+    return(response |> resp_body_json(simplifyVector = TRUE))  
+  } else {
+    stop("Request failed. Status code: ", resp_status(response))
+  }
+}
+
+# FRED series to iterate over
+series_FRED <- c("MEHOINUSNYA672N", "CES0500000003", "TB3MS", "SP500", "NYPCPI", "CPIAUCSL", "CUURA101SA0")
+
+# Loop through each series, fetch data, and save to CSV
+for (fred_series in series_FRED) {
+    # Build the request for FRED
+    fred_request <- build_request(
+      FRED_BASE,
+      series_id = fred_series,
+      frequency = "m",
+      api_key = FRED_API_KEY,
+      file_type = "json"
+    )
+
+    # Fetch and parse the data
+    fred_data <- send_request(fred_request)
+
+    # Extract observations as a data frame
+    fred_observations <- as.data.frame(fred_data$observations)
+
+    # Create a filename for the CSV
+    csv_filename <- paste0("data/mp04/",fred_series, "_data.csv")
+
+    # Save the data frame to CSV for development
+    write.csv(fred_observations, csv_filename, row.names = FALSE)
+    
+    cat(paste0("Data for series '", fred_series, "' saved to ", csv_filename, "\n"))
+}
+
+# Alpha Vantage Data
+ALPHA_BASE <- "https://www.alphavantage.co/query"
+ALPHA_API_KEY <- Sys.getenv("ALPHA_API_KEY")
+
+# Define a function to fetch and transform Alpha Vantage data
+fetch_alpha_vantage_data <- function(base_url, function_type, symbol, api_key, outputsize = "full") {
+  # Build the request
+  request <- build_request(
+    base_url,
+    # Be careful: function is a reserved word in R
+    `function` = function_type,
+    symbol = symbol,
+    apikey = api_key,
+    outputsize = outputsize
+  )
+  
+  # Send the request and parse the response
+  response <- send_request(request)
+  
+  # Extract the records and metadata
+  list(
+    records = response$`Monthly Adjusted Time Series`,
+    symbol = response$`Meta Data`$`2. Symbol`
+  )
+}
+
+# Define a function to convert Alpha Vantage records into a data frame
+records_to_dataframe <- function(records, symbol) {
+  # Calculate the average dividend value
+  all_dividends <- sapply(names(records), function(date) {
+    as.numeric(records[[date]][["7. dividend amount"]])
+    })
+      
+  avg_dividend <- mean(all_dividends, na.rm = TRUE)
+  
+  df <- do.call(rbind, lapply(names(records), function(date) {
+    data.frame(
+      date = as.Date(date),
+      close = as.numeric(records[[date]][["4. close"]]), 
+      dividend =  avg_dividend 
+    )
+  }))
+  
+  # Rename the 'close' column to the symbol
+  colnames(df)[colnames(df) == "close"] <- symbol
+  return(df)
+}
+
+alpha_data <- fetch_alpha_vantage_data(
+  base_url = alpha_base,
+  function_type = "TIME_SERIES_MONTHLY_ADJUSTED",
+  symbol = alpha_symbol,
+  api_key = ALPHA_API_KEY
+)
+
+# Alpha Vontage symbols to iterate over
+symbols <- c("SPY", "AGG","ACWI") 
+
+for (symbol in symbols) {
+  # Fetch Alpha Vantage data
+  alpha_data <- fetch_alpha_vantage_data(
+    base_url = ALPHA_BASE,
+    function_type = "TIME_SERIES_MONTHLY_ADJUSTED",
+    symbol = symbol,
+    api_key = ALPHA_API_KEY
+  )
+  
+  # Convert records to a data frame
+  df <- records_to_dataframe(alpha_data$records, alpha_data$symbol)
+  
+  # Save the data frame to a CSV file for development
+  csv_filename <- paste0("data/mp04/", symbol, "_data.csv")
+  write.csv(df, file = csv_filename, row.names = FALSE)
+  cat(paste0("Data for symbol: '", symbol, "' saved to ", csv_filename, "\n"))
+}
+```
+</details>
+
+
+
