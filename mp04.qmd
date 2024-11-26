@@ -3,12 +3,16 @@ install.packages("httr2")
 library(httr2)
 library(jsonlite)
 library(dplyr)
+library(ggplot2)
 
 readRenviron("/Users/jasonamey/Desktop/BARUCH-CLASSES/1-STATS/STA9750-2024-FALL-SITE-FILES/.Renviron")
 
 FRED_API_KEY <- Sys.getenv("FRED_API_KEY")
 
 The following keys were used for FRED data : 
+
+`ENUC356240010SA` **Wage Growth** : Average Weekly Wages for Employees in Total Covered Establishments in New York-Northern New Jersey-Long Island, NY-NJ-PA
+`ECIGVTWAG` **Wage Growth** : Employment Cost Index: Wages and Salaries: State and Local Government: All Workers
 
 `CES0500000003` **Wage Growth** : Wage indices, average hourly earnings 
 `TB3MS` **Short-Term Debt Returns** : Treasury Yields 
@@ -26,6 +30,7 @@ The following ticker symbols were queried for Vontage Alpha data :
 <summary> \> show the code</summary>
 
 ```r
+lint(filename = "mp04.qmd")
 # FRED data
 FRED_BASE <- "https://api.stlouisfed.org/fred/series/observations"
 FRED_API_KEY <- Sys.getenv("FRED_API_KEY")
@@ -39,42 +44,98 @@ build_request <- function(base_url, ...) {
 # Function for sending GET requests to a REST API with response parsed as JSON
 send_request <- function(req) {
   response <- req |>
-    req_perform() 
-  if (resp_status(response) == 200) {  
-    return(response |> resp_body_json(simplifyVector = TRUE))  
+    req_perform()
+  if (resp_status(response) == 200) {
+    return(response |> resp_body_json(simplifyVector = TRUE))
   } else {
     stop("Request failed. Status code: ", resp_status(response))
   }
 }
 
 # FRED series to iterate over
-series_FRED <- c("MEHOINUSNYA672N", "CES0500000003", "TB3MS", "SP500", "NYPCPI", "CPIAUCSL", "CUURA101SA0")
+series_FRED <- c("CES0500000003", "TB3MS",  "CPIAUCSL", "CUURA101SA0")
+
+series_FRED <- c("ECIGVTWAG", "ENUC356240010SA")
+
+# TO DO RE-WRITE CODE WITH NAMED VECTORS FOR PERIOD LOOK-UPS: 
+series_info <- c(
+  "CES0500000003" = "m",
+  "TB3MS" = "m",
+  "CPIAUCSL" = "m",
+  "CUURA101SA0" = "m",
+  "ECIGVTWAG" = "q",
+  "ENUC356240010SA" = "q"
+)
 
 # Loop through each series, fetch data, and save to CSV
 for (fred_series in series_FRED) {
+  # Build the request for FRED
+  fred_request <- build_request(
+    FRED_BASE,
+    series_id = fred_series,
+    frequency = "m",
+    api_key = FRED_API_KEY,
+    file_type = "json"
+  )
+
+  # Fetch and parse the data
+  fred_data <- send_request(fred_request)
+
+  # Extract observations as a data frame
+  fred_observations <- as.data.frame(fred_data$observations)
+
+  # Create a filename for the CSV
+  csv_filename <- paste0("data/mp04/", fred_series, "_data.csv")
+
+  # Save the data frame to CSV for development
+  write.csv(fred_observations, csv_filename, row.names = FALSE)
+
+  cat(paste0("Data for series '", fred_series, "' saved to ", csv_filename, "\n"))
+}
+
+
+fetch_fred_data <- function(series_FRED, frequency = "m", FRED_BASE, FRED_API_KEY, output_dir = "data/mp04/") {
+  # Ensure output directory exists
+  if (!dir.exists(output_dir)) {
+    dir.create(output_dir, recursive = TRUE)
+  }
+  
+  for (fred_series in series_FRED) {
     # Build the request for FRED
-    fred_request <- build_request(
+    fred_request <- sprintf(
+      "%s?series_id=%s&frequency=%s&api_key=%s&file_type=json",
       FRED_BASE,
-      series_id = fred_series,
-      frequency = "m",
-      api_key = FRED_API_KEY,
-      file_type = "json"
+      fred_series,
+      frequency,
+      FRED_API_KEY
     )
 
     # Fetch and parse the data
-    fred_data <- send_request(fred_request)
-
-    # Extract observations as a data frame
-    fred_observations <- as.data.frame(fred_data$observations)
-
-    # Create a filename for the CSV
-    csv_filename <- paste0("data/mp04/",fred_series, "_data.csv")
-
-    # Save the data frame to CSV for development
-    write.csv(fred_observations, csv_filename, row.names = FALSE)
+    fred_response <- httr::GET(fred_request)
     
-    cat(paste0("Data for series '", fred_series, "' saved to ", csv_filename, "\n"))
+    # Check if the request was successful
+    if (httr::status_code(fred_response) == 200) {
+      fred_data <- jsonlite::fromJSON(httr::content(fred_response, as = "text"))
+      
+      # Extract observations as a data frame
+      fred_observations <- as.data.frame(fred_data$observations)
+
+      # Create a filename for the CSV
+      csv_filename <- file.path(output_dir, paste0(fred_series, "_data.csv"))
+
+      # Save the data frame to CSV for development
+      write.csv(fred_observations, csv_filename, row.names = FALSE)
+
+      cat(paste0("Data for series '", fred_series, "' saved to ", csv_filename, "\n"))
+    } else {
+      cat(paste0("Failed to fetch data for series '", fred_series, "'. HTTP status: ", httr::status_code(fred_response), "\n"))
+    }
+  }
 }
+
+# Fetch data for quarterly series 
+fetch_fred_data(c("ENUC356240010SA","ECIGVTWAG"), frequency = "q", FRED_BASE, FRED_API_KEY, output_dir = "data/mp04/")
+
 
 # Alpha Vantage Data
 ALPHA_BASE <- "https://www.alphavantage.co/query"
@@ -91,10 +152,10 @@ fetch_alpha_vantage_data <- function(base_url, function_type, symbol, api_key, o
     apikey = api_key,
     outputsize = outputsize
   )
-  
+
   # Send the request and parse the response
   response <- send_request(request)
-  
+
   # Extract the records and metadata
   list(
     records = response$`Monthly Adjusted Time Series`,
@@ -104,21 +165,15 @@ fetch_alpha_vantage_data <- function(base_url, function_type, symbol, api_key, o
 
 # Define a function to convert Alpha Vantage records into a data frame
 records_to_dataframe <- function(records, symbol) {
-  # Calculate the average dividend value
-  all_dividends <- sapply(names(records), function(date) {
-    as.numeric(records[[date]][["7. dividend amount"]])
-    })
-      
-  avg_dividend <- mean(all_dividends, na.rm = TRUE)
-  
+
   df <- do.call(rbind, lapply(names(records), function(date) {
     data.frame(
       date = as.Date(date),
-      close = as.numeric(records[[date]][["4. close"]]), 
-      dividend =  avg_dividend 
+      close = as.numeric(records[[date]][["4. close"]]),
+      dividend = as.numeric(records[[date]][["5. adjusted close"]])
     )
   }))
-  
+
   # Rename the 'close' column to the symbol
   colnames(df)[colnames(df) == "close"] <- symbol
   return(df)
@@ -131,8 +186,10 @@ alpha_data <- fetch_alpha_vantage_data(
   api_key = ALPHA_API_KEY
 )
 
-# Alpha Vontage symbols to iterate over
-symbols <- c("SPY", "AGG","ACWI") 
+symbols <- c("SPY", "AGG", "ACWI")
+
+alpha_data
+df <- records_to_dataframe(alpha_data$records, alpha_data$symbol)
 
 for (symbol in symbols) {
   # Fetch Alpha Vantage data
@@ -142,17 +199,59 @@ for (symbol in symbols) {
     symbol = symbol,
     api_key = ALPHA_API_KEY
   )
-  
+
   # Convert records to a data frame
   df <- records_to_dataframe(alpha_data$records, alpha_data$symbol)
-  
+
   # Save the data frame to a CSV file for development
   csv_filename <- paste0("data/mp04/", symbol, "_data.csv")
   write.csv(df, file = csv_filename, row.names = FALSE)
   cat(paste0("Data for symbol: '", symbol, "' saved to ", csv_filename, "\n"))
 }
+
+
+
 ```
 </details>
+
+Full URL: https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=SPY&apikey=I7FO7Y68QAQFB8DM&outputsize=full
+
+symbols <- c("SPY", "AGG", "ACWI")
+
+<details>
+<summary>\> show the code </summary>
+
+```r
+
+CPI_US <- read.csv("data/mp04/CPIAUCSL_data.csv")
+CPI_NY_METRO <- read.csv("data/mp04/CUURA101SA0_data.csv") 
+TREASURY <- read.csv("data/mp04/TB3MS_data.csv")
+SPY <- read.csv("data/mp04/SPY_data.csv")
+AGG <- read.csv("data/mp04/AGG_data.csv")
+ACWI <- read.csv("data/mp04/ACWI_data.csv") 
+
+```
+</details>
+
+
+
+<!-- dividend code :  -->
+
+<!--   # Calculate the average dividend value -->
+<!--   all_dividends <- sapply(names(records), function(date) { -->
+<!--      value <- records[[date]][["7. dividend amount"]] -->
+<!--   if (is.null(value) || value == "") { -->
+<!--     return(NA)  # Replace missing or empty values with NA -->
+<!--   } -->
+<!--   as.numeric(value)  -->
+<!--   }) -->
+<!--   print(all_dividends) -->
+<!--   if (any(is.na(all_dividends))) { -->
+<!--     warning("Some dividend values are NA. Check the records for missing or non-numeric            data.") -->
+<!--   } -->
+
+<!--   avg_dividend <- mean(all_dividends, na.rm = TRUE) -->
+
 
 
 

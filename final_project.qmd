@@ -34,8 +34,105 @@ records <- strsplit(text_lines,"\n")
 parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
 
 
+# Create Sampled Data 
 
-file_path <- "data/final_project/finance/fy24_tc234.txt"
+
+
+URL_2024_TC1 <-"https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
+URL_2024_TC234 <- "https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
+
+https://www.nyc.gov/assets/finance/downloads/tar/tc1_12.zip
+https://www.nyc.gov/assets/finance/downloads/tar/tc1_15.zip
+https://www.nyc.gov/assets/finance/downloads/tar/tc1_16.zip
+https://www.nyc.gov/assets/finance/downloads/tar/tc1_17.zip
+https://www.nyc.gov/assets/finance/downloads/tar/tc1_18.zip
+https://www.nyc.gov/assets/finance/downloads/tar/tc1_19.zip
+https://www.nyc.gov/assets/finance/downloads/tar/tc1_22.zip
+https://www.nyc.gov/assets/finance/downloads/tar/final_tc1_2023.zip
+https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip
+
+https://www.nyc.gov/assets/finance/downloads/tar/tc1_14.zip
+"https://www.nyc.gov/assets/finance/downloads/tar/tc1_10.zip"
+
+
+process_records_from_url <- function(year, tax_class, url, borough) {
+  library(stringr) # For string manipulation
+  library(httr)    # For downloading files
+  
+  # Download and unzip the target data file from URL
+  temp_file <- tempfile(fileext = ".zip")
+  temp_dir <- tempdir()
+  download.file(url, temp_file)
+  unzip(temp_file, exdir = temp_dir)
+  
+  # Find the first extracted file
+  file_path <- list.files(temp_dir, pattern = "\\.txt$", full.names = TRUE)[1]
+  
+  # Download shapefile if it does not already exist
+  shapefile_name <- "nyc_borough_boundaries.zip"
+  if (!file.exists(file_name)) {
+    download.file(url, destfile = file_name)
+  }
+  
+  # Read and process the target data file
+  text_lines <- readLines(file_path)
+  records <- strsplit(text_lines, "\n")
+  
+  # Parse, filter, and clean records
+  parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
+  
+  filtered_records <- lapply(parsed_records, function(record) {
+    if (record[[1]][[2]] == "3") { # Adjust index as necessary
+      return(record)
+    } else {
+      return(NULL) # Return NULL to indicate exclusion
+    }
+  })
+  filtered_records <- filtered_records[!sapply(filtered_records, is.null)]
+  
+  cleaned_records <- lapply(filtered_records, function(record) {
+    sapply(record, trimws)
+  })
+  
+  # Convert to a data frame
+  df <- do.call(cbind, cleaned_records)
+  df <- as.data.frame(t(df))
+  
+  return(df)
+}
+
+
+
+
+```r
+
+# There exists no consitency with file naming conventions for the property assessment 
+# archives. This function downloads the files 
+
+function (year, tax_class, url) {
+
+  # 
+  flie_name
+  if(!file.exists("nyc_borough_boundaries.zip")){
+    download.file(url), 
+              destfile="nyc_borough_boundaries.zip")
+
+}
+
+
+
+}
+
+
+```
+
+
+
+
+
+# 
+
+URL_2024_TC234 <- "https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
 
 text_lines <- readLines(file_path)
 

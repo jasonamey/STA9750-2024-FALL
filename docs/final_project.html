@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -35,10 +69,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6a549a5e0532b7ec267537b390b66fc6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -95,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
@@ -113,7 +147,43 @@ ul.task-list li input[type="checkbox"] {
 <p>text_lines &lt;- readLines(file_path_sample)</p>
 <p>records &lt;- strsplit(text_lines,“”)</p>
 <p>parsed_records &lt;- lapply(records, function(record) strsplit(record, “))</p>
-<p>file_path &lt;- “data/final_project/finance/fy24_tc234.txt”</p>
+<section id="create-sampled-data" class="level1">
+<h1>Create Sampled Data</h1>
+<p>URL_2024_TC1 &lt;-“https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip” URL_2024_TC234 &lt;- “https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip”</p>
+<p>https://www.nyc.gov/assets/finance/downloads/tar/tc1_12.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_15.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_16.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_17.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_18.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_19.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_22.zip https://www.nyc.gov/assets/finance/downloads/tar/final_tc1_2023.zip https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip</p>
+<p>https://www.nyc.gov/assets/finance/downloads/tar/tc1_14.zip “https://www.nyc.gov/assets/finance/downloads/tar/tc1_10.zip”</p>
+<p>process_records_from_url &lt;- function(year, tax_class, url, borough) { library(stringr) # For string manipulation library(httr) # For downloading files</p>
+<p># Download and unzip the target data file from URL temp_file &lt;- tempfile(fileext = “.zip”) temp_dir &lt;- tempdir() download.file(url, temp_file) unzip(temp_file, exdir = temp_dir)</p>
+<p># Find the first extracted file file_path &lt;- list.files(temp_dir, pattern = “\.txt$”, full.names = TRUE)[1]</p>
+<p># Download shapefile if it does not already exist shapefile_name &lt;- “nyc_borough_boundaries.zip” if (!file.exists(file_name)) { download.file(url, destfile = file_name) }</p>
+<p># Read and process the target data file text_lines &lt;- readLines(file_path) records &lt;- strsplit(text_lines, “”)</p>
+<p># Parse, filter, and clean records parsed_records &lt;- lapply(records, function(record) strsplit(record, “))</p>
+<p>filtered_records &lt;- lapply(parsed_records, function(record) { if (record[[1]][[2]] == “3”) { # Adjust index as necessary return(record) } else { return(NULL) # Return NULL to indicate exclusion } }) filtered_records &lt;- filtered_records[!sapply(filtered_records, is.null)]</p>
+<p>cleaned_records &lt;- lapply(filtered_records, function(record) { sapply(record, trimws) })</p>
+<p># Convert to a data frame df &lt;- do.call(cbind, cleaned_records) df &lt;- as.data.frame(t(df))</p>
+<p>return(df) }</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># There exists no consitency with file naming conventions for the property assessment </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># archives. This function downloads the files </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span> (year, tax_class, url) {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  flie_name</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">"nyc_borough_boundaries.zip"</span>)){</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(url), </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>              destfile<span class="ot">=</span><span class="st">"nyc_borough_boundaries.zip"</span><span class="er">)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="section" class="level1">
+<h1></h1>
+<p>URL_2024_TC234 &lt;- “https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip”</p>
 <p>text_lines &lt;- readLines(file_path)</p>
 <p>records &lt;- strsplit(text_lines,“”)</p>
 <p>parsed_records &lt;- lapply(records, function(record) strsplit(record, “))</p>
@@ -176,6 +246,7 @@ View(BBL)
 </code></pre>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
