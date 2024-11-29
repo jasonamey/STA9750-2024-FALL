@@ -1,9 +1,22 @@
 install.packages(c("httr", "jsonlite"))
 install.packages("httr2")
+install.packages("zoo")
+install.packages("RColorBrewer")
+install.packages("shiny")
+install.packages("shinythemes")
+install.packages("lubridate")
+install.packages("purrr")
+library(shiny)
+library(shinythemes)
+library(RColorBrewer)
 library(httr2)
 library(jsonlite)
 library(dplyr)
 library(ggplot2)
+library(zoo)
+library(tidyr)
+library(lubridate)
+library(purrr)
 
 readRenviron("/Users/jasonamey/Desktop/BARUCH-CLASSES/1-STATS/STA9750-2024-FALL-SITE-FILES/.Renviron")
 
@@ -29,8 +42,9 @@ The following ticker symbols were queried for Vontage Alpha data :
 <details>
 <summary> \> show the code</summary>
 
+<!-- TASK 3 -->
+
 ```r
-lint(filename = "mp04.qmd")
 # FRED data
 FRED_BASE <- "https://api.stlouisfed.org/fred/series/observations"
 FRED_API_KEY <- Sys.getenv("FRED_API_KEY")
@@ -52,22 +66,8 @@ send_request <- function(req) {
   }
 }
 
-# FRED series to iterate over
-series_FRED <- c("CES0500000003", "TB3MS",  "CPIAUCSL", "CUURA101SA0")
-
-series_FRED <- c("ECIGVTWAG", "ENUC356240010SA")
-
-# TO DO RE-WRITE CODE WITH NAMED VECTORS FOR PERIOD LOOK-UPS: 
-series_info <- c(
-  "CES0500000003" = "m",
-  "TB3MS" = "m",
-  "CPIAUCSL" = "m",
-  "CUURA101SA0" = "m",
-  "ECIGVTWAG" = "q",
-  "ENUC356240010SA" = "q"
-)
-
 # Loop through each series, fetch data, and save to CSV
+fetch_fred_data <- function(series_FRED, frequency = "m", FRED_BASE = FRED_BASE, FRED_API_KEY = FRED_API_KEY, output_dir = "data/mp04/"){
 for (fred_series in series_FRED) {
   # Build the request for FRED
   fred_request <- build_request(
@@ -83,7 +83,9 @@ for (fred_series in series_FRED) {
 
   # Extract observations as a data frame
   fred_observations <- as.data.frame(fred_data$observations)
-
+  fred_observations <- fred_observations |> mutate(
+    date = as.Date(as.character(date), format = "%Y-%m-%d")
+  )
   # Create a filename for the CSV
   csv_filename <- paste0("data/mp04/", fred_series, "_data.csv")
 
@@ -92,49 +94,33 @@ for (fred_series in series_FRED) {
 
   cat(paste0("Data for series '", fred_series, "' saved to ", csv_filename, "\n"))
 }
-
-
-fetch_fred_data <- function(series_FRED, frequency = "m", FRED_BASE, FRED_API_KEY, output_dir = "data/mp04/") {
-  # Ensure output directory exists
-  if (!dir.exists(output_dir)) {
-    dir.create(output_dir, recursive = TRUE)
-  }
-  
-  for (fred_series in series_FRED) {
-    # Build the request for FRED
-    fred_request <- sprintf(
-      "%s?series_id=%s&frequency=%s&api_key=%s&file_type=json",
-      FRED_BASE,
-      fred_series,
-      frequency,
-      FRED_API_KEY
-    )
-
-    # Fetch and parse the data
-    fred_response <- httr::GET(fred_request)
-    
-    # Check if the request was successful
-    if (httr::status_code(fred_response) == 200) {
-      fred_data <- jsonlite::fromJSON(httr::content(fred_response, as = "text"))
-      
-      # Extract observations as a data frame
-      fred_observations <- as.data.frame(fred_data$observations)
-
-      # Create a filename for the CSV
-      csv_filename <- file.path(output_dir, paste0(fred_series, "_data.csv"))
-
-      # Save the data frame to CSV for development
-      write.csv(fred_observations, csv_filename, row.names = FALSE)
-
-      cat(paste0("Data for series '", fred_series, "' saved to ", csv_filename, "\n"))
-    } else {
-      cat(paste0("Failed to fetch data for series '", fred_series, "'. HTTP status: ", httr::status_code(fred_response), "\n"))
-    }
-  }
 }
 
+series_FRED <- c("CES0500000003", "TB3MS",  "CPIAUCSL", "CUURA101SA0", )
+series_FRED_q <- c("ECIGVTWAG", "ENUC356240010SA")
+
+fetch_fred_data(series_FRED, "m", FRED_BASE, FRED_API_KEY, "data/mp04/")
+fetch_fred_data(series_FRED_q, "q", FRED_BASE, FRED_API_KEY, "data/mp04/")
+
+fred_request <- build_request(
+    FRED_BASE,
+    series_id = "TB3MS",
+    frequency = "m",
+    api_key = FRED_API_KEY,
+    file_type = "json"
+  )
+
+  fred_data <- send_request(fred_request)
+  
+
+# FRED series to iterate over
+series_FRED <- c("CES0500000003", "TB3MS",  "CPIAUCSL", "CUURA101SA0", )
+series_FRED_q <- c("ECIGVTWAG", "ENUC356240010SA")
+
 # Fetch data for quarterly series 
-fetch_fred_data(c("ENUC356240010SA","ECIGVTWAG"), frequency = "q", FRED_BASE, FRED_API_KEY, output_dir = "data/mp04/")
+fetch_fred_data(series_FRED_q, frequency = "q", FRED_BASE, FRED_API_KEY, output_dir = "data/mp04/")
+
+fetch_fred_data(series_FRED, frequency = "m", FRED_BASE, FRED_API_KEY, output_dir = "data/mp04/")
 
 
 # Alpha Vantage Data
@@ -170,7 +156,7 @@ records_to_dataframe <- function(records, symbol) {
     data.frame(
       date = as.Date(date),
       close = as.numeric(records[[date]][["4. close"]]),
-      dividend = as.numeric(records[[date]][["5. adjusted close"]])
+      adjusted_close = as.numeric(records[[date]][["5. adjusted close"]])
     )
   }))
 
@@ -186,10 +172,12 @@ alpha_data <- fetch_alpha_vantage_data(
   api_key = ALPHA_API_KEY
 )
 
-symbols <- c("SPY", "AGG", "ACWI")
 
-alpha_data
 df <- records_to_dataframe(alpha_data$records, alpha_data$symbol)
+
+symbols <- c("SPY", "AGG", "ACWI")
+symbols <- c("VXUS")
+symbols <- c("VEU")
 
 for (symbol in symbols) {
   # Fetch Alpha Vantage data
@@ -202,7 +190,8 @@ for (symbol in symbols) {
 
   # Convert records to a data frame
   df <- records_to_dataframe(alpha_data$records, alpha_data$symbol)
-
+  df <- df |> 
+    mutate(date = as.Date(date, format = "%Y-%m-%d")) 
   # Save the data frame to a CSV file for development
   csv_filename <- paste0("data/mp04/", symbol, "_data.csv")
   write.csv(df, file = csv_filename, row.names = FALSE)
@@ -221,37 +210,420 @@ symbols <- c("SPY", "AGG", "ACWI")
 <details>
 <summary>\> show the code </summary>
 
-```r
+```{r echo=TRUE}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+# `ENUC356240010SA` **Wage Growth** : Average Weekly Wages for Employees in Total Covered Establishments in New York-Northern New Jersey-Long Island, NY-NJ-PA
+# `ECIGVTWAG` **Wage Growth** : Employment Cost Index: Wages and Salaries: State and Local Government: All Workers
+# 
+# 
+# `CES0500000003` **Wage Growth** : Wage indices, average hourly earnings 
+# `TB3MS` **Short-Term Debt Returns** : Treasury Yields 
+# 
+# 
+# `CUURA101SA0` **Inflation NYC**: Tracks NYC-area inflation 
 
 CPI_US <- read.csv("data/mp04/CPIAUCSL_data.csv")
 CPI_NY_METRO <- read.csv("data/mp04/CUURA101SA0_data.csv") 
 TREASURY <- read.csv("data/mp04/TB3MS_data.csv")
-SPY <- read.csv("data/mp04/SPY_data.csv")
-AGG <- read.csv("data/mp04/AGG_data.csv")
-ACWI <- read.csv("data/mp04/ACWI_data.csv") 
+
+
+change_to_date <- function(df){
+  df <- df |> 
+    mutate(date = as.Date(as.character(date)))  
+  return(df)
+}
+
+SPY <- change_to_date(read.csv("data/mp04/SPY_data.csv"))
+AGG <- change_to_date(read.csv("data/mp04/AGG_data.csv"))
+ACWI <- change_to_date(read.csv("data/mp04/ACWI_data.csv")) 
+
+# Data only available quarterly
+HOURLY_PRIVATE_NY_WAGES <- read.csv("data/mp04/ENUC356240010SA_data.csv")
+GOVERNMENT_WAGES <- read.csv("data/mp04/ECIGVTWAG_data.csv")
+
+
+
+SPY_2008 <- SPY |> 
+  filter(date > as.Date("2008-04-29"))
+
+SPY_ACWI <- SPY_2008 |> 
+  left_join(ACWI, join_by(date == date))
+  
+RECESSION_PERIODS <- data.frame(
+  start = as.Date(c("2008-04-30", "2020-02-01")),
+  end = as.Date(c("2009-06-01", "2020-04-01")),
+  ymin = -Inf,
+  ymax = Inf
+)
+
+
+ggplot(SPY_ACWI, aes(x = date)) +
+  geom_line(aes(y = adjusted_close.x, color = "SPDR S&P 500 ETF (SPY)")) +
+  geom_line(aes(y = adjusted_close.y, color = "iShares MSCI ACWI ETF (ACWI)")) +
+  scale_color_brewer(palette = "Set2") +
+   geom_rect(data = RECESSION_PERIODS,
+            aes(xmin = start, xmax = end, ymin = ymin, ymax = ymax),
+            fill = "grey", alpha = 0.3, inherit.aes = FALSE) +
+  scale_x_date(limits = range(SPY_ACWI$date), expand = c(0, 0)) +
+  labs(
+    title = "Time Series of Adjusted Close Prices for SPY and ACWI",
+    subtitle = "SPY tracks the S&P 500 Index; ACWI tracks the MSCI All-Country World Index",
+    x = "Date",
+    y = "Adjusted Close Price (USD)",
+    color = "ETF Name and Ticker"
+  ) +
+  theme(axis.line = element_line(color = "black", linewidth = 1),
+    axis.line.x = element_line(color = "black", linewidth= 1),  
+    axis.line.y = element_line(color = "black", linewidth = 1),
+    panel.background = element_blank(),
+    panel.grid.major = element_line(color = "gray90", size = 0.25), 
+    panel.grid.minor = element_line(color = "gray95", size = 0.25),
+    ) 
+
+
+```
+</details>
+
+**SPY** represents the U.S. large-cap equity market including 500 of the largest publicly traded companies in the United States while **ACWI** represents a broader global market, representing equities from both developed and emerging markets. Comparing their volatility provides insights into the risk profiles of U.S. equities versus the global market.
+
+<details>
+<summary> \> show the code</summary>
+```{r echo=TRUE}
+
+
+# data <- data |> 
+#   mutate(
+#     SPY_return = c(NA, diff(log(SPY_adjusted_close))),
+#     ACWI_return = c(NA, diff(log(ACWI_adjusted_close)))
+#   )
+# 
+# head(SPY_ACWI )
+
+# Calculate rolling volatility (3-period rolling standard deviation)
+rolling_window <- 3
+data <- SPY_ACWI |> 
+  mutate(
+    SPY_volatility = zoo::rollapply(adjusted_close.x, rolling_window, sd, fill = NA, align = "right"),
+    ACWI_volatility = zoo::rollapply(adjusted_close.y, rolling_window, sd, fill = NA, align = "right")
+  )
+
+# Reshape data for ggplot
+volatility_data <- data |> 
+  select(date, SPY_volatility, ACWI_volatility) |> 
+  pivot_longer(cols = -date, names_to = "Symbol", values_to = "Volatility")
+
+# Filter out rows with missing values
+volatility_data <- volatility_data |> 
+  filter(!is.na(Volatility))
+
+# Plot the volatility between SPY and ACWI
+ggplot(volatility_data, aes(x = date, y = Volatility, color = Symbol)) +
+  geom_line(size = 0.25) +
+  scale_x_date(limits = range(volatility_data$date), expand = c(0, 0)) +
+  scale_color_brewer(palette = "Set1") +
+     geom_rect(data = RECESSION_PERIODS,
+            aes(xmin = start, xmax = end, ymin = ymin, ymax = ymax),
+            fill = "grey", alpha = 0.3, inherit.aes = FALSE) +
+  labs(
+    title = "Comparison of Rolling Volatility: SPY vs. ACWI ETFs",
+    subtitle = "Rolling 3-period standard deviation of adjusted close prices for SPY and ACWI ETFs",
+    x = "Date",
+    y = "Rolling Volatility (Standard Deviation of Returns)",
+    color = "ETF Ticker", 
+    caption = "Source: Alpha Vantage"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.line = element_line(color = "black", linewidth = 1),
+    axis.line.x = element_line(color = "black", linewidth = 1),  
+    axis.line.y = element_line(color = "black", linewidth = 1),
+    panel.background = element_blank(),
+    panel.grid.major = element_line(color = "gray90", size = 0.25), 
+    panel.grid.minor = element_line(color = "gray95", size = 0.25)
+  )
+
+
+```
+</details>
+
+<details>
+<summary> \> show the code</summary> 
+<!-- {r echo=TRUE message=FALSE warning=FALSE} -->
+```
+
+# Load necessary libraries
+library(dplyr)
+library(lubridate)
+
+# Load the data
+wage_growth_public <- read.csv("data/mp04/ECIGVTWAG_data.csv") |>
+  mutate(date = as.Date(date), wage_growth_percent = (value - lag(value)) / lag(value)) 
+
+View(wage_growth_public)
+
+wage_growth_2008 <- wage_growth_public |> 
+  filter(date >= as.Date("2008-04-01"))
+  
+wage_growth_2008 <- wage_growth_2008 |> 
+  filter(!is.na(wage_growth_percent))
+
+
+STARTING_SALARY <- 45000
+
+salary_data <- wage_growth_2008 |>
+  mutate(
+    wage_growth_percent = ifelse(is.na(wage_growth_percent), 0, wage_growth_percent),
+    salary = STARTING_SALARY * cumprod(1 + lag(wage_growth_percent, default = 0))
+  )
+
+
+
+# Limit to last 3 years of salary data
+last_3_salaries <- salary_data |> 
+  filter(date == as.Date("2024-07-01") | date == as.Date("2023-10-01") | date == as.Date("2022-07-01"))
+
+# Function to calculate N, years of service
+calculate_years_of_service <- function(data, date_col = "date") {
+
+  # Find the oldest and most recent dates
+  oldest_date <- min(data[[date_col]], na.rm = TRUE)
+  most_recent_date <- max(data[[date_col]], na.rm = TRUE)
+  
+  # Calculate the years of service
+  return(as.numeric(difftime(most_recent_date, oldest_date, units = "days")) / 365.25)
+  
+} 
+
+# Function to calculate retirement benefit 
+calculate_retirement_benefit <- function(n, fas) {
+
+  benefit <- if (n < 20) {
+    0.0167 * fas * n
+  } else if (n == 20) {
+    0.0175 * fas * n
+  } else {
+    (0.35 + 0.02 * (n - 20)) * fas
+  }
+  
+  return(benefit)
+}
+
+N <- calculate_years_of_service(salary_data)
+FAS <- mean(last_3_salaries$salary)
+calculate_retirement_benefit(N, FAS)
+
+
+inflation <- read.csv("data/mp04/CPIAUCSL_data.csv") |>
+  mutate(date = format(as.Date(date), "%b-%Y"))
+
+returns_spy <- read.csv("data/mp04/SPY_data.csv") |>
+  mutate(date = format(as.Date(date), "%b-%Y"), monthly_return = adjusted_close / lag(adjusted_close) - 1) |>
+  filter(!is.na(monthly_return)) |>
+  rename(SPY_monthly_return = monthly_return)
+
+returns_agg <- read.csv("data/mp04/AGG_data.csv") |>
+  mutate(date = format(as.Date(date), "%b-%Y"), monthly_return = adjusted_close / lag(adjusted_close) - 1) |>
+  filter(!is.na(monthly_return)) |>
+  rename(AGG_monthly_return = monthly_return)
+  
+returns_acwi <- read.csv("data/mp04/ACWI_data.csv") |>
+  mutate(date = format(as.Date(date), "%b-%Y"), monthly_return = adjusted_close / lag(adjusted_close) - 1) |>
+  filter(!is.na(monthly_return)) |>
+  rename(ACWI_monthly_return = monthly_return)
+
+returns_treasury <- read.csv("data/mp04/TB3MS_data.csv") |> 
+  mutate(date = format(as.Date(date), "%b-%Y"), monthly_return = value / 12 / 10) |>
+  filter(!is.na(monthly_return)) |>
+  rename(treasury_monthly_return = monthly_return, treasury_value = value)
+
+salary_data <- salary_data |> 
+ mutate(date = format(as.Date(date), "%b-%Y"))
+
+combined_returns <- returns_spy |>
+  full_join(returns_agg, by = "date") |>
+  full_join(returns_acwi, by = "date") |> 
+  full_join(returns_treasury, by = "date") |>
+  full_join(salary_data, by = "date")
+
+# Drop all rows that doesnt exist (leaves >2008 data)
+combined_returns_2008 <- na.omit(combined_returns)
+
+
+# Employer contribution rate function
+employer_rate <- function(years_of_service) {
+  ifelse(years_of_service <= 7, 0.08, 0.10)
+}
+
+# Employee contribution rate function
+employee_rate_calculator <- function(salary) {
+  case_when(
+    salary <= 45000 ~ 0.03,
+    salary <= 55000 ~ 0.035,
+    salary <= 75000 ~ 0.045,
+    salary <= 100000 ~ 0.0575,
+    TRUE ~ 0.06
+  )
+}
+
+
+# US Equities rate function
+us_equities_rate_calculator <- function(age) {
+  case_when(
+    age >= 25 & age <= 49 ~ 0.54,
+    age >= 50 & age <= 59 ~ 0.47,
+    age >= 60 & age <= 74 ~ 0.34,
+    age >= 75 ~ 0.19,
+    TRUE ~ NA_real_  # Return NA for ages outside the range
+  )
+}
+
+# International Equities rate function
+international_equity_rate_calculator <- function(age) {
+  case_when(
+    age >= 25 & age <= 49 ~ 0.36,
+    age >= 50 & age <= 59 ~ 0.32,
+    age >= 60 & age <= 74 ~ 0.23,
+    age >= 75 ~ 0.13,
+    TRUE ~ NA_real_
+  )
+}
+
+# Bonds rate function
+bonds_rate_calculator <- function(age) {
+  case_when(
+    age >= 25 & age <= 49 ~ 0.10,
+    age >= 50 & age <= 59 ~ 0.21,
+    age >= 60 & age <= 74 ~ 0.43,
+    age >= 75 ~ 0.62,
+    TRUE ~ NA_real_
+  )
+}
+
+# Short-Term Debt rate function
+short_term_debt_rate_calculator <- function(age) {
+  case_when(
+    age >= 75 ~ 0.06,  # Short-term debt only applies to age 75+
+    TRUE ~ 0.00
+  )
+}
+
+
+test <- combined_returns_2008 |> 
+  mutate(age =  as.numeric(sub(".*-", "", date)) - 2008 + 45) |>
+  mutate(year_of_service = 1 + as.numeric(sub(".*-", "", date)) - 2008 ) |>
+  mutate(employer_rate = ifelse(year_of_service <= 7, 0.08, 0.10)) |> 
+  mutate(employee_rate = employee_rate_calculator(salary)) |>
+  mutate(total_contribution = employer_rate * salary + employee_rate * salary) |>
+  mutate(us_equity_rate = us_equities_rate_calculator(age)) |> 
+  mutate(international_equity_rate = international_equity_rate_calculator(age)) |> 
+  mutate(bond_rate = bonds_rate_calculator(age)) |> 
+  mutate(short_term_bond_rate = short_term_debt_rate_calculator (age)) |>
+  mutate(date = as.Date(paste0("01-", date), format = "%d-%b-%Y")) |>
+  arrange(date)
+
+
+test <- test |> 
+   select(-matches("^adjusted_close")) |> 
+   select(-matches("^adjusted_close")) |>
+   select(-matches("^realtime")) |> 
+   select(-SPY, -ACWI, -AGG, -treasury_value, -value)
+
+# Running calculation function
+calculate_cumulative_contribution <- function(data) {
+  data |>
+    mutate(
+      # Contributions to each asset class
+      us_equity_contribution = total_contribution * us_equity_rate,
+      international_equity_contribution = total_contribution * international_equity_rate,
+      bond_contribution = total_contribution * bond_rate,
+      short_term_bond_contribution = total_contribution * short_term_bond_rate,
+      
+      # Adjusting by returns
+      us_equity_value = cumsum(us_equity_contribution * (1 + SPY_monthly_return)),
+      international_equity_value = cumsum(international_equity_contribution * (1 + ACWI_monthly_return)),
+      bond_value = cumsum(bond_contribution * (1 + AGG_monthly_return)),
+      short_term_bond_value = cumsum(short_term_bond_contribution * (1 + treasury_monthly_return)),
+      
+      # Total portfolio value
+      total_portfolio_value = us_equity_value +
+                              international_equity_value +
+                              bond_value +
+                              short_term_bond_value
+    )
+}
+
+# Apply the function to your data
+portfolio_data <- calculate_cumulative_contribution(test)
+
+# View the result
+View(portfolio_data)
+
+
+
+############
 
 ```
 </details>
 
 
-
-<!-- dividend code :  -->
-
-<!--   # Calculate the average dividend value -->
-<!--   all_dividends <- sapply(names(records), function(date) { -->
-<!--      value <- records[[date]][["7. dividend amount"]] -->
-<!--   if (is.null(value) || value == "") { -->
-<!--     return(NA)  # Replace missing or empty values with NA -->
-<!--   } -->
-<!--   as.numeric(value)  -->
-<!--   }) -->
-<!--   print(all_dividends) -->
-<!--   if (any(is.na(all_dividends))) { -->
-<!--     warning("Some dividend values are NA. Check the records for missing or non-numeric            data.") -->
-<!--   } -->
-
-<!--   avg_dividend <- mean(all_dividends, na.rm = TRUE) -->
+# TO-DO RE-WRITE CODE WITH NAMED VECTORS FOR PERIOD LOOK-UPS: 
+series_info <- c(
+  "CES0500000003" = "m",
+  "TB3MS" = "m",
+  "CPIAUCSL" = "m",
+  "CUURA101SA0" = "m",
+  "ECIGVTWAG" = "q",
+  "ENUC356240010SA" = "q"
+)
 
 
+
+# Merge datasets to align wage growth, inflation, and returns
+data <- wage_growth |>
+  inner_join(inflation, by = "date") |>
+  rename(wage_growth = value.x, inflation = value.y) |>
+  filter(!is.na(wage_growth_percent))
+  
+# Set parameters
+starting_salary <- 25000  # Assumed starting salary
+years_of_service <- 38    # Length of service based on data
+trs_brackets <- c(45000, 55000, 75000, 100000)  # Contribution brackets
+trs_rates <- c(0.03, 0.035, 0.045, 0.0575, 0.06)  # Contribution rates
+
+# Calculate annual salary over time
+data <- data |>
+  mutate(
+    year = year(date),
+    salary = starting_salary * cumprod(1 + wage_growth_percent / 100),  # Adjust salary by wage growth
+    trs_rate = case_when(
+      salary <= trs_brackets[1] ~ trs_rates[1],
+      salary <= trs_brackets[2] ~ trs_rates[2],
+      salary <= trs_brackets[3] ~ trs_rates[3],
+      salary <= trs_brackets[4] ~ trs_rates[4],
+      TRUE ~ trs_rates[5]
+    ),
+    trs_contribution = salary * trs_rate
+  )
+
+View(data)
+
+# Calculate Final Average Salary (FAS)
+final_years <- data |> filter(year >= max(year) - 2)
+final_avg_salary <- mean(final_years$salary)
+
+final_avg_salary
+
+# Compute TRS annual retirement benefit
+trs_benefit <- case_when(
+  years_of_service < 20 ~ 0.0167 * years_of_service * final_avg_salary,
+  years_of_service <= 30 ~ 0.02 * years_of_service * final_avg_salary,
+  TRUE ~ 0.02 * 30 * final_avg_salary + 0.016 * (years_of_service - 30) * final_avg_salary
+)
+
+# Monthly TRS benefit
+trs_monthly_benefit <- trs_benefit / 12
+trs_monthly_benefit
 
 
