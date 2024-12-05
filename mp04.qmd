@@ -1,5 +1,4 @@
 # Monte Carlo-Informed Selection of CUNY Retirement Plans
-*by, Jason Amey*
 
 ## Table of Contents
 
