@@ -270,7 +270,7 @@ CPI_US <- read.csv("data/mp04/CPIAUCSL_data.csv")
 CPI_NY_METRO <- read.csv("data/mp04/CUURA101SA0_data.csv") 
 TREASURY <- read.csv("data/mp04/TB3MS_data.csv")
 
-# Function that ensures 
+# Function that ensures dates are in date format 
 change_to_date <- function(df){
   df <- df |> 
     mutate(date = as.Date(as.character(date)))  
@@ -702,19 +702,13 @@ combined_returns_d <- combined_returns_d |>
 COMBINED_RETURNS <- combined_returns_d |>
     drop_na()
   
-
-
 combined_csv_filename <- paste0("data/mp04/", "COMBINED_SERIES.csv")
 write.csv(COMBINED_RETURNS, combined_csv_filename, row.names = FALSE)
-
-
 
 # Drop all rows that do not exist (leaves >2008 data)
 combined_returns_2008 <- na.omit(combined_returns_d) |> 
   arrange(salary) |> 
   select(-SPY, -AGG, -ACWI, -value)
-
-
 
 ### FUNCTIONS FOR CALCULATING ORP PARAMETERS 
 
@@ -831,7 +825,6 @@ compute_portfolio_rates_retired <- function(data) {
     ) 
   
 }
-
 
 calculate_cumulative_portfolio <- function(data) {
   data <- data |>
@@ -991,22 +984,6 @@ generate_portfolio_values <- function(starting_salary_sequence, date_age_data) {
   return(portfolio_results)
 }
 
-# Define the salary sequence
-salary_sequence <- seq(15000, 100500, by = 10000)
-
-DATE_AGE_DATA <- add_date_and_age(combined_returns_2008, 45, "2008-05-01")
-portfolio_data <- generate_portfolio_values(salary_sequence, DATE_AGE_DATA)
-
-
-
-joined_data_TRS_ORP <- portfolio_data |>
-  left_join(payout_results, by = c("salary" = "starting_salary")) |>
-  rename("Starting Salary" = salary, "Total Portfolio Value, ORP" = total_portfolio_value, "Monthly Payout, TRS" = monthly_payout)
-
-# joined_data_TRS_ORP, data to display
-
-#########
-
 ```
 </details>
 
@@ -1112,12 +1089,6 @@ result <- calculate_portfolio_duration(
   avg_cpi = AVG_NYC_CPI
 )
 
-
-joined_data_TRS_ORP$"Total Portfolio Value, ORP"
-
-monthly_withdrawal <- seq(1000,10000, by=1000)
-monthly_withdrawal
-
 # Example usage
 portfolio_values <- c(89743.96, 149573.26, 210688.26, 284710.93, 370466.45, 454545.09, 549198.91, 630844.66, 709285.38)
 monthly_withdrawals <- c(2000, 3000, 4000, 5000,6000,7000)
@@ -1176,15 +1147,6 @@ generate_portfolio_durations <- function(portfolio_values, withdrawal_values, st
   return(duration_results)
 }
 
-oldest_age_data <- generate_portfolio_durations(portfolio_values, monthly_withdrawals, 61)
-
-wide_data <- oldest_age_data |>
-  pivot_wider(
-    names_from = Monthly_Withdrawal,
-    values_from = Duration,
-    names_prefix = "Withdrawal "
-  )
-wide_data
 ```
 </details>
 
