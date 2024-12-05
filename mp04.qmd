@@ -1159,7 +1159,7 @@ Users can modify parameters to align closely with common financial planning cons
 
 The input parameters for this app are designed to capture the critical aspects of financial planning for retirement, enabling users to customize the simulation to reflect their unique circumstances and objectives. These parameters include **years working**, **starting age**, **starting salary**, **retirement years**, **annual withdrawal**, and the **number of bootstraps**. 
 
-Unfortunately, my app is unable to be hosted on [shinyapps.io](https://www.shinyapps.io/) because their servers [only support R version `>4.3.3`](https://forum.posit.co/t/unsupported-r-version-4-4-2-what-to-do/194760), while my machine is running a later version of **R**. In lieu of a live version of the app, here is screen-capture video of the app: 
+Unfortunately, my app is unable to be hosted on [shinyapps.io](https://www.shinyapps.io/) because their servers [only support R version `4.3.3` and earlier](https://forum.posit.co/t/unsupported-r-version-4-4-2-what-to-do/194760), while my machine is running a later version of **R**. In lieu of a live version of the app, here is screen-capture video of the app: 
 
 [Youtube Link to demonstration of Shiny App](https://youtu.be/C7dv-c2ufHs)
 
