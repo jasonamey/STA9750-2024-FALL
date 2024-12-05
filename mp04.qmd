@@ -32,7 +32,7 @@ The [Federal Reserve Economic Data (FRED)](https://fred.stlouisfed.org/) platfor
 
 The **API** keys are stored as environment variables through a `.Renviron` file. This prevents hardcoding the keys directly into the project, enhancing security and privacy. By adding the lines `FRED_API_KEY=your_fred_api_key_here` and `ALPHA_API_KEY=your_alpha_api_key_here` to a `.Renviron` file, the project accesses the keys through the following syntax:  `Sys.getenv("FRED_API_KEY")` and `Sys.getenv("ALPHA_API_KEY")`. 
 
-This method ensures sensitive information is kept secure, while also making your code portable across different environments without exposing the keys.
+This method ensures sensitive information is kept secure, while also making the code portable across different environments without exposing the keys.
 
 
 ### III. Data Acquisition from FRED and Alpha Vantage
