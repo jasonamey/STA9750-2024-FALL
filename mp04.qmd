@@ -1161,7 +1161,7 @@ The input parameters for this app are designed to capture the critical aspects o
 
 Here is a running demo of the app:
 
-<iframe src="https://jasonamey.shinyapps.io/portfolio_app/" width="100%" height="1000px" style="border:none;"></iframe>
+<iframe src="https://jasonamey.shinyapps.io/portfolio_app/" width="100%" height="800px" style="border:none;"></iframe>
 
 These simulations indicate a clear advantage of the **ORP Retirement System**.  But is the data underneath the simulation `100%` trustworthy? 
 
