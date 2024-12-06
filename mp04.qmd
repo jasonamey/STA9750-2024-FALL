@@ -1371,5 +1371,3 @@ shinyApp(ui = ui, server = server)
 
 </details>
 
-simulate_retirement_portfolio
-
