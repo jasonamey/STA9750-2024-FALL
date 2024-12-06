@@ -1163,6 +1163,8 @@ Here is a running demo of the app:
 
 <iframe src="https://jasonamey.shinyapps.io/portfolio_app/" width="100%" height="1000px" style="border:none;"></iframe>
 
+These simulations indicate a clear advantage of the **ORP Retirement System**.  But is the data underneath the simulation `100%` trustworthy? 
+
 Between `2010` and `2024`, Wall Street experienced an era of unprecedented growth fueled by a combination of economic recovery, technological innovation, and accommodative monetary policy. The aftermath of the `2008` financial crisis saw central banks, particularly the Federal Reserve, implementing quantitative easing and maintaining historically low interest rates, which created a favorable environment for financial markets.
 
 During this period, U.S. equities, as measured by benchmarks like the **S&P 500**, delivered exceptional returns. As such, this basis for projection could be generating overly optimistic expectations. Long-term planning should consider more tempered assumptions, possibly aligned with historical averages rather than recent outperformance.
@@ -1270,8 +1272,6 @@ simulate_retirement_portfolio <- function(retirement_years, age, date, portfolio
   # Calculate the number of months
   MONTHS <- retirement_years * 12
   
-  
-  
   # Perform the bootstrap simulation
   bootstrap_returns_retired <- combined_returns_no_salary |>
     slice_sample(n = MONTHS * n_bootstrap, replace = TRUE) |>
@@ -1297,8 +1297,6 @@ simulate_retirement_portfolio <- function(retirement_years, age, date, portfolio
   
   return(portfolio_simulations_retired)
 }
-
-
 
 working_retirement_portfolio <- function(years_working, starting_age, starting_salary, 
                                          retirement_years, annual_withdrawal = 50000, n_bootstrap = 10, 
