@@ -1159,13 +1159,10 @@ Users can modify parameters to align closely with common financial planning cons
 
 The input parameters for this app are designed to capture the critical aspects of financial planning for retirement, enabling users to customize the simulation to reflect their unique circumstances and objectives. These parameters include **years working**, **starting age**, **starting salary**, **retirement years**, **annual withdrawal**, and the **number of bootstraps**. 
 
-Unfortunately, my app is unable to be hosted on [shinyapps.io](https://www.shinyapps.io/) because their servers [only support R version `4.3.3` and earlier](https://forum.posit.co/t/unsupported-r-version-4-4-2-what-to-do/194760), while my machine is running a later version of **R**. In lieu of a live version of the app, here is screen-capture video of the app: 
+Here is a running demo of the app:
 
-[Youtube Link to demonstration of Shiny App](https://youtu.be/C7dv-c2ufHs)
+<iframe src="https://jasonamey.shinyapps.io/portfolio_app/" width="100%" height="1000px" style="border:none;"></iframe>
 
-In addition, what follows is a plot of a **Monte Carlo** simulation for `30` years of work and `10` years retirement: 
-
-![](images/mp-04/portfolio-simulation.jpg){style="width:90%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 Between `2010` and `2024`, Wall Street experienced an era of unprecedented growth fueled by a combination of economic recovery, technological innovation, and accommodative monetary policy. The aftermath of the `2008` financial crisis saw central banks, particularly the Federal Reserve, implementing quantitative easing and maintaining historically low interest rates, which created a favorable environment for financial markets.
 
 During this period, U.S. equities, as measured by benchmarks like the **S&P 500**, delivered exceptional returns. As such, this basis for projection could be generating overly optimistic expectations. Long-term planning should consider more tempered assumptions, possibly aligned with historical averages rather than recent outperformance.
@@ -1269,6 +1266,40 @@ simulate_portfolio_working <- function(num_years, starting_age, starting_salary,
   return(portfolio_simulations)
 }
 
+simulate_retirement_portfolio <- function(retirement_years, age, date, portfolio_value,  annual_withdrawal = 50000, n_bootstrap = N_BOOTSTRAP, combined_returns_no_salary = COMBINED_RETURNS) {
+  # Calculate the number of months
+  MONTHS <- retirement_years * 12
+  
+  
+  
+  # Perform the bootstrap simulation
+  bootstrap_returns_retired <- combined_returns_no_salary |>
+    slice_sample(n = MONTHS * n_bootstrap, replace = TRUE) |>
+    mutate(bootstrap_id = rep(1:n_bootstrap, each = MONTHS)) |>
+    group_by(bootstrap_id) |>
+    mutate(
+      date = seq.Date(from = as.Date(date), by = "month", length.out = n()),
+      age = round(age + (row_number() - 1) / 12, 2),
+      running_count = row_number()
+    ) |>
+    group_modify(~ compute_portfolio_rates_retired(.x)) |>
+    group_modify(~ calculate_cumulative_portfolio_retired(.x,portfolio_value, annual_withdrawal)) |>
+    ungroup()
+  
+  # Pivot the results for easier analysis
+  portfolio_simulations_retired <- bootstrap_returns_retired |>
+    select(date, bootstrap_id, total_portfolio_value) |>
+    pivot_wider(
+      names_from = bootstrap_id,
+      values_from = total_portfolio_value,
+      names_prefix = "bootstrap_"
+    )
+  
+  return(portfolio_simulations_retired)
+}
+
+
+
 working_retirement_portfolio <- function(years_working, starting_age, starting_salary, 
                                          retirement_years, annual_withdrawal = 50000, n_bootstrap = 10, 
                                          wage_growth_public = WAGE_GROWTH_PUBLIC, 
@@ -1276,7 +1307,7 @@ working_retirement_portfolio <- function(years_working, starting_age, starting_s
   working_portfolio <- simulate_portfolio_working(years_working, starting_age, starting_salary, 
                                                   n_bootstrap, wage_growth_public, combined_returns)
   last_date <- tail(working_portfolio$date, 1)
-  avg_portfolio_value <- mean(tail(working_portfolio[, -1], 1), na.rm = TRUE)
+  avg_portfolio_value <- mean(as.numeric(tail(working_portfolio[, -1], 1), na.rm = TRUE))
   retirement_portfolio <- simulate_retirement_portfolio(
     retirement_years, years_working + starting_age, last_date, avg_portfolio_value, 
     annual_withdrawal, n_bootstrap, combined_returns
@@ -1342,5 +1373,5 @@ shinyApp(ui = ui, server = server)
 
 </details>
 
-
+simulate_retirement_portfolio
 
