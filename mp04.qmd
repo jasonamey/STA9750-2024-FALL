@@ -261,7 +261,7 @@ This datta shows the long-term annualized average returns for four different inv
 <details>
 <summary>\> show the code </summary>
 
-```r
+```{r}
 library(dplyr)
 library(ggplot2)
 library(tidyr)
@@ -290,13 +290,15 @@ SPY_2008 <- SPY |>
 
 SPY_ACWI <- SPY_2008 |> 
   left_join(ACWI, join_by(date == date))
-  
+    
 RECESSION_PERIODS <- data.frame(
   start = as.Date(c("2008-04-30", "2020-02-01")),
   end = as.Date(c("2009-06-01", "2020-04-01")),
   ymin = -Inf,
   ymax = Inf
 )
+
+
 
 # Plot to demonstrate relationship between US vs. International equities
 ggplot(SPY_ACWI, aes(x = date)) +

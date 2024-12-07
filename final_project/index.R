@@ -1,5 +1,7 @@
 library(readr)
-
+library(stringr)  
+library(httr2)   
+  
 
 BBL <- read_csv("data/final_project/finance/avroll.csv")
 
@@ -13,10 +15,7 @@ data <- finance_data_2010 |>
     
 glimpse(data)
 
-
-<!-- block 1066 lot 35 -->
-  
-park_corner <- finance_data_2010_residential |> 
+park_corner <- finance_data_2010_residential |>
   filter(BLOCK == 1068 & LOT == 37)
 
 park_corner$FULLVAL
@@ -34,26 +33,12 @@ records <- strsplit(text_lines,"\n")
 parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
 
 
-# Create Sampled Data 
+# Create Sampled Data
 
 
 
 URL_2024_TC1 <-"https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
 URL_2024_TC234 <- "https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
-
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_12.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_15.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_16.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_17.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_18.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_19.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_22.zip
-https://www.nyc.gov/assets/finance/downloads/tar/final_tc1_2023.zip
-https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip
-
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_14.zip
-"https://www.nyc.gov/assets/finance/downloads/tar/tc1_10.zip"
-
 
 process_records_from_url <- function(year, tax_class, url, borough) {
   library(stringr) # For string manipulation
@@ -103,38 +88,7 @@ process_records_from_url <- function(year, tax_class, url, borough) {
 
 
 
-
-```r
-
-# There exists no consitency with file naming conventions for the property assessment 
-# archives. This function downloads the files 
-
-function (year, tax_class, url) {
-
-  # 
-  flie_name
-  if(!file.exists("nyc_borough_boundaries.zip")){
-    download.file(url), 
-              destfile="nyc_borough_boundaries.zip")
-
-}
-
-
-
-}
-
-
-```
-
-
-
-
-
-# 
-
 URL_2024_TC234 <- "https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
-
-
 
 text_lines <- readLines(file_path)
 
@@ -171,28 +125,28 @@ glimpse(property)
 write.csv(df,"data/final_project/sampled/fy24_tc234_sampled.csv", row.names = FALSE)
 ```
 
-```r
+
 # Import real estate valuations from NYC Department of Finance 
 finance_data_2010 <- read_csv("data/final_project/finance/avroll.csv")
 
 # Import all finance data for tax classes 2, 3 and 4
 finance_data_class_234 <- read_csv("data/final_project/finance/tc234_2010.csv") |>
 
-# Limit to Brooklyn and the residential tax class of 2, and the 
+# Limit to Brooklyn and the residential tax class of 2, and the
 bk_finance_data_class_2_2010 <- finance_data_class_234 |>
   filter(BORO == 3 & TXCL == 2)
 
 bk_finance_data_class_2_2010
 
 # Import all finance data for tax classes 2, 3 and 4
-finance_data_class_1 <- read_csv("data/final_project/finance/tc1_2010.csv") 
+finance_data_class_1 <- read_csv("data/final_project/finance/tc1_2010.csv")
 
 # Limit to Brooklyn:
 bk_finance_data_class_1_2010 <- finance_data_class_1 |>
   filter(BORO == 3)
   
 bk_finance_data_class_1_2010 <- bk_finance_data_class_1_2010 |> 
-  select()
+    select()
   
 View(bk_finance_data_class_1_2010)
   
@@ -216,25 +170,54 @@ write_csv(brooklyn_2010, "data/final_project/brooklyn_2010.csv")
 #Import Borough, Block, Lot info for PPW from The NYC Department of Planning
 BBL <- read_csv("data/final_project/planning/lot_selector_PPW_PLUTO.csv")
 
-View(BBL)
 
 
-text_lines <- readLines(file_path)
+FY24_TC234 <- "data/final_project/finance/fy24_tc234.txt"
+
+text_lines <- readLines(FY24_TC234)
 
 records <- strsplit(text_lines,"\n")
 
 parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
 
+parsed_records[[1]][[1]][26]
 
+
+FY24_TC1_URL <- "https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
+
+# Create temporary files and directories
+temp_file <- tempfile(fileext = ".zip")
+temp_dir <- tempdir()
+
+# Send GET request to download the file
+response <- request(FY24_TC1_URL) |> 
+  req_perform() 
+
+# Handle the response content as a zip file
+writeBin(resp_body_raw(response), temp_file)
+  
+# Unzip the downloaded file into a temporary directory
+unzip(temp_file, exdir = temp_dir)
+
+file_path <- list.files(temp_dir, pattern = "\\.txt$", full.names = TRUE)[1]
+
+text_lines <- readLines(file_path)
+records <- strsplit(text_lines, "\n")
+  
+parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
+  
 filtered_records <- lapply(parsed_records, function(record) {
   if (record[[1]][[2]] == "3") {
     return(record)
   } else {
-    return(NULL) # Return NULL to indicate exclusion
+    return(NULL)
   }
 })
 
 filtered_records <- filtered_records[!sapply(filtered_records, is.null)]
 
+filtered_records[[1]][[1]]
+
+write.csv(df,"data/final_project/sampled/fy24_tc234_sampled.csv", row.names = FALSE)
 
 
