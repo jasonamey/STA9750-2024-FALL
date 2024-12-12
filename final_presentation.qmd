@@ -60,7 +60,7 @@ format: revealjs
 
 ![](images/final-presentation-final-project/tax-assessment-data.jpg) 
 
-## We've created a dyanmic app to analyze the years 2011-2023
+## We've created a dynamic app to analyze the years 2011-2023
 
 ![](images/final-presentation-final-project/dynamic-app.jpg)
 
