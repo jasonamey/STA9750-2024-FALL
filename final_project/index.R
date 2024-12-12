@@ -221,3 +221,10 @@ filtered_records[[1]][[1]]
 write.csv(df,"data/final_project/sampled/fy24_tc234_sampled.csv", row.names = FALSE)
 
 
+library(rvest)
+
+html_file_path <- "final_project/src/scripts/scraping/dept_of_finance_tax_assessment_archives.txt"  # Replace with the path to your HTML file
+
+base_url <- "https://www.nyc.gov"
+
+webpage <- read_html(file_path)

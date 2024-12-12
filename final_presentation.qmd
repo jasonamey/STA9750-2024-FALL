@@ -1,0 +1,76 @@
+---
+title: "STA 9750 Final Project Presentation"
+author: "Clinta Varghese and Jason Amey CA$H-VZ"
+format: revealjs
+---
+
+## Is there a relationship between streets and home values?
+
+![](images/final-project-presentation/slide-1.jpg)
+  
+## Thesis to explore:
+  
+![](images/final-project-presentation-check-in/1-thesis.jpg)
+
+
+## Has this topic been studied? In New York City?: 
+
+![](images/final-project-presentation-check-in/2-research.jpg)
+
+## Why the Prospect Park Bike Lane?
+
+## Famed neighborhood Park Slope in Brooklyn captures people's imagination
+
+![](images/final-presentation-final-project/google-trends.jpg)
+
+## The media and city at-large remained interested in the story 
+
+![](images/final-presentation-final-project/news-media.jpg)
+
+## The PPW Bike Lane was unpopular with many powerful politicians
+
+![](images/final-presentation-final-project/markowitz.jpg)
+
+## We added additional corridors for our analysis
+
+![](images/final-presentation-final-project/streets-for-evaluation.jpg)
+
+## Prospect Park West, Brooklyn
+
+![](images/final-presentation-final-project/ppw-street.jpg)
+
+## 8th Ave and Prospect Park South West
+
+![](images/final-presentation-final-project/ppsw-8th-ave.jpg)
+
+## 6th Ave and 7th Ave
+
+![](images/final-presentation-final-project/6thave-7thave.jpg) 
+
+
+## 4th Ave and 5th Ave
+
+![](images/final-presentation-final-project/4thave-5th-ave.jpg) 
+
+## The challenge for our project
+
+![](images/final-presentation-final-project/data-by-the-numbers.jpg) 
+
+## Tax assessment valuations: imperfect measures of market value
+
+![](images/final-presentation-final-project/tax-assessment-data.jpg) 
+
+## We've created a dyanmic app to analyze the years 2011-2023
+
+![](images/final-presentation-final-project/dynamic-app.jpg)
+
+
+
+## We have ability to run multiple statistical tests spanning different years and streets
+
+![](images/final-presentation-final-project/statistical-tests.jpg) 
+
+## Final Study: 2011-2023 appears statistically significant
+
+![](images/final-presentation-final-project/t-tests-final.jpg) 
+
