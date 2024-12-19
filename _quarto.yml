@@ -15,11 +15,16 @@ website:
 include-in-header:
   - text: |
      <link rel = "shortcut icon" href = "images/favicon.ico" />
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
   
 format:
   html:
     theme: cosmo
     toc: false
-    css: styles.css
+    css: styles.css 
+    include-in-header: |
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 
   

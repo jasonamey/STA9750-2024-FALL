@@ -11,9 +11,7 @@ Clinta Varghese
 [II. Methodology]\
 [III. Data Visualization and Dynamic Analysis]\
 [IV. Findings]\
-[V. Historical Comparison of TRS and ORP]\
-[VI. Long-Term Average Analysis]\
-[VII. Monte Carlo Analysis]\
+[V. Conclusion]\
 
 ### I. Introduction
 
@@ -157,10 +155,23 @@ The app also demostrates how resilient and stable property values on Prospect Pa
 
 ![](images/final-project-report/t-test-11-23.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
+<br/>
 
-This project originally intended to be a 
+This project originally intended to be a static analysis of statistical significance of the change in property values on Prospect Park West compared to comparable corridors in Park Slope from 2011 (1-year after installation of the Prospect Park bike lane) to today. Despite muddle results in the mid-`2010`'s, this table communicates a statistically significant increase in property values on Prospect Park West from `2011-2023`:
+
 ![](images/final-project-report/t-test-11-23.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
+<br/>
 
+### V. Conclusion
 
+This analysis provides valuable insights into the relationship between urban infrastructure improvements and property values, yet it is undeniably complicated by the dominant forces of gentrification. 
+
+The impact of traffic calming projects, like the Prospect Park bike lane, cannot be fully disentangled from the broader market pressures of an overheated real estate market in neighborhoods like Brooklyn's beloved Park Slope. 
+
+It raises the question: 
+
+*Are such projects inherently tied to gentrifying areas, creating a chicken-and-egg dilemma? Are traffic calming initiatives a catalyst or a product of gentrification?*
+
+To gain a deeper understanding, future research could examine property values from earlier periods, such as the `1990`s and `2000`s, and perform a paired t-test on Prospect Park West properties to assess pre- and post-intervention trends. However, challenges exist with the t-tests due to issues like bimodal distributions, extreme outliers, and inconsistent variance in the data. These statistical limitations suggest the need for more robust methodologies, such as non-parametric tests or resampling techniques like bootstrapping, to better capture the complexities and variability in the dataset.
 
