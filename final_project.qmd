@@ -86,6 +86,74 @@ Here is a link to the application :
 
 ### IV. Findings
 
+Immediately following the installation of the Prospect Park bike lane in `2010`, there was a noticeable statistical difference in the uptick of property values on Prospect Park West compared to its neighboring streets. Analysis of property assessment data from `2010` through `2013` revealed a consistent and significant increase in values along Prospect Park West, suggesting a positive correlation between the bike lane installation and property value appreciation.
+
+![](images/final-project-report/t-test-11-13.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+<br/>
+
+This is evident in the following ridge plot, with Prospect Park West leading other corridors in Park Slope:  
+
+![](images/final-project-report/immediate-demand-2011-2013.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+<br/>
+
+This map visualization, highlights the dominance of green on Prospect Park West compared to its neighboring streets: 
+
+![](images/final-project-report/after-installation-green.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+<br/>
+
+...but this analysis is arguably limited by the immeasurable economic influence of gentrification and the outsized desirability of Park Slope as a premier residential neighborhood in Brooklyn. 
+
+Here is that story in images. 
+
+**5th Avenue, Park Slope 2011**: 
+
+![](images/final-project-report/5th-avenue-before.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+**5th Avenue, Park Slope 2023**:
+
+![](images/final-project-report/5th-avenue-after.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+<br/>
+
+Highlighted by these images, with the financial crisis of the late 2000s in the rear-view mirror,  property values in Park Slope skyrocketed, reflecting both the neighborhood's intrinsic appeal and broader market forces. While the installation of the Prospect Park bike lane may have contributed to local value increases, isolating its specific impact from these larger trends presents a challenge in the face of gentrification.
+
+
+This ridge plot vividly highlights the dominant role of gentrification in driving property value changes in Park Slope during the mid-2010s.The clustering of density curves toward higher percentage changes underscores the broad and profound market pressures, as the neighborhood became increasingly attractive to higher-income residents amplifying the impact of gentrification during this period.
+
+
+![](images/final-project-report/gentrification-2011-2023.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+<br/>
+
+Reflecting the influx of new businesses, you can see the pronounced effect of gentrification with the high peaks of the 2 dominant commercial stretches in Park Slope: 5th avenue and 7th avenue during the prime growth years of the` 2010`'s. 
+
+![](images/final-project-report/gentrification-2013-2019.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+<br/>
+
+The pre-Covid `2010`'s truly represented a period of healthy valuations of Park Slope real estate:
+
+![](images/final-project-report/after-financial-crisis-peak-brooklyn.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+
+<br/>
+The dominance of gentrication arguable muddles the ability to fully assess the influence of the Prospect Park West traffic calming project on Park Slope real estate values. As evidence in this document of t-tests, there is a series of inconclusive results during this period of explosive growth in the Park Slope real estate market: 
+
+![](images/final-project-report/demand-2011-2019.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+
+Yet, one of the advantages of creating a dynamic application, is the ability to draw analysis 
+
+![](images/final-project-report/covid-after.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+
+
+
+
+![](images/final-project-report/t-test-11-23.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 <!-- [![LinkedIn](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/svgs/brands/linkedin.svg)](https://www.linkedin.com/in/your-profile) Connect with me on LinkedIn -->
 
