@@ -1,240 +1,92 @@
-library(readr)
-
-
-BBL <- read_csv("data/final_project/finance/avroll.csv")
 
-finance_data_2010_residential <- finance_data_2010 |> 
-  filter(TAXCLASS != "4" & TAXCLASS != "3" & B == 3)
 
+# Traffic Calming and Property Values In New York City: Analyzing the Economic Impact of the Prospect Park Bike Lane
 
+AUTHORS <br>
+Jason Amey <br>
+Clinta Varghese
 
-data <- finance_data_2010 |> 
-    filter(B == 3 & BLOCK == 1068 & LOT == 37)
-    
-glimpse(data)
 
+[I. Introduction]\
+[II. Methodology]\
+[III. Data Visualization and Dynamic Analysis]\
+[IV. Findings]\
+[V. Historical Comparison of TRS and ORP]\
+[VI. Long-Term Average Analysis]\
+[VII. Monte Carlo Analysis]\
 
-<!-- block 1066 lot 35 -->
-  
-park_corner <- finance_data_2010_residential |> 
-  filter(BLOCK == 1068 & LOT == 37)
+### I. Introduction
 
-park_corner$FULLVAL
+Park Slope in Brooklyn is a neighborhood of considerable interest. In 2010, it became the center of significant media attention following the New York City Department of Transportation's (NYC DOT) decision to remove a lane of traffic on Prospect Park West - the street that runs adjacent to Prospect Park - and install a protected bike lane. This decision sparked a lawsuit and drew widespread media attention^[Foderaro, L. W. (2011, March 8). Bike lane debate in Brooklyn is set for court. The New York Times. Retrieved December 19, 2024, from https://www.nytimes.com/2011/03/09/nyregion/09bike.html].
 
+Despite the initial backlash, the project proved to be a success in terms of safety metrics^[Project for Public Spaces. (n.d.). Prospect Park West: Overcoming controversy to create safety and mobility benefits in Brooklyn. Retrieved December 19, 2024, from https://www.pps.org/article/prospect-park-west-overcoming-controversy-to-create-safety-and-mobility-benefits-in-brooklyn] and has since become a beloved feature of the neighborhood. However, an intriguing question remains: did this transformative change have an impact on the corridor's real estate values?
 
+This project seeks to evaluate the potential effects of the bike lane installation on property values along Prospect Park West. To provide a comprehensive analysis, it compares Prospect Park West to all parallel streets in Park Slope - 8th Avenue, 7th Avenue, 6th Avenue and 5th Avenue - as well as Prospect Park Southwest—a park-facing street in the adjacent neighborhood of Windsor Terrace. 
 
-glimpse(finance_data_2010_residential)
+Through this evaluation, the project seeks to determine whether the bike lane influenced changes in the local real estate market, while also opening the door to a broader exploration of urban economics and the ever-topical issue of rising real estate values in New York City.
 
-file_path_sample <- "data/final_project/fy24_sample.txt"
+### II. Methodology
 
-text_lines <- readLines(file_path_sample)
+This project investigates historical property tax assessment values in Park Slope and Windsor Terrace, Brooklyn, using data sourced from the [New York City Department of Finance Property Assessment Roll Archives](https://www.nyc.gov/site/finance/property/property-assessment-roll-archives.page). These archives provide a complete digital repository of property valuation data available from 2010 to the present. 
 
-records <- strsplit(text_lines,"\n")
+#### Data Collection and Preparation
+**Property Valuation Source**: The **NYC Department of Finance**'s online [Property Assessment Roll Archives](https://www.nyc.gov/site/finance/property/property-assessment-roll-archives.page), includes dozens of property valuation metrics for all residential and commercial properties throughout New York City.
 
-parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
+**Selected Metric**: After careful consideration, the team settled on using the **New Full Value, Total** (`NEW_FV_T`) as the best metric reflecting market value of the land, the property and surrounding neighborhood trends. 
 
+**Challenges with Disparate Data**: The data spanned multiple years and formats, with differing data schemes. To create a consistent dataset, significant processing and cleaning were undertaken to standardize the information.
 
-# Create Sampled Data 
+#### Data Filtering and Focus
+**Tax Classifications** : NYC property is divided into four tax classifications, each reflecting a different type of property^[New York City Department of Finance. (n.d.). Definitions of property assessment terms. NYC.gov. Retrieved December 19, 2024, from https://www.nyc.gov/site/finance/property/definitions-of-property-assessment-terms.page]:
 
+- **Class 1**: Primarily residential properties of up to three units, including family homes and small mixed-use properties (e.g., homes with small stores or offices).
+- **Class 2**: Larger residential properties such as rentals, cooperatives, and condominiums. This class is further subdivided:
+  - **2A**: `4–6` unit rental buildings
+  - **2B**: `7–10` unit rental buildings
+  - **2C**: `2–10` unit cooperative or condominium buildings
+- **Class 2** (general): Residential properties with `11` or more units.
+- **Class 3**: Utility properties.
+- **Class 4**: Commercial and industrial properties.
 
+For this study, we focused on residential property classifications: `1`, `1A`, `1B`, `1C`, `1D`, `2`, `2A`, `2B`, `2C`. These categories captured the majority of residential properties relevant to Park Slope and Windsor Terrace.
 
-URL_2024_TC1 <-"https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
-URL_2024_TC234 <- "https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
+**Geographic Scope**: To ensure the analysis remained localized, the data was filtered for properties located within the relevant ZIP codes for Park Slope and Windsor Terrace.
 
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_12.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_15.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_16.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_17.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_18.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_19.zip
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_22.zip
-https://www.nyc.gov/assets/finance/downloads/tar/final_tc1_2023.zip
-https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip
+**Final Dataset**: The cleaned and filtered dataset was saved for analysis. While the dataset covers `2010` to the present, it is acknowledged that a more robust analysis would incorporate property values from earlier periods, especially prior to the installation of the Prospect Park bike lane. This would provide greater insight into pre- and post-infrastructure changes and their potential impact on property values. The pre-`2010` data is available at the New York City Municipal Archive^[New York City Department of Records and Information Services. (n.d.). Municipal archives. NYC.gov. Retrieved December 19, 2024, from https://www.nyc.gov/site/records/about/municipal-archives.page]
 
-https://www.nyc.gov/assets/finance/downloads/tar/tc1_14.zip
-"https://www.nyc.gov/assets/finance/downloads/tar/tc1_10.zip"
+**Mapping**: To visualize the change in property values in Park Slope, `.shp` files (shapefiles) were collected from the [NYC Department of City Planning's Lot Selector tool](https://lotselector.planning.nyc.gov/#16/40.7508/-73.98). The shapefiles were downloaded to map property parcels in the Park Slope area, enabling detailed spatial visualizations and the highlighting of valuation trends over time.
 
+#### Property Value Analysis
 
-process_records_from_url <- function(year, tax_class, url, borough) {
-  library(stringr) # For string manipulation
-  library(httr)    # For downloading files
-  
-  # Download and unzip the target data file from URL
-  temp_file <- tempfile(fileext = ".zip")
-  temp_dir <- tempdir()
-  download.file(url, temp_file)
-  unzip(temp_file, exdir = temp_dir)
-  
-  # Find the first extracted file
-  file_path <- list.files(temp_dir, pattern = "\\.txt$", full.names = TRUE)[1]
-  
-  # Download shapefile if it does not already exist
-  shapefile_name <- "nyc_borough_boundaries.zip"
-  if (!file.exists(file_name)) {
-    download.file(url, destfile = file_name)
-  }
-  
-  # Read and process the target data file
-  text_lines <- readLines(file_path)
-  records <- strsplit(text_lines, "\n")
-  
-  # Parse, filter, and clean records
-  parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
-  
-  filtered_records <- lapply(parsed_records, function(record) {
-    if (record[[1]][[2]] == "3") { # Adjust index as necessary
-      return(record)
-    } else {
-      return(NULL) # Return NULL to indicate exclusion
-    }
-  })
-  filtered_records <- filtered_records[!sapply(filtered_records, is.null)]
-  
-  cleaned_records <- lapply(filtered_records, function(record) {
-    sapply(record, trimws)
-  })
-  
-  # Convert to a data frame
-  df <- do.call(cbind, cleaned_records)
-  df <- as.data.frame(t(df))
-  
-  return(df)
-}
+**Data Transformation**: Code was developed to manipulate the original tax assessment data, enabling the calculation of percentage changes in property values across any selected range of years. For each year pair within the specified range, the code calculates the changes and appends these as new columns to the dataset, facilitating a comparison of year-over-year trends across various streets.
 
+**Statistical Analysis**: A t-test was chosen to evaluate whether percentage changes in property values on Prospect Park West (PPW) differ significantly from those on parallel streets, such as 8th Avenue, 7th Avenue, and 5th Avenue. The t-test is appropriate for comparing the means of two independent groups, particularly when examining whether observed differences in property value trends are likely due to random variation or reflect genuine distinctions.
 
+**t-test Table**: It was decided to create a t-test results table to provide a clear and formatted summary of the statistical comparisons performed for PPW and its neighboring streets. The table is organized by year ranges, making it easy to identify periods of significant valuation changes. By presenting the results in a structured format, the table concisely summarizes the outcomes of potentially dozens of tests at once. This approach leverages the capabilities of statistical software, providing an efficient means to review a broad range of analyses.
 
+**Ridge Plot**: Ridge plots were created to add deeper insight into the density distributions of percentage changes in property values by street. 
 
-```r
+**Box Plot**: It was decided to create box plot visualizations for another visualization of the distribution of changes, highlighting trends, outliers, and differences in variability. 
 
-# There exists no consitency with file naming conventions for the property assessment 
-# archives. This function downloads the files 
+**Percentage Change Summary**: Summary tables were developed to aggregate key statistics for percentage changes by street. These tables calculate the mean and standard deviation for each street, providing a quantitative overview of average trends and their variability. The summaries were designed to contextualize the insights from the box and ridge plots, offering concrete data to support the observed patterns in property value changes.
 
-function (year, tax_class, url) {
+### III. Data Visualization and Dynamic Analysis
 
-  # 
-  flie_name
-  if(!file.exists("nyc_borough_boundaries.zip")){
-    download.file(url), 
-              destfile="nyc_borough_boundaries.zip")
+To effectively communicate the findings from this analysis, a dynamic web-based app was developed using [Shiny](https://shiny.posit.co/) and deployed on [shinyapps.io](https://www.shinyapps.io/). This application integrates geospatial and statistical visualizations to provide an interactive and user-friendly platform for exploring property value trends in Park Slope and Windsor Terrace. The visualizations were designed to cater to various analytical needs, from exploring geographic trends to examining statistical patterns in property values.
 
-}
+#### Mapping and Interface
 
+**Leaflet Maps**: The app utilizes the `leaflet` `R` package to render detailed maps based on the `.shp` files collected from the NYC Department of City Planning. These interactive maps allow users to explore property parcels and their associated change in property valuations.
 
+**Time Frame Selector**: The app includes an interface that allows users to specify the time frame of interest. This feature enables customized analyses, making it easy to compare property values before and after events of interest.
 
-}
+Here is a link to the application : 
 
+[`https://jasonamey.shinyapps.io/park-slope-property-app/`](https://jasonamey.shinyapps.io/park-slope-property-app/)
 
-```
+### IV. Findings
 
 
-
-
-
-# 
-
-URL_2024_TC234 <- "https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip"
-
-
-
-text_lines <- readLines(file_path)
-
-records <- strsplit(text_lines,"\n")
-
-parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
-
-filtered_records <- lapply(parsed_records, function(record) {
-  if (record[[1]][[2]] == "3") {
-    return(record)
-  } else {
-    return(NULL) # Return NULL to indicate exclusion
-  }
-})
-
-filtered_records <- filtered_records[!sapply(filtered_records, is.null)]
-
-<!-- Block: 1068 -->
-
-<!-- Lot: 37 -->
-
-cleaned_records <- lapply(filtered_records, function(record) {
-  sapply(record, trimws)
-})
-
-df <- do.call(cbind, cleaned_records)
-df <- as.data.frame(t(df))
-
-property <- df |> 
-  filter(V3 == "01068" & V4 == "0037")
-
-glimpse(property)
-
-write.csv(df,"data/final_project/sampled/fy24_tc234_sampled.csv", row.names = FALSE)
-```
-
-```r
-# Import real estate valuations from NYC Department of Finance 
-finance_data_2010 <- read_csv("data/final_project/finance/avroll.csv")
-
-# Import all finance data for tax classes 2, 3 and 4
-finance_data_class_234 <- read_csv("data/final_project/finance/tc234_2010.csv") |>
-
-# Limit to Brooklyn and the residential tax class of 2, and the 
-bk_finance_data_class_2_2010 <- finance_data_class_234 |>
-  filter(BORO == 3 & TXCL == 2)
-
-bk_finance_data_class_2_2010
-
-# Import all finance data for tax classes 2, 3 and 4
-finance_data_class_1 <- read_csv("data/final_project/finance/tc1_2010.csv") 
-
-# Limit to Brooklyn:
-bk_finance_data_class_1_2010 <- finance_data_class_1 |>
-  filter(BORO == 3)
-  
-bk_finance_data_class_1_2010 <- bk_finance_data_class_1_2010 |> 
-  select()
-  
-View(bk_finance_data_class_1_2010)
-  
-# Convert EASE column to consistent data types for row binding
-bk_finance_data_class_1_2010 <- bk_finance_data_class_1_2010 %>% mutate(EASE = as.character(EASE))
-bk_finance_data_class_2_2010 <- bk_finance_data_class_2_2010 %>% mutate(EASE = as.character(EASE))
-
-
-
-bk_finance_data_2010 <- bind_rows(bk_finance_data_class_1_2010, bk_finance_data_class_2_2010)
-
-bk_finance_data_2010
-
-#Re-create dataset with just Brooklyn data, borough 3 
-brooklyn_2010 <- finance_data_2010 |>
-  filter(B == 3)
-
-#Save new dataset to csv
-write_csv(brooklyn_2010, "data/final_project/brooklyn_2010.csv")
-
-#Import Borough, Block, Lot info for PPW from The NYC Department of Planning
-BBL <- read_csv("data/final_project/planning/lot_selector_PPW_PLUTO.csv")
-
-View(BBL)
-
-
-text_lines <- readLines(file_path)
-
-records <- strsplit(text_lines,"\n")
-
-parsed_records <- lapply(records, function(record) strsplit(record, "\t"))
-
-
-filtered_records <- lapply(parsed_records, function(record) {
-  if (record[[1]][[2]] == "3") {
-    return(record)
-  } else {
-    return(NULL) # Return NULL to indicate exclusion
-  }
-})
-
-filtered_records <- filtered_records[!sapply(filtered_records, is.null)]
-
+<!-- [![LinkedIn](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/svgs/brands/linkedin.svg)](https://www.linkedin.com/in/your-profile) Connect with me on LinkedIn -->
 
 

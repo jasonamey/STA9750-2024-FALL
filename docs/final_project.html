@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -134,121 +100,92 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>library(readr)</p>
-<p>BBL &lt;- read_csv(“data/final_project/finance/avroll.csv”)</p>
-<p>finance_data_2010_residential &lt;- finance_data_2010 |&gt; filter(TAXCLASS != “4” &amp; TAXCLASS != “3” &amp; B == 3)</p>
-<p>data &lt;- finance_data_2010 |&gt; filter(B == 3 &amp; BLOCK == 1068 &amp; LOT == 37)</p>
-<p>glimpse(data)</p>
-<!-- block 1066 lot 35 -->
-<p>park_corner &lt;- finance_data_2010_residential |&gt; filter(BLOCK == 1068 &amp; LOT == 37)</p>
-<p>park_corner$FULLVAL</p>
-<p>glimpse(finance_data_2010_residential)</p>
-<p>file_path_sample &lt;- “data/final_project/fy24_sample.txt”</p>
-<p>text_lines &lt;- readLines(file_path_sample)</p>
-<p>records &lt;- strsplit(text_lines,“”)</p>
-<p>parsed_records &lt;- lapply(records, function(record) strsplit(record, “))</p>
-<section id="create-sampled-data" class="level1">
-<h1>Create Sampled Data</h1>
-<p>URL_2024_TC1 &lt;-“https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip” URL_2024_TC234 &lt;- “https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip”</p>
-<p>https://www.nyc.gov/assets/finance/downloads/tar/tc1_12.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_15.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_16.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_17.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_18.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_19.zip https://www.nyc.gov/assets/finance/downloads/tar/tc1_22.zip https://www.nyc.gov/assets/finance/downloads/tar/final_tc1_2023.zip https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip</p>
-<p>https://www.nyc.gov/assets/finance/downloads/tar/tc1_14.zip “https://www.nyc.gov/assets/finance/downloads/tar/tc1_10.zip”</p>
-<p>process_records_from_url &lt;- function(year, tax_class, url, borough) { library(stringr) # For string manipulation library(httr) # For downloading files</p>
-<p># Download and unzip the target data file from URL temp_file &lt;- tempfile(fileext = “.zip”) temp_dir &lt;- tempdir() download.file(url, temp_file) unzip(temp_file, exdir = temp_dir)</p>
-<p># Find the first extracted file file_path &lt;- list.files(temp_dir, pattern = “\.txt$”, full.names = TRUE)[1]</p>
-<p># Download shapefile if it does not already exist shapefile_name &lt;- “nyc_borough_boundaries.zip” if (!file.exists(file_name)) { download.file(url, destfile = file_name) }</p>
-<p># Read and process the target data file text_lines &lt;- readLines(file_path) records &lt;- strsplit(text_lines, “”)</p>
-<p># Parse, filter, and clean records parsed_records &lt;- lapply(records, function(record) strsplit(record, “))</p>
-<p>filtered_records &lt;- lapply(parsed_records, function(record) { if (record[[1]][[2]] == “3”) { # Adjust index as necessary return(record) } else { return(NULL) # Return NULL to indicate exclusion } }) filtered_records &lt;- filtered_records[!sapply(filtered_records, is.null)]</p>
-<p>cleaned_records &lt;- lapply(filtered_records, function(record) { sapply(record, trimws) })</p>
-<p># Convert to a data frame df &lt;- do.call(cbind, cleaned_records) df &lt;- as.data.frame(t(df))</p>
-<p>return(df) }</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># There exists no consitency with file naming conventions for the property assessment </span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># archives. This function downloads the files </span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span> (year, tax_class, url) {</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># </span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  flie_name</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(<span class="st">"nyc_borough_boundaries.zip"</span>)){</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(url), </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>              destfile<span class="ot">=</span><span class="st">"nyc_borough_boundaries.zip"</span><span class="er">)</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="traffic-calming-and-property-values-in-new-york-city-analyzing-the-economic-impact-of-the-prospect-park-bike-lane" class="level1">
+<h1>Traffic Calming and Property Values In New York City: Analyzing the Economic Impact of the Prospect Park Bike Lane</h1>
+<p>AUTHORS <br> Jason Amey <br> Clinta Varghese</p>
+<p><a href="#i.-introduction">I. Introduction</a><br>
+<a href="#ii.-methodology">II. Methodology</a><br>
+<a href="#iii.-data-visualization-and-dynamic-analysis">III. Data Visualization and Dynamic Analysis</a><br>
+<a href="#iv.-findings">IV. Findings</a><br>
+[V. Historical Comparison of TRS and ORP]<br>
+[VI. Long-Term Average Analysis]<br>
+[VII. Monte Carlo Analysis]<br>
+</p>
+<section id="i.-introduction" class="level3">
+<h3 class="anchored" data-anchor-id="i.-introduction">I. Introduction</h3>
+<p>Park Slope in Brooklyn is a neighborhood of considerable interest. In 2010, it became the center of significant media attention following the New York City Department of Transportation’s (NYC DOT) decision to remove a lane of traffic on Prospect Park West - the street that runs adjacent to Prospect Park - and install a protected bike lane. This decision sparked a lawsuit and drew widespread media attention<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Despite the initial backlash, the project proved to be a success in terms of safety metrics<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and has since become a beloved feature of the neighborhood. However, an intriguing question remains: did this transformative change have an impact on the corridor’s real estate values?</p>
+<p>This project seeks to evaluate the potential effects of the bike lane installation on property values along Prospect Park West. To provide a comprehensive analysis, it compares Prospect Park West to all parallel streets in Park Slope - 8th Avenue, 7th Avenue, 6th Avenue and 5th Avenue - as well as Prospect Park Southwest—a park-facing street in the adjacent neighborhood of Windsor Terrace.</p>
+<p>Through this evaluation, the project seeks to determine whether the bike lane influenced changes in the local real estate market, while also opening the door to a broader exploration of urban economics and the ever-topical issue of rising real estate values in New York City.</p>
 </section>
-<section id="section" class="level1">
-<h1></h1>
-<p>URL_2024_TC234 &lt;- “https://www.nyc.gov/assets/finance/downloads/tar/fy24_tc1.zip”</p>
-<p>text_lines &lt;- readLines(file_path)</p>
-<p>records &lt;- strsplit(text_lines,“”)</p>
-<p>parsed_records &lt;- lapply(records, function(record) strsplit(record, “))</p>
-<p>filtered_records &lt;- lapply(parsed_records, function(record) { if (record[[1]][[2]] == “3”) { return(record) } else { return(NULL) # Return NULL to indicate exclusion } })</p>
-<p>filtered_records &lt;- filtered_records[!sapply(filtered_records, is.null)]</p>
-<!-- Block: 1068 -->
-<!-- Lot: 37 -->
-<p>cleaned_records &lt;- lapply(filtered_records, function(record) { sapply(record, trimws) })</p>
-<p>df &lt;- do.call(cbind, cleaned_records) df &lt;- as.data.frame(t(df))</p>
-<p>property &lt;- df |&gt; filter(V3 == “01068” &amp; V4 == “0037”)</p>
-<p>glimpse(property)</p>
-<p>write.csv(df,“data/final_project/sampled/fy24_tc234_sampled.csv”, row.names = FALSE)</p>
-<pre><code>
-```r
-# Import real estate valuations from NYC Department of Finance 
-finance_data_2010 &lt;- read_csv("data/final_project/finance/avroll.csv")
-
-# Import all finance data for tax classes 2, 3 and 4
-finance_data_class_234 &lt;- read_csv("data/final_project/finance/tc234_2010.csv") |&gt;
-
-# Limit to Brooklyn and the residential tax class of 2, and the 
-bk_finance_data_class_2_2010 &lt;- finance_data_class_234 |&gt;
-  filter(BORO == 3 &amp; TXCL == 2)
-
-bk_finance_data_class_2_2010
-
-# Import all finance data for tax classes 2, 3 and 4
-finance_data_class_1 &lt;- read_csv("data/final_project/finance/tc1_2010.csv") 
-
-# Limit to Brooklyn:
-bk_finance_data_class_1_2010 &lt;- finance_data_class_1 |&gt;
-  filter(BORO == 3)
-  
-bk_finance_data_class_1_2010 &lt;- bk_finance_data_class_1_2010 |&gt; 
-  select()
-  
-View(bk_finance_data_class_1_2010)
-  
-# Convert EASE column to consistent data types for row binding
-bk_finance_data_class_1_2010 &lt;- bk_finance_data_class_1_2010 %&gt;% mutate(EASE = as.character(EASE))
-bk_finance_data_class_2_2010 &lt;- bk_finance_data_class_2_2010 %&gt;% mutate(EASE = as.character(EASE))
-
-
-
-bk_finance_data_2010 &lt;- bind_rows(bk_finance_data_class_1_2010, bk_finance_data_class_2_2010)
-
-bk_finance_data_2010
-
-#Re-create dataset with just Brooklyn data, borough 3 
-brooklyn_2010 &lt;- finance_data_2010 |&gt;
-  filter(B == 3)
-
-#Save new dataset to csv
-write_csv(brooklyn_2010, "data/final_project/brooklyn_2010.csv")
-
-#Import Borough, Block, Lot info for PPW from The NYC Department of Planning
-BBL &lt;- read_csv("data/final_project/planning/lot_selector_PPW_PLUTO.csv")
-
-View(BBL)
-</code></pre>
+<section id="ii.-methodology" class="level3">
+<h3 class="anchored" data-anchor-id="ii.-methodology">II. Methodology</h3>
+<p>This project investigates historical property tax assessment values in Park Slope and Windsor Terrace, Brooklyn, using data sourced from the <a href="https://www.nyc.gov/site/finance/property/property-assessment-roll-archives.page">New York City Department of Finance Property Assessment Roll Archives</a>. These archives provide a complete digital repository of property valuation data available from 2010 to the present.</p>
+<section id="data-collection-and-preparation" class="level4">
+<h4 class="anchored" data-anchor-id="data-collection-and-preparation">Data Collection and Preparation</h4>
+<p><strong>Property Valuation Source</strong>: The <strong>NYC Department of Finance</strong>’s online <a href="https://www.nyc.gov/site/finance/property/property-assessment-roll-archives.page">Property Assessment Roll Archives</a>, includes dozens of property valuation metrics for all residential and commercial properties throughout New York City.</p>
+<p><strong>Selected Metric</strong>: After careful consideration, the team settled on using the <strong>New Full Value, Total</strong> (<code>NEW_FV_T</code>) as the best metric reflecting market value of the land, the property and surrounding neighborhood trends.</p>
+<p><strong>Challenges with Disparate Data</strong>: The data spanned multiple years and formats, with differing data schemes. To create a consistent dataset, significant processing and cleaning were undertaken to standardize the information.</p>
+</section>
+<section id="data-filtering-and-focus" class="level4">
+<h4 class="anchored" data-anchor-id="data-filtering-and-focus">Data Filtering and Focus</h4>
+<p><strong>Tax Classifications</strong> : NYC property is divided into four tax classifications, each reflecting a different type of property<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>:</p>
+<ul>
+<li><strong>Class 1</strong>: Primarily residential properties of up to three units, including family homes and small mixed-use properties (e.g., homes with small stores or offices).</li>
+<li><strong>Class 2</strong>: Larger residential properties such as rentals, cooperatives, and condominiums. This class is further subdivided:
+<ul>
+<li><strong>2A</strong>: <code>4–6</code> unit rental buildings</li>
+<li><strong>2B</strong>: <code>7–10</code> unit rental buildings</li>
+<li><strong>2C</strong>: <code>2–10</code> unit cooperative or condominium buildings</li>
+</ul></li>
+<li><strong>Class 2</strong> (general): Residential properties with <code>11</code> or more units.</li>
+<li><strong>Class 3</strong>: Utility properties.</li>
+<li><strong>Class 4</strong>: Commercial and industrial properties.</li>
+</ul>
+<p>For this study, we focused on residential property classifications: <code>1</code>, <code>1A</code>, <code>1B</code>, <code>1C</code>, <code>1D</code>, <code>2</code>, <code>2A</code>, <code>2B</code>, <code>2C</code>. These categories captured the majority of residential properties relevant to Park Slope and Windsor Terrace.</p>
+<p><strong>Geographic Scope</strong>: To ensure the analysis remained localized, the data was filtered for properties located within the relevant ZIP codes for Park Slope and Windsor Terrace.</p>
+<p><strong>Final Dataset</strong>: The cleaned and filtered dataset was saved for analysis. While the dataset covers <code>2010</code> to the present, it is acknowledged that a more robust analysis would incorporate property values from earlier periods, especially prior to the installation of the Prospect Park bike lane. This would provide greater insight into pre- and post-infrastructure changes and their potential impact on property values. The pre-<code>2010</code> data is available at the New York City Municipal Archive<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p><strong>Mapping</strong>: To visualize the change in property values in Park Slope, <code>.shp</code> files (shapefiles) were collected from the <a href="https://lotselector.planning.nyc.gov/#16/40.7508/-73.98">NYC Department of City Planning’s Lot Selector tool</a>. The shapefiles were downloaded to map property parcels in the Park Slope area, enabling detailed spatial visualizations and the highlighting of valuation trends over time.</p>
+</section>
+<section id="property-value-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="property-value-analysis">Property Value Analysis</h4>
+<p><strong>Data Transformation</strong>: Code was developed to manipulate the original tax assessment data, enabling the calculation of percentage changes in property values across any selected range of years. For each year pair within the specified range, the code calculates the changes and appends these as new columns to the dataset, facilitating a comparison of year-over-year trends across various streets.</p>
+<p><strong>Statistical Analysis</strong>: A t-test was chosen to evaluate whether percentage changes in property values on Prospect Park West (PPW) differ significantly from those on parallel streets, such as 8th Avenue, 7th Avenue, and 5th Avenue. The t-test is appropriate for comparing the means of two independent groups, particularly when examining whether observed differences in property value trends are likely due to random variation or reflect genuine distinctions.</p>
+<p><strong>t-test Table</strong>: It was decided to create a t-test results table to provide a clear and formatted summary of the statistical comparisons performed for PPW and its neighboring streets. The table is organized by year ranges, making it easy to identify periods of significant valuation changes. By presenting the results in a structured format, the table concisely summarizes the outcomes of potentially dozens of tests at once. This approach leverages the capabilities of statistical software, providing an efficient means to review a broad range of analyses.</p>
+<p><strong>Ridge Plot</strong>: Ridge plots were created to add deeper insight into the density distributions of percentage changes in property values by street.</p>
+<p><strong>Box Plot</strong>: It was decided to create box plot visualizations for another visualization of the distribution of changes, highlighting trends, outliers, and differences in variability.</p>
+<p><strong>Percentage Change Summary</strong>: Summary tables were developed to aggregate key statistics for percentage changes by street. These tables calculate the mean and standard deviation for each street, providing a quantitative overview of average trends and their variability. The summaries were designed to contextualize the insights from the box and ridge plots, offering concrete data to support the observed patterns in property value changes.</p>
+</section>
+</section>
+<section id="iii.-data-visualization-and-dynamic-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="iii.-data-visualization-and-dynamic-analysis">III. Data Visualization and Dynamic Analysis</h3>
+<p>To effectively communicate the findings from this analysis, a dynamic web-based app was developed using <a href="https://shiny.posit.co/">Shiny</a> and deployed on <a href="https://www.shinyapps.io/">shinyapps.io</a>. This application integrates geospatial and statistical visualizations to provide an interactive and user-friendly platform for exploring property value trends in Park Slope and Windsor Terrace. The visualizations were designed to cater to various analytical needs, from exploring geographic trends to examining statistical patterns in property values.</p>
+<section id="mapping-and-interface" class="level4">
+<h4 class="anchored" data-anchor-id="mapping-and-interface">Mapping and Interface</h4>
+<p><strong>Leaflet Maps</strong>: The app utilizes the <code>leaflet</code> <code>R</code> package to render detailed maps based on the <code>.shp</code> files collected from the NYC Department of City Planning. These interactive maps allow users to explore property parcels and their associated change in property valuations.</p>
+<p><strong>Time Frame Selector</strong>: The app includes an interface that allows users to specify the time frame of interest. This feature enables customized analyses, making it easy to compare property values before and after events of interest.</p>
+<p>Here is a link to the application :</p>
+<p><a href="https://jasonamey.shinyapps.io/park-slope-property-app/"><code>https://jasonamey.shinyapps.io/park-slope-property-app/</code></a></p>
+</section>
+</section>
+<section id="iv.-findings" class="level3">
+<h3 class="anchored" data-anchor-id="iv.-findings">IV. Findings</h3>
+<!-- [![LinkedIn](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/svgs/brands/linkedin.svg)](https://www.linkedin.com/in/your-profile) Connect with me on LinkedIn -->
 
 
 </section>
+</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Foderaro, L. W. (2011, March 8). Bike lane debate in Brooklyn is set for court. The New York Times. Retrieved December 19, 2024, from https://www.nytimes.com/2011/03/09/nyregion/09bike.html<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Project for Public Spaces. (n.d.). Prospect Park West: Overcoming controversy to create safety and mobility benefits in Brooklyn. Retrieved December 19, 2024, from https://www.pps.org/article/prospect-park-west-overcoming-controversy-to-create-safety-and-mobility-benefits-in-brooklyn<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>New York City Department of Finance. (n.d.). Definitions of property assessment terms. NYC.gov. Retrieved December 19, 2024, from https://www.nyc.gov/site/finance/property/definitions-of-property-assessment-terms.page<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>New York City Department of Records and Information Services. (n.d.). Municipal archives. NYC.gov. Retrieved December 19, 2024, from https://www.nyc.gov/site/records/about/municipal-archives.page<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
