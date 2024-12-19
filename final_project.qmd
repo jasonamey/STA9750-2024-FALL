@@ -151,11 +151,16 @@ Yet, one of the advantages of creating an interactive application, is the abilit
 ![](images/final-project-report/covid-after.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 
+<br/>
 
-
+The app also demostrates how resilient and stable property values on Prospect Park West remain - compared the extreme variance seen on other streets - as evidenced by their performance during the height of pandemic: 
 
 ![](images/final-project-report/t-test-11-23.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
-<!-- [![LinkedIn](https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/svgs/brands/linkedin.svg)](https://www.linkedin.com/in/your-profile) Connect with me on LinkedIn -->
+
+This project originally intended to be a 
+![](images/final-project-report/t-test-11-23.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+
+
 
 
