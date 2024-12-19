@@ -86,7 +86,7 @@ Here is a link to the application :
 
 ### IV. Findings
 
-Immediately following the installation of the Prospect Park bike lane in `2010`, there was a noticeable statistical difference in the uptick of property values on Prospect Park West compared to its neighboring streets. Analysis of property assessment data from `2010` through `2013` revealed a consistent and significant increase in values along Prospect Park West, suggesting a positive correlation between the bike lane installation and property value appreciation.
+Immediately following the installation of the Prospect Park bike lane in `2010`, there was a noticeable statistical difference in the uptick of property values on Prospect Park West compared to its neighboring streets. Analysis of property assessment data from `2010` through `2013` revealed a consistent and significant increase in values along Prospect Park West, suggesting a positive correlation between the bike lane installation and property value appreciation:
 
 ![](images/final-project-report/t-test-11-13.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
@@ -121,14 +121,14 @@ Here is that story in images.
 Highlighted by these images, with the financial crisis of the late 2000s in the rear-view mirror,  property values in Park Slope skyrocketed, reflecting both the neighborhood's intrinsic appeal and broader market forces. While the installation of the Prospect Park bike lane may have contributed to local value increases, isolating its specific impact from these larger trends presents a challenge in the face of gentrification.
 
 
-This ridge plot vividly highlights the dominant role of gentrification in driving property value changes in Park Slope during the mid-2010s.The clustering of density curves toward higher percentage changes underscores the broad and profound market pressures, as the neighborhood became increasingly attractive to higher-income residents amplifying the impact of gentrification during this period.
+This ridge plot vividly demonstrates the dominant role of gentrification in driving property value changes in Park Slope during the mid-2010s.The clustering of density curves toward higher percentage changes underscores the broad and profound market pressures, as the neighborhood became increasingly attractive to higher-income residents amplifying the impact of gentrification during this period:
 
 
 ![](images/final-project-report/gentrification-2011-2023.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 <br/>
 
-Reflecting the influx of new businesses, you can see the pronounced effect of gentrification with the high peaks of the 2 dominant commercial stretches in Park Slope: 5th avenue and 7th avenue during the prime growth years of the` 2010`'s. 
+Reflecting the influx of new businesses, you can see the pronounced effect of gentrification with the high peaks of the 2 dominant commercial stretches in Park Slope: 5th avenue and 7th avenue during the prime growth years of the` 2010`'s: 
 
 ![](images/final-project-report/gentrification-2013-2019.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
@@ -144,8 +144,9 @@ The dominance of gentrication arguable muddles the ability to fully assess the i
 
 ![](images/final-project-report/demand-2011-2019.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
+<br/>
 
-Yet, one of the advantages of creating a dynamic application, is the ability to draw analysis 
+Yet, one of the advantages of creating an interactive application, is the ability to draw dynamic analysis. This visualization clearly highlights the impact of the Covid pandemic on Park Slope real estate: 
 
 ![](images/final-project-report/covid-after.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
