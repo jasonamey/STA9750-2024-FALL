@@ -3,8 +3,8 @@
 # Traffic Calming and Property Values In New York City: Analyzing the Economic Impact of the Prospect Park Bike Lane
 
 AUTHORS <br>
-Jason Amey <br>
-Clinta Varghese
+[Jason Amey](https://www.linkedin.com/in/jason-amey-597b08191/) <br>
+[Clinta Varghese](https://www.linkedin.com/in/clintavarghese/)
 
 
 [I. Introduction]\
