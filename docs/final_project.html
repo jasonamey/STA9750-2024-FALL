@@ -67,6 +67,7 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <link rel="shortcut icon" href="images/favicon.ico">
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -107,9 +108,7 @@ ul.task-list li input[type="checkbox"] {
 <a href="#ii.-methodology">II. Methodology</a><br>
 <a href="#iii.-data-visualization-and-dynamic-analysis">III. Data Visualization and Dynamic Analysis</a><br>
 <a href="#iv.-findings">IV. Findings</a><br>
-[V. Historical Comparison of TRS and ORP]<br>
-[VI. Long-Term Average Analysis]<br>
-[VII. Monte Carlo Analysis]<br>
+<a href="#v.-conclusion">V. Conclusion</a><br>
 </p>
 <section id="i.-introduction" class="level3">
 <h3 class="anchored" data-anchor-id="i.-introduction">I. Introduction</h3>
@@ -203,7 +202,18 @@ ul.task-list li input[type="checkbox"] {
 <p><br></p>
 <p>The app also demostrates how resilient and stable property values on Prospect Park West remain - compared the extreme variance seen on other streets - as evidenced by their performance during the height of pandemic:</p>
 <p><img src="images/final-project-report/t-test-11-23.jpg" class="img-fluid" style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
-<p>This project originally intended to be a <img src="images/final-project-report/t-test-11-23.jpg" class="img-fluid" style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
+<p><br></p>
+<p>This project originally intended to be a static analysis of statistical significance of the change in property values on Prospect Park West compared to comparable corridors in Park Slope from 2011 (1-year after installation of the Prospect Park bike lane) to today. Despite muddle results in the mid-<code>2010</code>’s, this table communicates a statistically significant increase in property values on Prospect Park West from <code>2011-2023</code>:</p>
+<p><img src="images/final-project-report/t-test-11-23.jpg" class="img-fluid" style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"></p>
+<p><br></p>
+</section>
+<section id="v.-conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="v.-conclusion">V. Conclusion</h3>
+<p>This analysis provides valuable insights into the relationship between urban infrastructure improvements and property values, yet it is undeniably complicated by the dominant forces of gentrification.</p>
+<p>The impact of traffic calming projects, like the Prospect Park bike lane, cannot be fully disentangled from the broader market pressures of an overheated real estate market in neighborhoods like Brooklyn’s beloved Park Slope.</p>
+<p>It raises the question:</p>
+<p><em>Are such projects inherently tied to gentrifying areas, creating a chicken-and-egg dilemma? Are traffic calming initiatives a catalyst or a product of gentrification?</em></p>
+<p>To gain a deeper understanding, future research could examine property values from earlier periods, such as the <code>1990</code>s and <code>2000</code>s, and perform a paired t-test on Prospect Park West properties to assess pre- and post-intervention trends. However, challenges exist with the t-tests due to issues like bimodal distributions, extreme outliers, and inconsistent variance in the data. These statistical limitations suggest the need for more robust methodologies, such as non-parametric tests or resampling techniques like bootstrapping, to better capture the complexities and variability in the dataset.</p>
 
 
 </section>
