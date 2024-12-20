@@ -371,6 +371,3 @@ Beyond that, I :
 - Did all of the work involved with hosting the app (This is harder than it sounds - the code needs to be migrated to another, older, computer. Don't ask.)
  
 
-I probably did a hundred other things I'm too exhausted to remember. 
-
-See you in `Spring 2026` for `STA 9890`. 
