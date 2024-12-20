@@ -369,7 +369,7 @@ Beyond that, I :
 
 - Created the scaffolding of the interactive app to integrate the data (Clinta did the hard work of getting the maps with `leaflet` to work)
 - Did all of the work involved with hosting the app (This is harder than it sounds - the code needs to be migrated to another, older, computer. Don't ask.)
-- Handled the presentations and wrote much of the final report. 
+ 
 
 I probably did a hundred other things I'm too exhausted to remember. 
 
