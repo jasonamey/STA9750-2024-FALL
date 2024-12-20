@@ -11,20 +11,14 @@ website:
     background: secondary
     search: false
  
- 
-include-in-header:
-  - text: |
-     <link rel = "shortcut icon" href = "images/favicon.ico" />
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-  
 format:
   html:
     theme: cosmo
     toc: true
     css: styles.css 
-    include-in-header: |
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
 
 
   
