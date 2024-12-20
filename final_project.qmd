@@ -153,7 +153,7 @@ Yet, one of the advantages of creating an interactive application, is the abilit
 
 The app also demostrates how resilient and stable property values on Prospect Park West remain - compared the extreme variance seen on other streets - as evidenced by their performance during the height of pandemic: 
 
-![](images/final-project-report/t-test-11-23.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
+![](images/final-project-report/resiliency.jpg){style="width:80%; box-shadow: -1px 1px 2px rgba(0, 0, 0, 0.5); display: block; margin: auto;"}
 
 <br/>
 
