@@ -1,0 +1,8 @@
+---
+title: "STA 9750 Newman Library Data Resources"
+author: "Jason Amey"
+format: revealjs
+---
+## Accessing Newman Library Resources
+[https://guides.newman.baruch.cuny.edu/databases](https://guides.newman.baruch.cuny.edu/databases)
+![](images/library-presentation/newman-library-databases.jpg)
