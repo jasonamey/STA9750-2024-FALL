@@ -53,20 +53,153 @@
     "href": "stat_9750_library_workshop.html#statista",
     "title": "STA 9750 Newman Library Data Resources",
     "section": "Statista",
-    "text": "Statista"
+    "text": "Statista\nhttps://guides.newman.baruch.cuny.edu/databases/S-T"
   },
   {
     "objectID": "stat_9750_library_workshop.html#statista-1",
     "href": "stat_9750_library_workshop.html#statista-1",
     "title": "STA 9750 Newman Library Data Resources",
     "section": "Statista",
-    "text": "Statista"
+    "text": "Statista\nhttps://guides.newman.baruch.cuny.edu/databases/S-T"
   },
   {
     "objectID": "stat_9750_library_workshop.html#statista-2",
     "href": "stat_9750_library_workshop.html#statista-2",
     "title": "STA 9750 Newman Library Data Resources",
     "section": "Statista",
-    "text": "Statista"
+    "text": "Statista\nhttps://guides.newman.baruch.cuny.edu/databases/S-T"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#open-data-resources",
+    "href": "stat_9750_library_workshop.html#open-data-resources",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Open Data Resources",
+    "text": "Open Data Resources\nhttps://guides.newman.baruch.cuny.edu/opendata"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#new-york-city-data",
+    "href": "stat_9750_library_workshop.html#new-york-city-data",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "New York City Data",
+    "text": "New York City Data\nhttps://guides.newman.baruch.cuny.edu/nyc_data"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#census-data",
+    "href": "stat_9750_library_workshop.html#census-data",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Census Data",
+    "text": "Census Data\nhttps://guides.newman.baruch.cuny.edu/us_census"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#mergent-online",
+    "href": "stat_9750_library_workshop.html#mergent-online",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Mergent Online",
+    "text": "Mergent Online\nhttps://guides.newman.baruch.cuny.edu/databases/M-N"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#sp-netadvantage",
+    "href": "stat_9750_library_workshop.html#sp-netadvantage",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "S&P NetAdvantage",
+    "text": "S&P NetAdvantage\nhttps://guides.newman.baruch.cuny.edu/databases/S-T"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#mri-simmons",
+    "href": "stat_9750_library_workshop.html#mri-simmons",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "MRI | SIMMONS",
+    "text": "MRI | SIMMONS\nhttps://guides.newman.baruch.cuny.edu/databases/M-N"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#socal-explorer",
+    "href": "stat_9750_library_workshop.html#socal-explorer",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Socal Explorer",
+    "text": "Socal Explorer\nhttps://guides.newman.baruch.cuny.edu/databases/S-T"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#access-to-financial-platforms",
+    "href": "stat_9750_library_workshop.html#access-to-financial-platforms",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Access to Financial Platforms",
+    "text": "Access to Financial Platforms\nhttps://guides.newman.baruch.cuny.edu/AccessFinData"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#sp-capital-iq",
+    "href": "stat_9750_library_workshop.html#sp-capital-iq",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "S&P Capital IQ",
+    "text": "S&P Capital IQ\nhttps://guides.newman.baruch.cuny.edu/databases/S-T"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#sp-capital-iq-1",
+    "href": "stat_9750_library_workshop.html#sp-capital-iq-1",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "S&P Capital IQ",
+    "text": "S&P Capital IQ\nhttps://guides.newman.baruch.cuny.edu/databases/S-T"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#wrds",
+    "href": "stat_9750_library_workshop.html#wrds",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "WRDS",
+    "text": "WRDS\nhttps://guides.newman.baruch.cuny.edu/databases/W-Z"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#wrds---compustat-and-crsp",
+    "href": "stat_9750_library_workshop.html#wrds---compustat-and-crsp",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "WRDS - Compustat and CRSP",
+    "text": "WRDS - Compustat and CRSP\nhttps://guides.newman.baruch.cuny.edu/databases/W-Z"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#wrds---programming",
+    "href": "stat_9750_library_workshop.html#wrds---programming",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "WRDS - Programming",
+    "text": "WRDS - Programming\nhttps://guides.newman.baruch.cuny.edu/databases/W-Z"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#bloomberg-terminals",
+    "href": "stat_9750_library_workshop.html#bloomberg-terminals",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Bloomberg Terminals",
+    "text": "Bloomberg Terminals\nSubotnick Center"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#schedule-a-consultation",
+    "href": "stat_9750_library_workshop.html#schedule-a-consultation",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Schedule a Consultation",
+    "text": "Schedule a Consultation\nhttps://library.baruch.cuny.edu/help/schedule-a-research-consultation/"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#tutorial-help-with-a-database",
+    "href": "stat_9750_library_workshop.html#tutorial-help-with-a-database",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Tutorial Help with a Database",
+    "text": "Tutorial Help with a Database"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#newman-library-search",
+    "href": "stat_9750_library_workshop.html#newman-library-search",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Newman Library Search",
+    "text": "Newman Library Search\nhttps://library.baruch.cuny.edu/"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#google-scholar",
+    "href": "stat_9750_library_workshop.html#google-scholar",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Google Scholar",
+    "text": "Google Scholar\nhttps://scholar.google.com/"
+  },
+  {
+    "objectID": "stat_9750_library_workshop.html#web-scraping",
+    "href": "stat_9750_library_workshop.html#web-scraping",
+    "title": "STA 9750 Newman Library Data Resources",
+    "section": "Web Scraping",
+    "text": "Web Scraping\nhttps://guides.newman.baruch.cuny.edu/c.php?g=1100946&p=8028636"
   }
 ]

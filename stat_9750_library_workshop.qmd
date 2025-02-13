@@ -3,20 +3,113 @@ title: "STA 9750 Newman Library Data Resources"
 author: "Jason Amey"
 format: revealjs
 ---
+
+## Open Data Resources
+[https://guides.newman.baruch.cuny.edu/opendata](https://guides.newman.baruch.cuny.edu/opendata)
+![](images/library-presentation/open-data.jpg)
+
+
+## New York City Data
+[https://guides.newman.baruch.cuny.edu/nyc_data](https://guides.newman.baruch.cuny.edu/nyc_data)
+![](images/library-presentation/nyc-data.jpg)
+
+## Census Data
+[https://guides.newman.baruch.cuny.edu/us_census](https://guides.newman.baruch.cuny.edu/us_census)
+![](images/library-presentation/census-data.jpg)
+
+
 ## Accessing Newman Library Resources
 [https://guides.newman.baruch.cuny.edu/databases](https://guides.newman.baruch.cuny.edu/databases)
 ![](images/library-presentation/newman-library-databases.jpg)
 
 ## Statista
+[https://guides.newman.baruch.cuny.edu/databases/S-T](https://guides.newman.baruch.cuny.edu/databases/S-T)
 ![](images/library-presentation/statista-1.jpg)
 
 
-
 ## Statista
+[https://guides.newman.baruch.cuny.edu/databases/S-T](https://guides.newman.baruch.cuny.edu/databases/S-T)
 ![](images/library-presentation/statista-2.jpg)
 
 
 ## Statista
+[https://guides.newman.baruch.cuny.edu/databases/S-T](https://guides.newman.baruch.cuny.edu/databases/S-T)
 ![](images/library-presentation/statista-3.jpg)
+
+## Mergent Online
+[https://guides.newman.baruch.cuny.edu/databases/M-N](https://guides.newman.baruch.cuny.edu/databases/M-N)
+![](images/library-presentation/mergent-online.jpg)
+
+## S&P NetAdvantage
+[https://guides.newman.baruch.cuny.edu/databases/S-T](https://guides.newman.baruch.cuny.edu/databases/S-T)
+![](images/library-presentation/net-advantage.jpg)
+
+
+## MRI | SIMMONS
+[https://guides.newman.baruch.cuny.edu/databases/M-N](https://guides.newman.baruch.cuny.edu/databases/M-N)
+![](images/library-presentation/mri-simmons.jpg)
+
+## Socal Explorer
+[https://guides.newman.baruch.cuny.edu/databases/S-T](https://guides.newman.baruch.cuny.edu/databases/S-T)
+![](images/library-presentation/social-explorer.jpg)
+
+## Access to Financial Platforms
+[https://guides.newman.baruch.cuny.edu/AccessFinData](https://guides.newman.baruch.cuny.edu/AccessFinData)
+![](images/library-presentation/access-to-finance-platforms.jpg)
+
+## S&P Capital IQ
+[https://guides.newman.baruch.cuny.edu/databases/S-T](https://guides.newman.baruch.cuny.edu/databases/S-T)
+![](images/library-presentation/cap-iq.jpg)
+
+## S&P Capital IQ
+[https://guides.newman.baruch.cuny.edu/databases/S-T](https://guides.newman.baruch.cuny.edu/databases/S-T)
+![](images/library-presentation/cap-iq.jpg)
+
+
+## WRDS
+[https://guides.newman.baruch.cuny.edu/databases/W-Z](https://guides.newman.baruch.cuny.edu/databases/W-Z)
+![](images/library-presentation/wrds-1.jpg)
+
+## WRDS - Compustat and CRSP 
+[https://guides.newman.baruch.cuny.edu/databases/W-Z](https://guides.newman.baruch.cuny.edu/databases/W-Z)
+![](images/library-presentation/wrds-2.jpg)
+
+
+## WRDS - Programming
+[https://guides.newman.baruch.cuny.edu/databases/W-Z](https://guides.newman.baruch.cuny.edu/databases/W-Z)
+![](images/library-presentation/wrds-3.jpg)
+
+
+
+## Bloomberg Terminals
+[Subotnick Center](https://zicklin.baruch.cuny.edu/faculty-research/centers-institutes/subotnick-financial-services-center/)
+![](images/library-presentation/bloomberg.jpg)
+
+
+## Schedule a Consultation
+[https://library.baruch.cuny.edu/help/schedule-a-research-consultation/](https://library.baruch.cuny.edu/help/schedule-a-research-consultation)
+![](images/library-presentation/schedule-consultation.jpg)
+
+
+
+## Tutorial Help with a Database
+![](images/library-presentation/youtube.jpg)
+
+
+## Newman Library Search
+[https://library.baruch.cuny.edu/](https://library.baruch.cuny.edu/)
+![](images/library-presentation/newman-library-search.jpg)
+
+## Google Scholar
+[https://scholar.google.com/](https://scholar.google.com/)
+![](images/library-presentation/google-scholar.jpg)
+
+
+## Web Scraping
+[https://guides.newman.baruch.cuny.edu/c.php?g=1100946&p=8028636](https://guides.newman.baruch.cuny.edu/c.php?g=1100946&p=8028636)
+![](images/library-presentation/web-scraping.jpg)
+
+
+
 
 
