@@ -9,6 +9,9 @@ format: revealjs
 ![](images/library-presentation/open-data.jpg)
 
 
+## Advanced Google Searching
+![](images/library-presentation/advanced-google.jpg)
+
 ## New York City Data
 [https://guides.newman.baruch.cuny.edu/nyc_data](https://guides.newman.baruch.cuny.edu/nyc_data)
 ![](images/library-presentation/nyc-data.jpg)
