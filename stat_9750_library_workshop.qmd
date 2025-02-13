@@ -6,3 +6,17 @@ format: revealjs
 ## Accessing Newman Library Resources
 [https://guides.newman.baruch.cuny.edu/databases](https://guides.newman.baruch.cuny.edu/databases)
 ![](images/library-presentation/newman-library-databases.jpg)
+
+## Statista
+![](images/library-presentation/statista-1.jpg)
+
+
+
+## Statista
+![](images/library-presentation/statista-2.jpg)
+
+
+## Statista
+![](images/library-presentation/statista-3.jpg)
+
+
